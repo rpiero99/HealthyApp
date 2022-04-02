@@ -13,4 +13,28 @@ class Esercizio {
       this._numeroSerie, this._ripetizioni, this._tempoRiposo);
 
   String get nome => _nome;
-}
+
+  set nome(String nome) => nome = nome;
+
+  String get descrizione => _descrizione;
+
+  String get image => _image;
+
+  set image(String im) => _image = im;
+
+  int get ripetizioni => _ripetizioni;
+
+  set ripetizioni(int ripetizioni) => _ripetizioni = ripetizioni;
+
+ int get numeroSerie => _numeroSerie;
+
+ set numeroSerie(int nSerie) => _numeroSerie = nSerie;
+
+ DateTime get tempoRiposo => _tempoRiposo;
+
+ set tempoRiposo(DateTime tempoRiposo) => _tempoRiposo = tempoRiposo;
+
+ CronometroProgrammabile get cronometroProg => _cronometro;
+
+ set cronometroProg(CronometroProgrammabile cronProg) => _cronometro = cronProg;
+} 
