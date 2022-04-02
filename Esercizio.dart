@@ -11,4 +11,6 @@ class Esercizio {
 
   Esercizio(this._cronometro, this._descrizione, this._image, this._nome,
       this._numeroSerie, this._ripetizioni, this._tempoRiposo);
+
+  String get nome => _nome;
 }
