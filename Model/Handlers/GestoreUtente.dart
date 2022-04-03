@@ -2,9 +2,9 @@ import '../AnagraficaUtente.dart';
 import '../Utente.dart';
 
 class GestoreUtente {
-  List<Utente> _utenti = new List.empty(growable: true);
+  List<Utente> _utenti;
 
-  GestoreUtente();
+  GestoreUtente() => _utenti = new List.empty(growable: true);
 
   List<Utente> get utenti => this._utenti;
 

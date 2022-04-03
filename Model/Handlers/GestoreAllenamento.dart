@@ -3,9 +3,9 @@ import 'dart:ffi';
 import '../Allenamento.dart';
 
 class GestoreAllenamento {
-  List<Allenamento> _allenamenti = new List.empty(growable: true);
+  List<Allenamento> _allenamenti;
 
-  GestoreAllenamento();
+  GestoreAllenamento() => _allenamenti = new List.empty(growable: true);
 
   Allenamento createAllenamento(
           int calorieConsumate,

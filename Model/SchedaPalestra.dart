@@ -1,12 +1,15 @@
 import 'Esercizio.dart';
 
 class SchedaPalestra {
-  List<Esercizio> _esercizi = List.empty(growable: true);
+  int _id;
+  List<Esercizio> _esercizi;
   String _name;
   String _descrizione;
 
-  SchedaPalestra(this._descrizione, this._name);
+  SchedaPalestra(this._descrizione, this._name) => _esercizi = List.empty(growable: true);
 
+  int get id => _id;
+  
   List<Esercizio> get esercizi => _esercizi;
 
   void addEsercizio(Esercizio esercizio) => this._esercizi.add(esercizio);
