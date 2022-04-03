@@ -14,11 +14,19 @@ class PianoAlimentare {
         categoria, calorie, descrizione, nome, ora, quantita, type);
   }
 
-  void addPasto(Pasto pasto) {
-    this._pasti.add(pasto);
-  }
+  void addPasto(Pasto pasto) => this._pasti.add(pasto);
 
-  void removePasto(Pasto pasto) {
-    this._pasti.remove(pasto);
-  }
+  void removePasto(Pasto pasto) => this._pasti.remove(pasto);
+
+  DateTime get dataInizio => this._dataInizio;
+
+  set dataInizio(DateTime dataInizio) => this._dataInizio = dataInizio;
+
+  DateTime get dataFine => this._dataFine;
+
+  set DateFine(DateTime dataFine) => this._dataFine = dataFine;
+
+  String get descrizione => this._descrizione;
+
+  set descrizione(String descrizione) => this._descrizione = descrizione;
 }
