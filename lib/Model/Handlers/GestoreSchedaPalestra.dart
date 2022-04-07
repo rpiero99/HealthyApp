@@ -11,11 +11,11 @@ class GestoreSchedaPalestra {
       SchedaPalestra(descrizione, nome);
 
   CronometroProgrammabile createCronometroProgrammabile(
-          Timer timer,
-          Timer tempoPreparazione,
-          Timer tempoRiposo,
-          Timer tempoLavoro,
-          int tempoTotale) =>
+      Timer timer,
+      Timer tempoPreparazione,
+      Timer tempoRiposo,
+      Timer tempoLavoro,
+      int tempoTotale) =>
       CronometroProgrammabile(
           tempoLavoro, tempoPreparazione, tempoRiposo, tempoTotale, timer);
 

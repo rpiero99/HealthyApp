@@ -2,5 +2,5 @@ class GestoreLogin{
 
     GestoreLogin();
 
-    login(){}
+    login(String email, String password){}
 }
