@@ -1,6 +1,0 @@
-class GestoreLogin{
-
-    GestoreLogin();
-
-    login(){}
-}

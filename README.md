@@ -1,2 +1,16 @@
-# HealtyApp
-Con questa app puoi tenere traccia dei tuoi allenamenti, controllare il cibo che mangi e quante calorie stai assumendo giorno per giorno, seguire un piano alimentare, fare nuove schede allenamento, tenere traccia della distanza percorsa durante una corsa o una passeggiata... tutto ciò che ti serve per restare in forma ed in salute!
+# healthy_app
+
+Progetto per esame PAWM.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
