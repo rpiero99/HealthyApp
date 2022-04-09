@@ -1,17 +1,17 @@
 import 'dart:ffi';
 
 class Allenamento {
-  int _id = 0;
-  DateTime _oraInizio;
-  DateTime _oraFine;
-  DateTime _tempoTotale;
-  Float _velocitaMedia;
-  int _calorieConsumate;
-  Float _distanza;
-  DateTime _tempoPerKm;
-  String _descrizione;
-  String _nome;
-  String _image;
+  int? _id = 0;
+  DateTime? _oraInizio;
+  DateTime? _oraFine;
+  DateTime? _tempoTotale;
+  Float? _velocitaMedia;
+  int? _calorieConsumate;
+  Float? _distanza;
+  DateTime? _tempoPerKm;
+  String? _descrizione;
+  String? _nome;
+  String? _image;
 
   Allenamento(
       this._calorieConsumate,
@@ -25,46 +25,77 @@ class Allenamento {
       this._tempoTotale,
       this._velocitaMedia);
 
-  int get id => _id;
+  Allenamento.fromJson(Map<String, dynamic> json) {
+    _id = json['id'];
+    _oraInizio = json['oraInizio'];
+    _oraFine = json['oraFine'];
+    _tempoPerKm = json['tempoPerKm'];
+    _tempoTotale = json['tempoTot'];
+    _velocitaMedia = json['velocitaMed'];
+    _calorieConsumate = json['calorieCons'];
+    _descrizione = json['descrizione'];
+    _distanza = json['distanza'];
+    _image = json['image'];
+    _nome = json['nome'];
+  }
 
-  DateTime get oraInizio => this._oraInizio;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['oraInizio'] = _oraInizio;
+    data['oraFine'] = _oraFine;
+    data['tempoPerKm'] = _tempoPerKm;
+    data['tempoTotale'] = _tempoTotale;
+    data['velocitaMed'] = _velocitaMedia;
+    data['calorieCons'] = _calorieConsumate;
+    data['descrizione'] = _descrizione;
+    data['distanza'] = _distanza;
+    data['image'] = _image;
+    data['nome'] = _nome;
+    return data;
+  }
 
-  set oraInizio(DateTime oraInizio) => this._oraInizio = oraInizio;
+  int? get id => _id;
 
-  DateTime get oraFine => this._oraFine;
+  DateTime? get oraInizio => this._oraInizio;
 
-  set oraFine(DateTime oraFine) => this._oraFine = oraFine;
+  set oraInizio(DateTime? oraInizio) => this._oraInizio = oraInizio;
 
-  DateTime get tempoTotale => this._tempoTotale;
+  DateTime? get oraFine => this._oraFine;
 
-  set tempoTotale(DateTime tempoTotale) => this._tempoTotale = tempoTotale;
+  set oraFine(DateTime? oraFine) => this._oraFine = oraFine;
 
-  DateTime get tempoPerKm => this._tempoPerKm;
+  DateTime? get tempoTotale => this._tempoTotale;
 
-  set tempoPerKm(DateTime tempoPerKm) => this._tempoPerKm = tempoPerKm;
+  set tempoTotale(DateTime? tempoTotale) => this._tempoTotale = tempoTotale;
 
-  Float get velocitaMedia => this._velocitaMedia;
+  DateTime? get tempoPerKm => this._tempoPerKm;
 
-  set velocitaMedia(Float velocitaMedia) => this._velocitaMedia = velocitaMedia;
+  set tempoPerKm(DateTime? tempoPerKm) => this._tempoPerKm = tempoPerKm;
 
-  int get calorieConsumate => this._calorieConsumate;
+  Float? get velocitaMedia => this._velocitaMedia;
 
-  set calorieConsumate(int calorieConsumate) =>
+  set velocitaMedia(Float? velocitaMedia) =>
+      this._velocitaMedia = velocitaMedia;
+
+  int? get calorieConsumate => this._calorieConsumate;
+
+  set calorieConsumate(int? calorieConsumate) =>
       this._calorieConsumate = calorieConsumate;
 
-  Float get distanza => this._distanza;
+  Float? get distanza => this._distanza;
 
-  set distanza(Float distanza) => this._distanza = distanza;
+  set distanza(Float? distanza) => this._distanza = distanza;
 
-  String get descrizione => this._descrizione;
+  String? get descrizione => this._descrizione;
 
-  set descrizione(String descrizione) => this._descrizione = descrizione;
+  set descrizione(String? descrizione) => this._descrizione = descrizione;
 
-  String get nome => this._nome;
+  String? get nome => this._nome;
 
-  set nome(String nome) => this._nome = nome;
+  set nome(String? nome) => this._nome = nome;
 
-  String get image => this._image;
+  String? get image => this._image;
 
-  set image(String image) => this._image = image;
+  set image(String? image) => this._image = image;
 }
