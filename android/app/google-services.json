@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1077357178934",
+    "project_id": "healthy-app-bb717",
+    "storage_bucket": "healthy-app-bb717.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077357178934:android:0166163dca63fd7e06e897",
+        "android_client_info": {
+          "package_name": "it.unicam.cs.pawm.team151.healthyApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1077357178934-4pd2f5pj7ks8l9k12aklr5uiagfs7dm6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCf7XH8_aS07nCLAglPR_wV-NtEuJEzA98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1077357178934-4pd2f5pj7ks8l9k12aklr5uiagfs7dm6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1077357178934-dq3ipm9aa6kuq47mdsek29mqdhk35f03.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "it.unicam.cs.pawm.team151"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
