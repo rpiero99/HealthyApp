@@ -98,4 +98,6 @@ class Allenamento {
   String? get image => this._image;
 
   set image(String? image) => this._image = image;
+
+  void setDate() {}
 }
