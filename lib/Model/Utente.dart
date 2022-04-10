@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unnecessary_getters_setters
+
 import 'AnagraficaUtente.dart';
 
 class Utente {

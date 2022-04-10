@@ -1,15 +1,15 @@
-import 'dart:ffi';
+// ignore_for_file: file_names, unnecessary_getters_setters
 
 class AnagraficaUtente {
   int? _id = 0;
   String? _nomeUtente;
   int? _altezzaUtente;
-  Float? _pesoUtente;
+  double? _pesoUtente;
   DateTime? _dataNascitaUtente;
   bool? _sesso;
 
-  AnagraficaUtente(
-      this._altezzaUtente, this._dataNascitaUtente, this._nomeUtente, this._pesoUtente, this._sesso);
+  AnagraficaUtente(this._altezzaUtente, this._dataNascitaUtente,
+      this._nomeUtente, this._pesoUtente, this._sesso);
 
   AnagraficaUtente.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
@@ -39,17 +39,17 @@ class AnagraficaUtente {
 
   int? get altezzaUtente => _altezzaUtente;
 
-  set altezzaUtente(int? altezza) => this._altezzaUtente = altezza;
+  set altezzaUtente(int? altezza) => _altezzaUtente = altezza;
 
-  Float? get pesoUtente => this._pesoUtente;
+  double? get pesoUtente => _pesoUtente;
 
-  set pesoUtente(Float? peso) => this._pesoUtente = peso;
+  set pesoUtente(double? peso) => _pesoUtente = peso;
 
-  DateTime? get dataNascitaUtente => this._dataNascitaUtente;
+  DateTime? get dataNascitaUtente => _dataNascitaUtente;
 
-  set dataNascitaUtente(DateTime? eta) => this._dataNascitaUtente = eta;
+  set dataNascitaUtente(DateTime? eta) => _dataNascitaUtente = eta;
 
-  bool? get sessoUtente => this._sesso;
+  bool? get sessoUtente => _sesso;
 
-  set sessoUtente(bool? sesso) => this._sesso = sesso;
+  set sessoUtente(bool? sesso) => _sesso = sesso;
 }

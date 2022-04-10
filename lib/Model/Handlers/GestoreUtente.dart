@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import '../AnagraficaUtente.dart';
 import '../Utente.dart';
 

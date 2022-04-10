@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unnecessary_getters_setters
+
 import 'Pasto.dart';
 
 class PianoAlimentare {
@@ -47,7 +49,7 @@ class PianoAlimentare {
 
   DateTime? get dataFine => _dataFine;
 
-  set DateFine(DateTime? dataFine) => _dataFine = dataFine;
+  set dataFine(DateTime? dataFine) => _dataFine = dataFine;
 
   String? get descrizione => _descrizione;
 

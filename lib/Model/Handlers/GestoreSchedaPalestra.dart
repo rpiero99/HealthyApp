@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import '../CronometroProgrammabile.dart';
 import '../SchedaPalestra.dart';
 import 'dart:async';

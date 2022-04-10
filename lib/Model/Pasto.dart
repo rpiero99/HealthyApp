@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unnecessary_getters_setters
+
 class Pasto {
   int? _id = 0;
   Enum? _categoria;
@@ -45,7 +47,7 @@ class Pasto {
 
   int? get calorie => _calorie;
 
-  DateTime? get ora => ora;
+  DateTime? get ora => _ora;
 
   String? get type => _type;
 

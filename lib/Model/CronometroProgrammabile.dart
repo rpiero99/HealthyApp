@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unnecessary_getters_setters
+
 import 'dart:async';
 
 class CronometroProgrammabile {
@@ -29,26 +31,26 @@ class CronometroProgrammabile {
     return data;
   }
 
-  Timer? get timer => this._timer;
+  Timer? get timer => _timer;
 
-  set timer(Timer? timer) => this._timer = timer;
+  set timer(Timer? timer) => _timer = timer;
 
-  Timer? get tempoLavoro => this._tempoLavoro;
+  Timer? get tempoLavoro => _tempoLavoro;
 
-  set tempoLavoro(Timer? tempoLavoro) => this._tempoLavoro = tempoLavoro;
+  set tempoLavoro(Timer? tempoLavoro) => _tempoLavoro = tempoLavoro;
 
-  Timer? get tempoPreparazione => this._tempoPreparazione;
+  Timer? get tempoPreparazione => _tempoPreparazione;
 
   set tempoPreparazione(Timer? tempoPreparazione) =>
-      this._tempoPreparazione = tempoPreparazione;
+      _tempoPreparazione = tempoPreparazione;
 
-  Timer? get tempoRiposo => this._tempoRiposo;
+  Timer? get tempoRiposo => _tempoRiposo;
 
-  set tempoRiposo(Timer? tempoRiposo) => this._tempoRiposo = tempoRiposo;
+  set tempoRiposo(Timer? tempoRiposo) => _tempoRiposo = tempoRiposo;
 
-  int? get tempoTotale => this._tempoTotale;
+  int? get tempoTotale => _tempoTotale;
 
-  set tempoTotale(int? tempoTotale) => this._tempoTotale = tempoTotale;
+  set tempoTotale(int? tempoTotale) => _tempoTotale = tempoTotale;
 
   void startTimer() {}
 

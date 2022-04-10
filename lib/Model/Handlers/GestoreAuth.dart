@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unused_catch_clause
+
 import 'package:firebase_auth/firebase_auth.dart';
 import '../Utente.dart';
 
