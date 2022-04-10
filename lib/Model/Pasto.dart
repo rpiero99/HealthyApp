@@ -21,7 +21,7 @@ class Pasto {
 
   int get calorie => _calorie;
 
-  DateTime get ora => ora;
+  DateTime get ora => _ora;
 
   String get type => _type;
 
