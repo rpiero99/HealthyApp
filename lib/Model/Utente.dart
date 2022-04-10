@@ -1,25 +1,45 @@
 import 'AnagraficaUtente.dart';
 
 class Utente {
-  final int _id = 0;
-  AnagraficaUtente _anagraficaUtente;
-  String _email;
-  String _password;
+  int? _id = 0;
+  AnagraficaUtente? _anagraficaUtente;
+  String? _email;
+  String? _password;
 
   Utente(this._anagraficaUtente, this._email, this._password);
 
-  int get id => _id;
-  
-  AnagraficaUtente get anagraficaUtente => this._anagraficaUtente;
+  Utente.fromJson(Map<String, dynamic> json) {
+    _id = json['id'];
+    _anagraficaUtente = json['anagraficaUtente'] != null
+        ? AnagraficaUtente.fromJson(json['anagraficaUtente'])
+        : null;
+    _email = json['email'];
+    _password = json['password'];
+  }
 
-  set anagraficaUtente(AnagraficaUtente anagraficaUtente) =>
-      this._anagraficaUtente = anagraficaUtente;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = _id;
+    if (_anagraficaUtente != null) {
+      data['anagraficaUtente'] = _anagraficaUtente?.toJson();
+    }
+    data['email'] = _email;
+    data['password'] = _password;
+    return data;
+  }
 
-  String get email => this._email;
+  int? get id => _id;
 
-  set email(String email) => this._email = email;
+  AnagraficaUtente? get anagraficaUtente => _anagraficaUtente;
 
-  String get password => this._password;
+  set anagraficaUtente(AnagraficaUtente? anagraficaUtente) =>
+      _anagraficaUtente = anagraficaUtente;
 
-  set password(String password) => this._password = password;
+  String? get email => _email;
+
+  set email(String? email) => _email = email;
+
+  String? get password => _password;
+
+  set password(String? password) => _password = password;
 }

@@ -1,33 +1,55 @@
 import 'Pasto.dart';
 
 class PianoAlimentare {
-  int _id = 0;
-  List<Pasto> _pasti = List.empty(growable: true);
-  DateTime _dataInizio;
-  DateTime _dataFine;
-  String _descrizione;
+  int? _id = 0;
+  List<Pasto?> _pasti = List.empty(growable: true);
+  DateTime? _dataInizio;
+  DateTime? _dataFine;
+  String? _descrizione;
 
   PianoAlimentare(this._dataFine, this._dataInizio, this._descrizione);
 
-  Pasto createPasto(Enum categoria, int calorie, String descrizione,
-      String nome, DateTime ora, int quantita, String type) {
-    return Pasto(
-        categoria, calorie, descrizione, nome, ora, quantita, type);
+  PianoAlimentare.fromJson(Map<String, dynamic> json) {
+    _id = json['id'];
+    if (json['pasti'] != null) {
+      _pasti = <Pasto>[];
+      json['pasti'].forEach((p) {
+        _pasti.add(Pasto.fromJson(p));
+      });
+    }
+    _dataInizio = json['dataInizio'];
+    _descrizione = json['descrizione'];
+    _dataFine = json['dataFine'];
   }
 
-  void addPasto(Pasto pasto) => this._pasti.add(pasto);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = _id;
+    data['pasti'] = _pasti.map((v) => v?.toJson()).toList();
+    data['dataInizio'] = _dataInizio;
+    data['descrizione'] = _descrizione;
+    data['dataFine'] = _dataFine;
+    return data;
+  }
 
-  void removePasto(Pasto pasto) => this._pasti.remove(pasto);
+  Pasto createPasto(Enum categoria, int calorie, String descrizione,
+      String nome, DateTime ora, int quantita, String type) {
+    return Pasto(categoria, calorie, descrizione, nome, ora, quantita, type);
+  }
 
-  DateTime get dataInizio => this._dataInizio;
+  void addPasto(Pasto? pasto) => _pasti.add(pasto);
 
-  set dataInizio(DateTime dataInizio) => this._dataInizio = dataInizio;
+  void removePasto(Pasto? pasto) => _pasti.remove(pasto);
 
-  DateTime get dataFine => this._dataFine;
+  DateTime? get dataInizio => _dataInizio;
 
-  set DateFine(DateTime dataFine) => this._dataFine = dataFine;
+  set dataInizio(DateTime? dataInizio) => _dataInizio = dataInizio;
 
-  String get descrizione => this._descrizione;
+  DateTime? get dataFine => _dataFine;
 
-  set descrizione(String descrizione) => this._descrizione = descrizione;
+  set DateFine(DateTime? dataFine) => _dataFine = dataFine;
+
+  String? get descrizione => _descrizione;
+
+  set descrizione(String? descrizione) => _descrizione = descrizione;
 }

@@ -15,7 +15,9 @@ class Esercizio {
 
   Esercizio.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
-    _cronometro = json['cronometroProg'] != null ? CronometroProgrammabile.fromJson(json['cronometroProgram']) : null;
+    _cronometro = json['cronometroProg'] != null
+        ? CronometroProgrammabile.fromJson(json['cronometroProg'])
+        : null;
     _ripetizioni = json['numRep'];
     _numeroSerie = json['numSerie'];
     _tempoRiposo = json['tempoRiposo'];
@@ -29,7 +31,7 @@ class Esercizio {
     data['tempoRiposo'] = _tempoRiposo;
     data['numSerie'] = _numeroSerie;
     data['numRep'] = _ripetizioni;
-    if(_cronometro!=null) {
+    if (_cronometro != null) {
       data['cronometroProg'] = _cronometro?.toJson();
     }
     data['descrizione'] = _descrizione;
@@ -38,16 +40,15 @@ class Esercizio {
     return data;
   }
 
-
   int? get id => _id;
-  
+
   String? get nome => _nome;
 
   set nome(String? nome) => nome = nome;
 
   String? get descrizione => _descrizione;
 
-  set descrizione (String? descrizione) => _descrizione = descrizione;
+  set descrizione(String? descrizione) => _descrizione = descrizione;
 
   String? get image => _image;
 
@@ -57,15 +58,16 @@ class Esercizio {
 
   set ripetizioni(int? ripetizioni) => _ripetizioni = ripetizioni;
 
- int? get numeroSerie => _numeroSerie;
+  int? get numeroSerie => _numeroSerie;
 
- set numeroSerie(int? nSerie) => _numeroSerie = nSerie;
+  set numeroSerie(int? nSerie) => _numeroSerie = nSerie;
 
- DateTime? get tempoRiposo => _tempoRiposo;
+  DateTime? get tempoRiposo => _tempoRiposo;
 
- set tempoRiposo(DateTime? tempoRiposo) => _tempoRiposo = tempoRiposo;
+  set tempoRiposo(DateTime? tempoRiposo) => _tempoRiposo = tempoRiposo;
 
- CronometroProgrammabile? get cronometroProg => _cronometro;
+  CronometroProgrammabile? get cronometroProg => _cronometro;
 
- set cronometroProg(CronometroProgrammabile? cronProg) => _cronometro = cronProg;
-} 
+  set cronometroProg(CronometroProgrammabile? cronProg) =>
+      _cronometro = cronProg;
+}

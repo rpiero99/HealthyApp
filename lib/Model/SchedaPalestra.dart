@@ -2,28 +2,49 @@ import 'Esercizio.dart';
 
 class SchedaPalestra {
   int? _id = 0;
-  List<Esercizio> _esercizi = List.empty(growable: true);
+  List<Esercizio?> _esercizi = List.empty(growable: true);
   String? _name;
   String? _descrizione;
 
   SchedaPalestra(this._descrizione, this._name);
 
+  SchedaPalestra.fromJson(Map<String, dynamic> json) {
+    _id = json['id'];
+    if (json['esercizi'] != null) {
+      _esercizi = <Esercizio>[];
+      json['esercizi'].forEach((p) {
+        _esercizi.add(Esercizio.fromJson(p));
+      });
+    }
+    _name = json['nome'];
+    _descrizione = json['descrizione'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = _id;
+    data['esercizi'] = _esercizi.map((v) => v?.toJson()).toList();
+    data['nome'] = _name;
+    data['descrizione'] = _descrizione;
+    return data;
+  }
+
   int? get id => _id;
-  
-  List<Esercizio> get esercizi => _esercizi;
 
-  void addEsercizio(Esercizio esercizio) => this._esercizi.add(esercizio);
+  List<Esercizio?> get esercizi => _esercizi;
 
-  void removeEsercizio(Esercizio esercizio) => this._esercizi.remove(esercizio);
+  void addEsercizio(Esercizio? esercizio) => _esercizi.add(esercizio);
 
-  Esercizio getEsercizioFromName(String nome) =>
-      this._esercizi.where((e) => e.nome == nome).first;
+  void removeEsercizio(Esercizio? esercizio) => _esercizi.remove(esercizio);
 
-  String? get nome => this._name;
+  Esercizio? getEsercizioFromName(String? nome) =>
+      _esercizi.where((e) => e!.nome == nome).first;
 
-  set nome(String? nome) => this._name = nome;
+  String? get nome => _name;
+
+  set nome(String? nome) => _name = nome;
 
   String? get descrizione => _descrizione;
 
-  set descrizione (String? descrizione) => _descrizione = descrizione;
+  set descrizione(String? descrizione) => _descrizione = descrizione;
 }

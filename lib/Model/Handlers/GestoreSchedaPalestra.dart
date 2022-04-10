@@ -5,23 +5,24 @@ import 'dart:async';
 class GestoreSchedaPalestra {
   List<SchedaPalestra> schede = List.empty(growable: true);
 
-  GestoreSchedaPalestra();
+  GestoreSchedaPalestra._privateConstructor();
+  static final instance = GestoreSchedaPalestra._privateConstructor();
 
   SchedaPalestra createSchedaPalestra(String descrizione, String nome) =>
       SchedaPalestra(descrizione, nome);
 
   CronometroProgrammabile createCronometroProgrammabile(
-      Timer timer,
-      Timer tempoPreparazione,
-      Timer tempoRiposo,
-      Timer tempoLavoro,
-      int tempoTotale) =>
+          Timer timer,
+          Timer tempoPreparazione,
+          Timer tempoRiposo,
+          Timer tempoLavoro,
+          int tempoTotale) =>
       CronometroProgrammabile(
           tempoLavoro, tempoPreparazione, tempoRiposo, tempoTotale, timer);
 
-  List<SchedaPalestra> get schedePalestra => this.schede;
+  List<SchedaPalestra> get schedePalestra => schede;
 
-  addSchedaPalestra(SchedaPalestra scheda) => this.schede.add(scheda);
+  addSchedaPalestra(SchedaPalestra scheda) => schede.add(scheda);
 
-  removeSchedaPalestra(SchedaPalestra scheda) => this.schede.remove(scheda);
+  removeSchedaPalestra(SchedaPalestra scheda) => schede.remove(scheda);
 }
