@@ -41,7 +41,7 @@ class Allenamento {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
+    data['id'] = _id;
     data['oraInizio'] = _oraInizio;
     data['oraFine'] = _oraFine;
     data['tempoPerKm'] = _tempoPerKm;
