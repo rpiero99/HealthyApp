@@ -1,42 +1,65 @@
 class Pasto {
-  int _id = 0;
-  Enum _categoria;
-  String _nome;
-  String _descrizione;
-  int _calorie;
-  DateTime _ora;
-  String _type;
-  int _quantita;
+  int? _id = 0;
+  Enum? _categoria;
+  String? _nome;
+  String? _descrizione;
+  int? _calorie;
+  DateTime? _ora;
+  String? _type;
+  int? _quantita;
 
   Pasto(this._categoria, this._calorie, this._descrizione, this._nome,
       this._ora, this._quantita, this._type);
 
-  int get id => _id;
-  
-  Enum get categoria => _categoria;
+  Pasto.fromJson(Map<String, dynamic> json) {
+    _id = json['id'];
+    _calorie = json['calorie'];
+    _categoria = json['categoria'];
+    _descrizione = json['descrizione'];
+    _nome = json['nome'];
+    _ora = json['ora'];
+    _quantita = json['quantita'];
+    _type = json['tipo'];
+  }
 
-  String get nome => _nome;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = _id;
+    data['calorie'] = _calorie;
+    data['categoria'] = _categoria;
+    data['descrizione'] = _descrizione;
+    data['nome'] = _nome;
+    data['ora'] = _ora;
+    data['quantita'] = _quantita;
+    data['tipo'] = _type;
+    return data;
+  }
 
-  String get descrizione => _descrizione;
+  int? get id => _id;
 
-  int get calorie => _calorie;
+  Enum? get categoria => _categoria;
 
-  DateTime get ora => _ora;
+  String? get nome => _nome;
 
-  String get type => _type;
+  String? get descrizione => _descrizione;
 
-  int get quantita => _quantita;
+  int? get calorie => _calorie;
 
-  set categoria(Enum categoria) => _categoria = categoria;
+  DateTime? get ora => ora;
 
-  set nome(String nome) => _nome = nome;
+  String? get type => _type;
 
-  set descrizione(String descrizione) => _descrizione = descrizione;
+  int? get quantita => _quantita;
 
-  set ora(DateTime ora) => _ora = ora;
+  set categoria(Enum? categoria) => _categoria = categoria;
 
-  set type(String type) => _type = type;
+  set nome(String? nome) => _nome = nome;
 
-  set quantita(int quantita) => _quantita = quantita;
+  set descrizione(String? descrizione) => _descrizione = descrizione;
 
+  set ora(DateTime? ora) => _ora = ora;
+
+  set type(String? type) => _type = type;
+
+  set quantita(int? quantita) => _quantita = quantita;
 }

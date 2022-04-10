@@ -11,7 +11,7 @@ class PianoAlimentare {
 
   Pasto createPasto(Enum categoria, int calorie, String descrizione,
       String nome, DateTime ora, int quantita, String type) {
-    return new Pasto(
+    return Pasto(
         categoria, calorie, descrizione, nome, ora, quantita, type);
   }
 

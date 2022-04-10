@@ -33,11 +33,11 @@ class AnagraficaUtente {
 
   int? get id => _id;
 
-  String? get nomeUtente => this._nomeUtente;
+  String? get nomeUtente => _nomeUtente;
 
-  set nomeUtente(String? nome) => this._nomeUtente = nome;
+  set nomeUtente(String? nome) => _nomeUtente = nome;
 
-  int? get altezzaUtente => this._altezzaUtente;
+  int? get altezzaUtente => _altezzaUtente;
 
   set altezzaUtente(int? altezza) => this._altezzaUtente = altezza;
 

@@ -1,7 +1,7 @@
 import 'AnagraficaUtente.dart';
 
 class Utente {
-  int _id = 0;
+  final int _id = 0;
   AnagraficaUtente _anagraficaUtente;
   String _email;
   String _password;
