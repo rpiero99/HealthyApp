@@ -15,6 +15,10 @@ class GestoreUtente {
           AnagraficaUtente anagrafica, String email, String password) =>
       Utente(anagrafica, email, password);
 
+  AnagraficaUtente createAnagraficaUtente(int altezza, DateTime dataNascita, String nome,  double peso, bool sesso)=>
+    AnagraficaUtente(altezza, dataNascita, nome, peso, sesso);
+
+
   addUtente(Utente utente) {
     _utenti.add(utente);
   }

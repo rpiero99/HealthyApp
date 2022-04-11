@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
+import 'package:healthy_app/Model/CronometroProgrammabile.dart';
+
 import 'Esercizio.dart';
 
 class SchedaPalestra {
@@ -35,12 +37,20 @@ class SchedaPalestra {
 
   List<Esercizio?> get esercizi => _esercizi;
 
-  void addEsercizio(Esercizio? esercizio) => _esercizi.add(esercizio);
+  Esercizio createEsercizio(CronometroProgrammabile cronometro, String descrizione, String image, String nome, int numeroSerie, int numeroRipetizioni, DateTime tempoRiposo) =>
+      Esercizio(cronometro, descrizione, image, nome, numeroSerie, numeroRipetizioni, tempoRiposo);
 
-  void removeEsercizio(Esercizio? esercizio) => _esercizi.remove(esercizio);
+  addEsercizio(Esercizio? esercizio) => _esercizi.add(esercizio);
+
+  removeEsercizio(Esercizio? esercizio) => _esercizi.remove(esercizio);
 
   Esercizio? getEsercizioFromName(String? nome) =>
       _esercizi.where((e) => e!.nome == nome).first;
+
+  updateEsercizio(Esercizio? esercizio){
+    removeEsercizio(getEsercizioFromName(esercizio?.nome));
+    addEsercizio(esercizio);
+  }
 
   String? get nome => _name;
 
