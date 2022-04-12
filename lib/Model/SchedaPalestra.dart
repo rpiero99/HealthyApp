@@ -1,7 +1,6 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
-import 'package:healthy_app/Model/CronometroProgrammabile.dart';
-
+import 'CronometroProgrammabile.dart';
 import 'Esercizio.dart';
 
 class SchedaPalestra {

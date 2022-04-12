@@ -4,16 +4,17 @@ import 'dart:async';
 import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:healthy_app/Model/Allenamento.dart';
-import 'package:healthy_app/Model/Esercizio.dart';
-import 'package:healthy_app/Model/Handlers/GestoreAllenamento.dart';
-import 'package:healthy_app/Model/Handlers/GestoreAuth.dart';
-import 'package:healthy_app/Model/Handlers/GestoreDatabase.dart';
-import 'package:healthy_app/Model/Handlers/GestoreSchedaPalestra.dart';
-import 'package:healthy_app/Model/Handlers/GestoreUtente.dart';
+import '../Model/Allenamento.dart';
+import '../Model/Esercizio.dart';
+import '../Model/Handlers/GestoreAllenamento.dart';
+import '../Model/Handlers/GestoreAuth.dart';
+import '../Model/Handlers/GestoreDatabase.dart';
+import '../Model/Handlers/GestoreSchedaPalestra.dart';
+import '../Model/Handlers/GestoreUtente.dart';
 
 import '../Model/AnagraficaUtente.dart';
 import '../Model/CronometroProgrammabile.dart';
+import '../Model/PianoAlimentare.dart';
 import '../Model/SchedaPalestra.dart';
 import '../Model/Utente.dart';
 
@@ -182,6 +183,14 @@ class HealthyAppController {
   removeEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio){
     schedaPalestra.removeEsercizio(esercizio);
     updateSchedaPalestra(schedaPalestra);
+  }
+
+  //Metodi piano alimentare
+  PianoAlimentare createPianoAlimentare(DateTime dataFine, DateTime dataInizio, String descrizione, Utente utente){
+    PianoAlimentare piano = gestoreUtente.createPianoAlimentare(dataFine, dataInizio, descrizione, utente);
+    gestoreUtente.addPianoAlimentare(piano);
+    gestoreDatabase.pianoAlimentareRef.add(piano.toJson());
+    return piano;
   }
 
 
