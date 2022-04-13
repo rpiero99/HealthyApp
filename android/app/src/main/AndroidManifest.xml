@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="it.unicam.cs.pawm.team151.healthy_app">
+    package="it.unicam.cs.pawm.team151.healthyApp">
    <application
         android:label="healthy_app"
         android:name="${applicationName}"
