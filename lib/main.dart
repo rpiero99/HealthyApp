@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:healthy_app/Controller/HealthyAppController.dart';
-import 'package:healthy_app/Model/AnagraficaUtente.dart';
+import 'Controller/HealthyAppController.dart';
+import 'Model/AnagraficaUtente.dart';
 
 void main() {
   runApp(const MyApp());
