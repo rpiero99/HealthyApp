@@ -14,6 +14,7 @@ import '../Model/Handlers/GestoreUtente.dart';
 
 import '../Model/AnagraficaUtente.dart';
 import '../Model/CronometroProgrammabile.dart';
+import '../Model/Pasto.dart';
 import '../Model/PianoAlimentare.dart';
 import '../Model/SchedaPalestra.dart';
 import '../Model/Utente.dart';
@@ -191,6 +192,33 @@ class HealthyAppController {
     gestoreUtente.addPianoAlimentare(piano);
     gestoreDatabase.pianoAlimentareRef.add(piano.toJson());
     return piano;
+  }
+
+  updatePianoAlimentare(PianoAlimentare pianoAlimentare) => gestoreDatabase.pianoAlimentareRef.doc().set(pianoAlimentare.toJson());
+
+  addPianoAlimentare(PianoAlimentare pianoAlimentare) => gestoreUtente.addPianoAlimentare(pianoAlimentare);
+
+  removePianoAlimentare(PianoAlimentare pianoAlimentare) => gestoreUtente.removePianoAlimentare(pianoAlimentare);
+
+  //Metodi pasto
+
+  Pasto createPasto(PianoAlimentare piano, Enum categoria, int calorie, String descrizione,
+      String nome, DateTime ora, int quantita, String type){
+    Pasto pasto = piano.createPasto(categoria, calorie, descrizione, nome, ora, quantita, type);
+    piano.addPasto(pasto);
+    gestoreDatabase.pastoRef.add(pasto.toJson());
+    updatePianoAlimentare(piano);
+    return pasto;
+  }
+
+  addPasto(PianoAlimentare piano, Pasto pasto){
+    piano.addPasto(pasto);
+    updatePianoAlimentare(piano);
+  }
+
+  removePasto(PianoAlimentare piano, Pasto pasto){
+    piano.removePasto(pasto);
+    updatePianoAlimentare(piano);
   }
 
 
