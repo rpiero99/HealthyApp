@@ -21,7 +21,6 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
@@ -45,7 +44,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "it.unicam.cs.pawm.team151.healthyApp"
+        applicationId "com.team151.healthyApp"
         minSdkVersion 19
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()

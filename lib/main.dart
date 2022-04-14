@@ -1,8 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 import 'Controller/HealthyAppController.dart';
 import 'Model/AnagraficaUtente.dart';
 
-void main() {
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -51,7 +55,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-//  HealthyAppController c = HealthyAppController.instance;
+  HealthyAppController c = HealthyAppController.instance;
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -59,11 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-//      AnagraficaUtente a =
-//          AnagraficaUtente(170, DateTime.now(), "test", 7.0, true);
-      //     c.registrazione(
-      //        c.createUtente(a, "alessandrot47@gmail.com", "passwordtest"));
-
+      AnagraficaUtente a =
+      AnagraficaUtente(170, DateTime.now(), "test", 7.0, true);
+      c.registrazione(
+          c.createUtente(a, "alessandrot47@gmail.com", "passwordtest"));
       _counter = 10;
     });
   }
