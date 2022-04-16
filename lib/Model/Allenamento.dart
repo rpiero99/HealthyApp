@@ -67,17 +67,11 @@ class Allenamento {
 
   set oraFine(DateTime? oraFine) => _oraFine = oraFine;
 
-  DateTime? get tempoTotale => _tempoTotale;
+  DateTime? get tempoTotale {}
 
-  set tempoTotale(DateTime? tempoTotale) => _tempoTotale = tempoTotale;
+  DateTime? get tempoPerKm {}
 
-  DateTime? get tempoPerKm => _tempoPerKm;
-
-  set tempoPerKm(DateTime? tempoPerKm) => _tempoPerKm = tempoPerKm;
-
-  Float? get velocitaMedia => _velocitaMedia;
-
-  set velocitaMedia(Float? velocitaMedia) => _velocitaMedia = velocitaMedia;
+  Float? get velocitaMedia {}
 
   int? get calorieConsumate => _calorieConsumate;
 
@@ -86,7 +80,7 @@ class Allenamento {
 
   Float? get distanza => _distanza;
 
-  set distanza(Float? distanza) => _distanza = distanza;
+  setDistanza() {}
 
   String? get descrizione => _descrizione;
 
@@ -99,4 +93,9 @@ class Allenamento {
   String? get image => _image;
 
   set image(String? image) => _image = image;
+
+  int calcoloCalorie(){return 0;}
+
+  int calcoloNumeroPassi() {return 0;}
+
 }

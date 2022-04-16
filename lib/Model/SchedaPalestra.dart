@@ -36,7 +36,7 @@ class SchedaPalestra {
 
   List<Esercizio?> get esercizi => _esercizi;
 
-  Esercizio createEsercizio(CronometroProgrammabile cronometro, String descrizione, String image, String nome, int numeroSerie, int numeroRipetizioni, DateTime tempoRiposo) =>
+  Esercizio createEsercizio(CronometroProgrammabile cronometro, String descrizione, String image, String nome, int numeroSerie, int numeroRipetizioni, int tempoRiposo) =>
       Esercizio(cronometro, descrizione, image, nome, numeroSerie, numeroRipetizioni, tempoRiposo);
 
   addEsercizio(Esercizio? esercizio) => _esercizi.add(esercizio);

@@ -7,21 +7,21 @@ class Esercizio {
   String? _nome;
   String? _descrizione;
   String? _image;
-  int? _ripetizioni;
-  int? _numeroSerie;
-  DateTime? _tempoRiposo;
+  int? _nRep;
+  int? _nSerie;
+  int? _tempoRiposo;
   CronometroProgrammabile? _cronometro;
 
   Esercizio(this._cronometro, this._descrizione, this._image, this._nome,
-      this._numeroSerie, this._ripetizioni, this._tempoRiposo);
+      this._nSerie, this._nRep, this._tempoRiposo);
 
   Esercizio.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _cronometro = json['cronometroProg'] != null
         ? CronometroProgrammabile.fromJson(json['cronometroProg'])
         : null;
-    _ripetizioni = json['numRep'];
-    _numeroSerie = json['numSerie'];
+    _nRep = json['numRep'];
+    _nSerie = json['numSerie'];
     _tempoRiposo = json['tempoRiposo'];
     _descrizione = json['descrizione'];
     _image = json['image'];
@@ -31,8 +31,8 @@ class Esercizio {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = _id;
     data['tempoRiposo'] = _tempoRiposo;
-    data['numSerie'] = _numeroSerie;
-    data['numRep'] = _ripetizioni;
+    data['numSerie'] = _nSerie;
+    data['numRep'] = _nRep;
     if (_cronometro != null) {
       data['cronometroProg'] = _cronometro?.toJson();
     }
@@ -56,17 +56,17 @@ class Esercizio {
 
   set image(String? im) => _image = im;
 
-  int? get ripetizioni => _ripetizioni;
+  int? get nRep => _nRep;
 
-  set ripetizioni(int? ripetizioni) => _ripetizioni = ripetizioni;
+  set nRep(int? rep) => _nRep = rep;
 
-  int? get numeroSerie => _numeroSerie;
+  int? get nSerie => _nSerie;
 
-  set numeroSerie(int? nSerie) => _numeroSerie = nSerie;
+  set nSerie(int? nSerie) => _nSerie = nSerie;
 
-  DateTime? get tempoRiposo => _tempoRiposo;
+  int? get tempoRiposo => _tempoRiposo;
 
-  set tempoRiposo(DateTime? tempoRiposo) => _tempoRiposo = tempoRiposo;
+  set tempoRiposo(int? tempoRiposo) => _tempoRiposo = tempoRiposo;
 
   CronometroProgrammabile? get cronometroProg => _cronometro;
 

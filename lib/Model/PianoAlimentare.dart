@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
+import 'package:flutter_icons/flutter_icons.dart';
+
 import 'Pasto.dart';
 import 'Utente.dart';
 
@@ -66,4 +68,13 @@ class PianoAlimentare {
   Utente? get utente => _utente;
 
   set utente(Utente? utente) => _utente = utente;
+
+  List<Pasto?> get pasti => _pasti;
+
+  List<Pasto?> getPastiFromDayWeek(DateTime timestamp){
+    List<Pasto?> toReturn = List.empty(growable: true);
+   for (Pasto? element in pasti) {
+      if(element?.ora?.weekday == timestamp.weekday)toReturn.add(element);}
+   return toReturn;
+  }
 }

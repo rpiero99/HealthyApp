@@ -4,9 +4,9 @@ import 'dart:async';
 
 class CronometroProgrammabile {
   Timer? _timer;
-  Timer? _tempoPreparazione;
-  Timer? _tempoRiposo;
-  Timer? _tempoLavoro;
+  int? _tempoPreparazione;
+  int? _tempoRiposo;
+  int? _tempoLavoro;
   int? _tempoTotale;
   int? _id;
 
@@ -35,18 +35,18 @@ class CronometroProgrammabile {
 
   set timer(Timer? timer) => _timer = timer;
 
-  Timer? get tempoLavoro => _tempoLavoro;
+  int? get tempoLavoro => _tempoLavoro;
 
-  set tempoLavoro(Timer? tempoLavoro) => _tempoLavoro = tempoLavoro;
+  set tempoLavoro(int? tempoLavoro) => _tempoLavoro = tempoLavoro;
 
-  Timer? get tempoPreparazione => _tempoPreparazione;
+  int? get tempoPreparazione => _tempoPreparazione;
 
-  set tempoPreparazione(Timer? tempoPreparazione) =>
+  set tempoPreparazione(int? tempoPreparazione) =>
       _tempoPreparazione = tempoPreparazione;
 
-  Timer? get tempoRiposo => _tempoRiposo;
+  int? get tempoRiposo => _tempoRiposo;
 
-  set tempoRiposo(Timer? tempoRiposo) => _tempoRiposo = tempoRiposo;
+  set tempoRiposo(int? tempoRiposo) => _tempoRiposo = tempoRiposo;
 
   int? get tempoTotale => _tempoTotale;
 
@@ -55,4 +55,6 @@ class CronometroProgrammabile {
   void startTimer() {}
 
   void stopTimer() {}
+
+  void resetTimer() {}
 }

@@ -95,7 +95,7 @@ class HealthyAppController {
       SchedaPalestra.fromJson(item.toJson());
       addSchedaPalestra(item);
     }
-    return gestoreSchedaPalestra.schede;
+    return gestoreSchedaPalestra.schedePalestra;
   }
 
   updateSchedaPalestra(SchedaPalestra scheda) =>  gestoreDatabase.schedaPalestraRef.doc().set(scheda.toJson());
@@ -109,9 +109,9 @@ class HealthyAppController {
   //Metodi cronometro programmabile
   CronometroProgrammabile createCronometroProgrammabile(
           Timer timer,
-          Timer tempoPreparazione,
-          Timer tempoRiposo,
-          Timer tempoLavoro,
+          int tempoPreparazione,
+          int tempoRiposo,
+          int tempoLavoro,
           int tempoTotale) {
     CronometroProgrammabile cronometroProgrammabile = gestoreSchedaPalestra.createCronometroProgrammabile(
         timer, tempoPreparazione, tempoRiposo, tempoLavoro, tempoTotale);
@@ -151,7 +151,7 @@ class HealthyAppController {
 
   //Metodi anagrafica utente
 
-  AnagraficaUtente createAnagraficaUtente(Utente user,int altezza, DateTime dataNascita, String nome,  double peso, bool sesso ){
+  AnagraficaUtente createAnagraficaUtente(Utente user,int altezza, DateTime dataNascita, String nome,  double peso, String sesso ){
     AnagraficaUtente anagrafica = gestoreUtente.createAnagraficaUtente(altezza, dataNascita, nome, peso, sesso);
     gestoreDatabase.anagraficaUtenteRef.add(anagrafica.toJson());
     user.anagraficaUtente = anagrafica;
@@ -166,7 +166,7 @@ class HealthyAppController {
   }
 
   //Metodi esercizio
-  Esercizio createEsercizio(SchedaPalestra schedaPalestra, CronometroProgrammabile cronometro, String descrizione, String image, String nome, int numeroSerie, int numeroRipetizioni, DateTime tempoRiposo){
+  Esercizio createEsercizio(SchedaPalestra schedaPalestra, CronometroProgrammabile cronometro, String descrizione, String image, String nome, int numeroSerie, int numeroRipetizioni, int tempoRiposo){
     Esercizio esercizio = schedaPalestra.createEsercizio(cronometro, descrizione, image, nome, numeroSerie, numeroRipetizioni, tempoRiposo);
     schedaPalestra.addEsercizio(esercizio);
     gestoreDatabase.esercizioRef.add(esercizio.toJson());

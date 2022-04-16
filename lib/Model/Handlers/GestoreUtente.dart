@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'package:healthy_app/Model/Pasto.dart';
+
 import '../AnagraficaUtente.dart';
 import '../PianoAlimentare.dart';
 import '../Utente.dart';
@@ -7,6 +9,7 @@ import '../Utente.dart';
 class GestoreUtente {
   final List<Utente> _utenti = List.empty(growable: true);
   final List<PianoAlimentare> _piani = List.empty(growable: true);
+  final List<Pasto> _pastiOfDay = List.empty(growable: true);
 
   GestoreUtente._privateConstructor();
   static final instance = GestoreUtente._privateConstructor();
@@ -19,7 +22,7 @@ class GestoreUtente {
           AnagraficaUtente anagrafica, String email, String password) =>
       Utente(anagrafica, email, password);
 
-  AnagraficaUtente createAnagraficaUtente(int altezza, DateTime dataNascita, String nome,  double peso, bool sesso)=>
+  AnagraficaUtente createAnagraficaUtente(int altezza, DateTime dataNascita, String nome,  double peso, String sesso)=>
     AnagraficaUtente(altezza, dataNascita, nome, peso, sesso);
 
   addUtente(Utente utente) =>
@@ -34,4 +37,13 @@ class GestoreUtente {
   addPianoAlimentare(PianoAlimentare piano) => _piani.add(piano);
 
   removePianoAlimentare(PianoAlimentare piano) => _piani.remove(piano);
+
+  List<Pasto> get pastiOfDay => _pastiOfDay;
+
+  //aggiunta di un pasto fatto in un certo giorno e che potrebbe essere incluso nel piano come no.
+  addPastoOfDay(Pasto pasto){
+    //todo - da vedere dove settare l'ora del pasto.
+    pasto.ora = DateTime.now();
+    pastiOfDay.add(pasto);
+  }
 }

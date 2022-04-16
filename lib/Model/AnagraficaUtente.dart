@@ -6,7 +6,7 @@ class AnagraficaUtente {
   int? _altezzaUtente;
   double? _pesoUtente;
   DateTime? _dataNascitaUtente;
-  bool? _sesso;
+  String? _sesso;
 
   AnagraficaUtente(this._altezzaUtente, this._dataNascitaUtente,
       this._nomeUtente, this._pesoUtente, this._sesso);
@@ -47,9 +47,9 @@ class AnagraficaUtente {
 
   DateTime? get dataNascitaUtente => _dataNascitaUtente;
 
-  set dataNascitaUtente(DateTime? eta) => _dataNascitaUtente = eta;
+  set dataNascitaUtente(DateTime? dataNascita) => _dataNascitaUtente = dataNascita;
 
-  bool? get sessoUtente => _sesso;
+  String? get sessoUtente => _sesso;
 
-  set sessoUtente(bool? sesso) => _sesso = sesso;
+  set sessoUtente(String? sesso) => _sesso = sesso;
 }
