@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -66,6 +67,7 @@ class HealthyAppController {
     final allAllenamentiInDB =
         querySnapshot.docs.map((doc) => doc.data()) as List<Allenamento>;
     for (var item in allAllenamentiInDB) {
+      Allenamento.fromJson(item.toJson());
       addAllenamento(item);
     }
     return gestoreAllenamento.allenamenti;
@@ -90,6 +92,7 @@ class HealthyAppController {
     final allSchedePalestraInDB =
         querySnapshot.docs.map((doc) => doc.data()) as List<SchedaPalestra>;
     for (var item in allSchedePalestraInDB) {
+      SchedaPalestra.fromJson(item.toJson());
       addSchedaPalestra(item);
     }
     return gestoreSchedaPalestra.schede;
@@ -134,6 +137,7 @@ class HealthyAppController {
     final allUsersInDB =
         querySnapshot.docs.map((doc) => doc.data()) as List<Utente>;
     for (var item in allUsersInDB) {
+      Utente.fromJson(item.toJson());
       addUtente(item);
     }
     return gestoreUtente.utenti;

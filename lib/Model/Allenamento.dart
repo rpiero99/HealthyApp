@@ -99,6 +99,4 @@ class Allenamento {
   String? get image => _image;
 
   set image(String? image) => _image = image;
-
-  void setDate() {}
 }

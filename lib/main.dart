@@ -63,10 +63,11 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      AnagraficaUtente a =
-      AnagraficaUtente(170, DateTime.now(), "test", 7.0, true);
-      c.registrazione(
-          c.createUtente(a, "alessandrot47@gmail.com", "passwordtest"));
+   //   AnagraficaUtente a =
+   //   AnagraficaUtente(170, DateTime.now(), "test", 7.0, true);
+   //   c.registrazione(
+   //       c.createUtente(a, "alessandrot47@gmail.com", "passwordtest"));
+      print(c.getUtenti().toString());
       _counter = 10;
     });
   }
