@@ -81,8 +81,8 @@ class HealthyAppController {
 
   //Metodi scheda palestra
 
-  SchedaPalestra createSchedaPalestra(String descrizione, String nome){
-    SchedaPalestra scheda = gestoreSchedaPalestra.createSchedaPalestra(descrizione, nome);
+  SchedaPalestra createSchedaPalestra(String descrizione, String nome, DateTime dataInizio, DateTime dataFine){
+    SchedaPalestra scheda = gestoreSchedaPalestra.createSchedaPalestra(descrizione, nome, dataInizio, dataFine);
     gestoreDatabase.schedaPalestraRef.add(scheda.toJson());
     return scheda;
   }
@@ -166,27 +166,30 @@ class HealthyAppController {
   }
 
   //Metodi esercizio
-  Esercizio createEsercizio(SchedaPalestra schedaPalestra, CronometroProgrammabile cronometro, String descrizione, String image, String nome, int numeroSerie, int numeroRipetizioni, int tempoRiposo){
+  Esercizio createEsercizio(SchedaPalestra schedaPalestra,
+      CronometroProgrammabile cronometro, String descrizione,
+      String image, String nome, int numeroSerie,
+      int numeroRipetizioni, int tempoRiposo, int day){
     Esercizio esercizio = schedaPalestra.createEsercizio(cronometro, descrizione, image, nome, numeroSerie, numeroRipetizioni, tempoRiposo);
-    schedaPalestra.addEsercizio(esercizio);
+    schedaPalestra.addEsercizio(esercizio, day);
     gestoreDatabase.esercizioRef.add(esercizio.toJson());
     updateSchedaPalestra(schedaPalestra);
     return esercizio;
   }
 
-  updateEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio){
+  updateEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio, int day){
     gestoreDatabase.esercizioRef.doc().set(esercizio.toJson());
-    schedaPalestra.updateEsercizio(esercizio);
+    schedaPalestra.updateEsercizio(esercizio, day);
     updateSchedaPalestra(schedaPalestra);
   }
 
-  addEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio){
-    schedaPalestra.addEsercizio(esercizio);
+  addEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio, int day){
+    schedaPalestra.addEsercizio(esercizio, day);
     updateSchedaPalestra(schedaPalestra);
   }
 
-  removeEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio){
-    schedaPalestra.removeEsercizio(esercizio);
+  removeEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio, int day){
+    schedaPalestra.removeEsercizio(esercizio, day);
     updateSchedaPalestra(schedaPalestra);
   }
 
@@ -225,5 +228,7 @@ class HealthyAppController {
     updatePianoAlimentare(piano);
   }
 
-
+  PianoAlimentare getCurrentPianoAlimentareOf(Utente utente){
+    return gestoreUtente.piani.where((element) => element.utente == utente && element.dataFine!.isAfter(DateTime.now())).first;
+  }
 }

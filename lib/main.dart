@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/Model/CronometroProgrammabile.dart';
+import 'package:healthy_app/Model/SchedaPalestra.dart';
 
 import 'Controller/HealthyAppController.dart';
 import 'Model/AnagraficaUtente.dart';
+import 'Model/Esercizio.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,10 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
    //   AnagraficaUtente(170, DateTime.now(), "test", 7.0, true);
    //   c.registrazione(
    //       c.createUtente(a, "alessandrot47@gmail.com", "passwordtest"));
-      print(c.getUtenti().toString());
       _counter = 10;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
