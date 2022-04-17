@@ -1,10 +1,8 @@
 // ignore_for_file: file_names
 
 import 'dart:async';
-import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:healthy_app/Utils/GeoLocService.dart';
 import '../Model/Allenamento.dart';
 import '../Model/Esercizio.dart';
 import '../Model/Handlers/GestoreAllenamento.dart';
@@ -26,38 +24,26 @@ class HealthyAppController {
   GestoreAuth gestoreAuth = GestoreAuth.instance;
   GestoreSchedaPalestra gestoreSchedaPalestra = GestoreSchedaPalestra.instance;
   GestoreUtente gestoreUtente = GestoreUtente.instance;
+  GeoLocService? geoLocService;
+  
 
   HealthyAppController._privateConstructor();
   static final instance = HealthyAppController._privateConstructor();
 
-  //Metodi per login e registrazione
+  ///Metodi per login e registrazione
+
   login(Utente utente) => gestoreAuth.login(utente);
 
   registrazione(Utente utente) => gestoreAuth.registrazione(utente);
 
-  //Metodi per allenamento
+  ///Metodi per allenamento
+
   Allenamento createAllenamento(
-      int calorieConsumate,
       String descrizione,
-      Float distanza,
-      String image,
-      String nome,
-      DateTime oraInizio,
-      DateTime oraFine,
-      DateTime tempoPerKm,
-      DateTime tempoTotale,
-      Float velocitaMedia) {
+      String nome) {
     Allenamento allenamento =  gestoreAllenamento.createAllenamento(
-        calorieConsumate,
         descrizione,
-        distanza,
-        image,
-        nome,
-        oraInizio,
-        oraFine,
-        tempoPerKm,
-        tempoTotale,
-        velocitaMedia);
+        nome);
     gestoreDatabase.allenamentoRef.add(allenamento.toJson());
     return allenamento;
   }
@@ -79,7 +65,26 @@ class HealthyAppController {
     gestoreAllenamento.addAllenamento(item);
   }
 
-  //Metodi scheda palestra
+  void startAllenamento(String descrizione, String nome) async{
+    geoLocService = GeoLocService();
+    DateTime timeStamp = DateTime.now();
+    geoLocService?.initPlatformState();
+    Allenamento newAllenamento = createAllenamento(descrizione, nome);
+    geoLocService?.startPosition = await geoLocService?.getCurrentPosition();
+    newAllenamento.oraInizio = timeStamp;
+    addAllenamento(newAllenamento);
+  }
+
+  void stopAllenamento(Allenamento allenamento) async {
+    allenamento.oraFine = DateTime.now();
+    geoLocService?.endPosition = await geoLocService?.getCurrentPosition();
+    allenamento.distanza = geoLocService?.calculateDistance(geoLocService?.startPosition?.latitude, geoLocService?.startPosition?.longitude,
+        geoLocService?.endPosition?.latitude, geoLocService?.endPosition?.longitude);
+    //todo da testare
+    geoLocService?.cancelListener();
+  }
+
+  ///Metodi scheda palestra
 
   SchedaPalestra createSchedaPalestra(String descrizione, String nome, DateTime dataInizio, DateTime dataFine){
     SchedaPalestra scheda = gestoreSchedaPalestra.createSchedaPalestra(descrizione, nome, dataInizio, dataFine);
@@ -106,7 +111,8 @@ class HealthyAppController {
   removeSchedaPalestra(SchedaPalestra scheda) =>
       gestoreSchedaPalestra.removeSchedaPalestra(scheda);
 
-  //Metodi cronometro programmabile
+  ///Metodi cronometro programmabile
+
   CronometroProgrammabile createCronometroProgrammabile(
           Timer timer,
           int tempoPreparazione,
@@ -123,7 +129,7 @@ class HealthyAppController {
       gestoreDatabase.schedaPalestraRef.doc().set(cronometroProgrammabile.toJson());
 
 
- //Metodi utente
+ ///Metodi utente
 
   Utente createUtente(
           AnagraficaUtente anagrafica, String email, String password) {
@@ -149,7 +155,7 @@ class HealthyAppController {
     gestoreUtente.addUtente(item);
   }
 
-  //Metodi anagrafica utente
+  ///Metodi anagrafica utente
 
   AnagraficaUtente createAnagraficaUtente(Utente user,int altezza, DateTime dataNascita, String nome,  double peso, String sesso ){
     AnagraficaUtente anagrafica = gestoreUtente.createAnagraficaUtente(altezza, dataNascita, nome, peso, sesso);
@@ -165,7 +171,8 @@ class HealthyAppController {
     updateUtente(user);
   }
 
-  //Metodi esercizio
+  ///Metodi esercizio
+
   Esercizio createEsercizio(SchedaPalestra schedaPalestra,
       CronometroProgrammabile cronometro, String descrizione,
       String image, String nome, int numeroSerie,
@@ -193,7 +200,8 @@ class HealthyAppController {
     updateSchedaPalestra(schedaPalestra);
   }
 
-  //Metodi piano alimentare
+  ///Metodi piano alimentare
+
   PianoAlimentare createPianoAlimentare(DateTime dataFine, DateTime dataInizio, String descrizione, Utente utente){
     PianoAlimentare piano = gestoreUtente.createPianoAlimentare(dataFine, dataInizio, descrizione, utente);
     gestoreUtente.addPianoAlimentare(piano);
@@ -207,7 +215,7 @@ class HealthyAppController {
 
   removePianoAlimentare(PianoAlimentare pianoAlimentare) => gestoreUtente.removePianoAlimentare(pianoAlimentare);
 
-  //Metodi pasto
+  ///Metodi pasto
 
   Pasto createPasto(PianoAlimentare piano, Enum categoria, int calorie, String descrizione,
       String nome, DateTime ora, int quantita, String type){

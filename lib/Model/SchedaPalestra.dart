@@ -1,6 +1,6 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:healthy_app/Utils/MapEserciziDay.dart';
 
 import 'CronometroProgrammabile.dart';
 import 'Esercizio.dart';
@@ -9,24 +9,24 @@ class SchedaPalestra {
   int? _id = 0;
   String? _name;
   String? _descrizione;
-  final Map<int, List<Esercizio>> _mapEserciziOfDay = <int, List<Esercizio>>{};
+  List<MapEserciziDay>? _map;
   DateTime? _dataInizio;
   DateTime? _dataFine;
 
   SchedaPalestra(this._descrizione, this._name, this._dataInizio, this._dataFine){
     for(int i = 1; i<8; i++){
-      _mapEserciziOfDay[i] = List.empty(growable: true);
+     _map?.add(MapEserciziDay(i));
     }
   }
 
   SchedaPalestra.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
-    // if (json['esercizi'] != null) {
-    //   _esercizi = <Esercizio>[];
-    //   json['esercizi'].forEach((p) {
-    //     _esercizi.add(Esercizio.fromJson(p));
-    //   });
-   // }
+    if (json['eserciziOfDay'] != null) {
+      _map = <MapEserciziDay>[];
+      json['eserciziOfDay'].forEach((v) {
+        _map!.add(MapEserciziDay.fromJson(v));
+      });
+    }
     _name = json['nome'];
     _descrizione = json['descrizione'];
   }
@@ -34,7 +34,9 @@ class SchedaPalestra {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = _id;
-  //  data['esercizi'] = _esercizi.map((v) => v?.toJson()).toList();
+    if (_map != null) {
+      data['eserciziOfDay'] = _map!.map((v) => v.toJson()).toList();
+    }
     data['nome'] = _name;
     data['descrizione'] = _descrizione;
     return data;
@@ -45,12 +47,12 @@ class SchedaPalestra {
   Esercizio createEsercizio(CronometroProgrammabile cronometro, String descrizione, String image, String nome, int numeroSerie, int numeroRipetizioni, int tempoRiposo) =>
       Esercizio(cronometro, descrizione, image, nome, numeroSerie, numeroRipetizioni, tempoRiposo);
 
-  addEsercizio(Esercizio? esercizio, int day) {
-    _mapEserciziOfDay[day]?.add(esercizio!);
+  addEsercizio(Esercizio? esercizio, int? day) {
+    _map?[day!].addEsercizio(esercizio!);
   }
 
-  removeEsercizio(Esercizio? esercizio, int day){
-    getEserciziFromDay(day)?.remove(esercizio);
+  removeEsercizio(Esercizio? esercizio, int? day){
+    _map?[day!].removeEsercizio(esercizio!);
   }
 
   updateEsercizio(Esercizio? esercizio, int day){
@@ -79,7 +81,7 @@ class SchedaPalestra {
   }
 
   List<Esercizio>? getEserciziFromDay(int day){
-    return _mapEserciziOfDay[day];
+    return _map?[day].eserciziOfDay;
   }
 
   List<Esercizio> getAllEsercizi(){
@@ -92,8 +94,8 @@ class SchedaPalestra {
 
   List<Esercizio> filterEsercizi(bool Function(Esercizio) filter){
     List<Esercizio> toReturn = List.empty(growable: true);
-      for(var element in _mapEserciziOfDay.values) {
-        for(Esercizio item in element){
+      for(var element in _map!) {
+        for(Esercizio item in element.eserciziOfDay){
           if (filter(item)) {
             toReturn.add(item);
           }

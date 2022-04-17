@@ -2,30 +2,21 @@
 
 import 'dart:ffi';
 
+import 'Utente.dart';
+
 class Allenamento {
   int? _id = 0;
   DateTime? _oraInizio;
   DateTime? _oraFine;
-  DateTime? _tempoTotale;
-  Float? _velocitaMedia;
-  int? _calorieConsumate;
-  Float? _distanza;
-  DateTime? _tempoPerKm;
+  int? _tempoTotale;
+  double? _velocitaMedia;
+  double? _calorieConsumate;
+  double? _distanza;
+  double? _tempoPerKm;
   String? _descrizione;
   String? _nome;
-  String? _image;
 
-  Allenamento(
-      this._calorieConsumate,
-      this._descrizione,
-      this._distanza,
-      this._image,
-      this._nome,
-      this._oraInizio,
-      this._oraFine,
-      this._tempoPerKm,
-      this._tempoTotale,
-      this._velocitaMedia);
+  Allenamento(this._descrizione, this._nome);
 
   Allenamento.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
@@ -37,7 +28,6 @@ class Allenamento {
     _calorieConsumate = json['calorieCons'];
     _descrizione = json['descrizione'];
     _distanza = json['distanza'];
-    _image = json['image'];
     _nome = json['nome'];
   }
 
@@ -52,7 +42,6 @@ class Allenamento {
     data['calorieCons'] = _calorieConsumate;
     data['descrizione'] = _descrizione;
     data['distanza'] = _distanza;
-    data['image'] = _image;
     data['nome'] = _nome;
     return data;
   }
@@ -67,20 +56,28 @@ class Allenamento {
 
   set oraFine(DateTime? oraFine) => _oraFine = oraFine;
 
-  DateTime? get tempoTotale {}
+  int? get tempoTotale {
+    _tempoTotale = oraFine?.difference(oraInizio!).inMinutes;
+    return _tempoTotale;
+  }
 
-  DateTime? get tempoPerKm {}
+  double? get tempoPerKm {
+    _tempoPerKm = (tempoTotale! * 60 / distanza!);
+    return _tempoPerKm;
+  }
 
-  Float? get velocitaMedia {}
+  double? get velocitaMedia {
+    _velocitaMedia = (distanza! / (tempoTotale! / 60));
+    return _velocitaMedia;
+  }
 
-  int? get calorieConsumate => _calorieConsumate;
+  double? get calorieConsumate => _calorieConsumate;
 
-  set calorieConsumate(int? calorieConsumate) =>
-      _calorieConsumate = calorieConsumate;
+  set calorieConsumate(double? calorie) => _calorieConsumate = calorie;
 
-  Float? get distanza => _distanza;
+  double? get distanza => _distanza;
 
-  setDistanza() {}
+  set distanza(double? distance) => _distanza = distance;
 
   String? get descrizione => _descrizione;
 
@@ -90,12 +87,8 @@ class Allenamento {
 
   set nome(String? nome) => _nome = nome;
 
-  String? get image => _image;
-
-  set image(String? image) => _image = image;
-
-  int calcoloCalorie(){return 0;}
-
-  int calcoloNumeroPassi() {return 0;}
-
+  double? calcoloCalorie(Utente utente) {
+    calorieConsumate = utente.anagraficaUtente!.pesoUtente! * distanza!;
+    return calorieConsumate;
+  }
 }

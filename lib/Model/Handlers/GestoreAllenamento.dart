@@ -10,18 +10,9 @@ class GestoreAllenamento {
   static final instance = GestoreAllenamento._privateConstructor();
 
   Allenamento createAllenamento(
-      int calorieConsumate,
       String descrizione,
-      Float distanza,
-      String image,
-      String nome,
-      DateTime oraInizio,
-      DateTime oraFine,
-      DateTime tempoPerKm,
-      DateTime tempoTotale,
-      Float velocitaMedia) {
-    return Allenamento(calorieConsumate, descrizione, distanza, image, nome,
-        oraInizio, oraFine, tempoPerKm, tempoTotale, velocitaMedia);
+      String nome) {
+    return Allenamento(descrizione, nome);
   }
 
   List<Allenamento> get allenamenti => _allenamenti;

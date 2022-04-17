@@ -57,7 +57,7 @@ class PianoAlimentare {
 
   set dataInizio(DateTime? dataInizio) => _dataInizio = dataInizio;
 
-  DateTime? get dataFine => _dataFine;
+  DateTime  ? get dataFine => _dataFine;
 
   set dataFine(DateTime? dataFine) => _dataFine = dataFine;
 
