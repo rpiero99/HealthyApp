@@ -2,7 +2,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-class Notificator{
+class NotificationService{
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
@@ -10,7 +10,7 @@ class Notificator{
     AndroidInitializationSettings('app_icon');
 
     const InitializationSettings initializationSettings =
-     InitializationSettings(
+    InitializationSettings(
         android: initializationSettingsAndroid,
         iOS: null,
         macOS: null);
