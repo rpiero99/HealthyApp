@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'dart:async';
+import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
 import '../Model/Allenamento.dart';
@@ -25,7 +26,7 @@ class HealthyAppController {
   GestoreSchedaPalestra gestoreSchedaPalestra = GestoreSchedaPalestra.instance;
   GestoreUtente gestoreUtente = GestoreUtente.instance;
   GeoLocService? geoLocService;
-  
+
 
   HealthyAppController._privateConstructor();
   static final instance = HealthyAppController._privateConstructor();
@@ -51,10 +52,12 @@ class HealthyAppController {
   Future<List<Allenamento>> getAllenamenti() async {
     QuerySnapshot querySnapshot = await gestoreDatabase.allenamentoRef.get();
     final allAllenamentiInDB =
-        querySnapshot.docs.map((doc) => doc.data()) as List<Allenamento>;
+        querySnapshot.docs.map((doc) => doc.id) as List<String>;
     for (var item in allAllenamentiInDB) {
-      Allenamento.fromJson(item.toJson());
-      addAllenamento(item);
+      DocumentSnapshot documentSnapshot =  gestoreDatabase.allenamentoRef.doc(item).get() as DocumentSnapshot<Object?>;
+      Map<String, dynamic>.from(documentSnapshot.data() as Map<String, dynamic>);
+      Allenamento all = Allenamento.fromJson(Map<String, dynamic>.from(documentSnapshot.data() as Map<String, dynamic>));
+      addAllenamento(all);
     }
     return gestoreAllenamento.allenamenti;
   }

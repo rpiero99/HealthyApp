@@ -72,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
    //   AnagraficaUtente(170, DateTime.now(), "test", 7.0, true);
    //   c.registrazione(
    //       c.createUtente(a, "alessandrot47@gmail.com", "passwordtest"));
+      c.createAllenamento("prova1", "namoooo");
       _counter = 10;
     });
   }
