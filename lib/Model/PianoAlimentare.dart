@@ -1,7 +1,5 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
-import 'package:flutter_icons/flutter_icons.dart';
-
 import 'Pasto.dart';
 import 'Utente.dart';
 

@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'dart:async';
-import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
 import '../Model/Allenamento.dart';
