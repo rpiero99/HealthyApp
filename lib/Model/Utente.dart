@@ -13,8 +13,7 @@ class Utente {
     _anagraficaUtente = json['anagraficaUtente'] != null
         ? AnagraficaUtente.fromJson(json['anagraficaUtente'])
         : null;
-    _email = json['email'];
-    _password = json['password'];
+    _email = json['email'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -23,7 +22,6 @@ class Utente {
       data['anagraficaUtente'] = _anagraficaUtente?.toJson();
     }
     data['email'] = _email;
-    data['password'] = _password;
     return data;
   }
 

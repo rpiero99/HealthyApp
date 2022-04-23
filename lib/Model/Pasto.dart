@@ -26,11 +26,11 @@ class Pasto {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['calorie'] = _calorie?.toInt();
     data['categoria'] = _categoria;
-    data['descrizione'] = _descrizione;
-    data['nome'] = _nome;
+    data['descrizione'] = _descrizione ?? "";
+    data['nome'] = _nome ?? "";
     data['ora'] = _ora;
     data['quantita'] = _quantita?.toInt();
-    data['tipo'] = _type;
+    data['tipo'] = _type ?? "";
     return data;
   }
 

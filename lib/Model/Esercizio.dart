@@ -17,11 +17,11 @@ class Esercizio {
     _cronometro = json['cronometroProg'] != null
         ? CronometroProgrammabile.fromJson(json['cronometroProg'])
         : null;
-    _nRep = num.tryParse(json['numRep']);
-    _nSerie = num.tryParse(json['numSerie']);
-    _tempoRiposo = num.tryParse(json['tempoRiposo']);
-    _descrizione = json['descrizione'];
-    _nome = json['nome'];
+    _nRep = json['numRep'];
+    _nSerie = json['numSerie'];
+    _tempoRiposo = json['tempoRiposo'];
+    _descrizione = json['descrizione'] ?? "";
+    _nome = json['nome'] ?? "";
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -31,8 +31,8 @@ class Esercizio {
     if (_cronometro != null) {
       data['cronometroProg'] = _cronometro?.toJson();
     }
-    data['descrizione'] = _descrizione;
-    data['nome'] = _nome;
+    data['descrizione'] = _descrizione ?? "";
+    data['nome'] = _nome ?? "";
     return data;
   }
 

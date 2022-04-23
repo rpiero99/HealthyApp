@@ -1,7 +1,4 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
-
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'Utente.dart';
@@ -28,12 +25,12 @@ class Allenamento {
       Timestamp oraFi = json['oraFine'];
       _oraFine = oraFi.toDate();
     }
-    _tempoPerKm = num.tryParse(json['tempoPerKm']);
-    _tempoTotale = num.tryParse(json['tempoTot']);
-    _velocitaMedia = num.tryParse(json['velocitaMed']);
-    _calorieConsumate = num.tryParse(json['calorieCons']);
+    _tempoPerKm = json['tempoPerKm'];
+    _tempoTotale = json['tempoTot'];
+    _velocitaMedia = json['velocitaMed'];
+    _calorieConsumate = json['calorieCons'];
     _descrizione = json['descrizione'];
-    _distanza = num.tryParse(json['distanza']);
+    _distanza = json['distanza'];
     _nome = json['nome'];
   }
 
@@ -45,9 +42,9 @@ class Allenamento {
     data['tempoTotale'] = _tempoTotale?.toInt();
     data['velocitaMed'] = _velocitaMedia?.toDouble();
     data['calorieCons'] = _calorieConsumate?.toInt();
-    data['descrizione'] = _descrizione;
-    data['distanza'] = _distanza;
-    data['nome'] = _nome;
+    data['descrizione'] = _descrizione ?? "";
+    data['distanza'] = _distanza?.toDouble();
+    data['nome'] = _nome ?? "";
     return data;
   }
 

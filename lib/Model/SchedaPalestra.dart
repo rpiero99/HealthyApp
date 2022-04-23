@@ -25,8 +25,8 @@ class SchedaPalestra {
         _map!.add(MapEserciziDay.fromJson(v));
       });
     }
-    _name = json['nome'];
-    _descrizione = json['descrizione'];
+    _name = json['nome'] ?? "";
+    _descrizione = json['descrizione'] ?? "";
   }
 
   Map<String, dynamic> toJson() {

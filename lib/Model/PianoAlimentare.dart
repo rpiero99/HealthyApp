@@ -31,11 +31,9 @@ class PianoAlimentare {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['pasti'] = _pasti.map((v) => v?.toJson()).toList();
     data['dataInizio'] = _dataInizio;
-    data['descrizione'] = _descrizione;
+    data['descrizione'] = _descrizione ?? "";
     data['dataFine'] = _dataFine;
-    if (_utente != null) {
-      data['utente'] = _utente?.toJson();
-    }
+    data['utente'] = _utente != null ? _utente?.toJson() : "";
     return data;
   }
 

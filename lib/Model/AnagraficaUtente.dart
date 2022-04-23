@@ -13,9 +13,9 @@ class AnagraficaUtente {
   AnagraficaUtente.fromJson(Map<String, dynamic> json) {
     _nomeUtente = json['nome'];
     _sesso = json['sesso'];
-    _altezzaUtente = num.tryParse(json['altezza']);
+    _altezzaUtente = json['altezza'];
     _dataNascitaUtente = json['dataNascita'];
-    _pesoUtente = num.tryParse(json['peso']);
+    _pesoUtente = json['peso'];
   }
 
   Map<String, dynamic> toJson() {

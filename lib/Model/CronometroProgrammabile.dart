@@ -13,9 +13,9 @@ class CronometroProgrammabile {
       this._tempoRiposo, this._tempoTotale, this._timer);
 
   CronometroProgrammabile.fromJson(Map<String, dynamic> json) {
-    _tempoPreparazione = num.tryParse(json['tempoPreparazione']);
-    _tempoTotale = num.tryParse(json['tempoTotale']);
-    _tempoLavoro = num.tryParse(json['tempoWork']);
+    _tempoPreparazione = json['tempoPreparazione'];
+    _tempoTotale = json['tempoTotale'];
+    _tempoLavoro = json['tempoWork'];
     _timer = json['timer'];
   }
 

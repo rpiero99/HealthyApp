@@ -7,7 +7,7 @@ class MapEserciziDay {
   MapEserciziDay(this._giorno);
 
   MapEserciziDay.fromJson(Map<String, dynamic> json) {
-    _giorno = num.tryParse(json["giorno"]);
+    _giorno = json["giorno"];
     if (json['esercizi'] != null) {
       _esercizi = <Esercizio>[];
       json['esercizi'].forEach((p) {

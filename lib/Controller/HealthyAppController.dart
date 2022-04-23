@@ -49,14 +49,12 @@ class HealthyAppController {
     QuerySnapshot querySnapshot = await gestoreDatabase.allenamentoRef.get();
     final allAllenamentiInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var value in allAllenamentiInDB) {
-      Allenamento? allenamento;
       await gestoreDatabase.allenamentoRef
           .doc(value)
           .get()
           .then((element) async {
-        allenamento = Allenamento.fromJson(element.data()!);
+        addAllenamento(Allenamento.fromJson(element.data()!));
       });
-      addAllenamento(allenamento!);
     }
     return gestoreAllenamento.allenamenti;
   }
@@ -104,14 +102,12 @@ class HealthyAppController {
     QuerySnapshot querySnapshot = await gestoreDatabase.schedaPalestraRef.get();
     final allSchedePalestraInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var value in allSchedePalestraInDB) {
-      SchedaPalestra? scheda;
       await gestoreDatabase.schedaPalestraRef
           .doc(value)
           .get()
           .then((element) async {
-        scheda = SchedaPalestra.fromJson(element.data()!);
+        addSchedaPalestra(SchedaPalestra.fromJson(element.data()!));
       });
-      addSchedaPalestra(scheda!);
     }
     return gestoreSchedaPalestra.schedePalestra;
   }
@@ -144,14 +140,12 @@ class HealthyAppController {
     QuerySnapshot querySnapshot = await gestoreDatabase.cronometroProgRef.get();
     final allCroInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var value in allCroInDB) {
-      CronometroProgrammabile? cronometroProgrammabile;
       await gestoreDatabase.schedaPalestraRef
           .doc(value)
           .get()
           .then((element) async {
-        cronometroProgrammabile = CronometroProgrammabile.fromJson(element.data()!);
+        addCronometroProgrammabile(CronometroProgrammabile.fromJson(element.data()!));
       });
-      addCronometroProgrammabile(cronometroProgrammabile!);
     }
     return gestoreSchedaPalestra.cronometriProg;
   }
@@ -179,14 +173,12 @@ class HealthyAppController {
     QuerySnapshot querySnapshot = await gestoreDatabase.utenteRef.get();
     final allUsersInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var item in allUsersInDB) {
-      Utente? utente;
       await gestoreDatabase.utenteRef
           .doc(item)
           .get()
           .then((element) async {
-        utente = Utente.fromJson(element.data()!);
+        addUtente(Utente.fromJson(element.data()!));
       });
-      addUtente(utente!);
     }
     return gestoreUtente.utenti;
   }
