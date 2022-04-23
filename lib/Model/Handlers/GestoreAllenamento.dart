@@ -17,7 +17,7 @@ class GestoreAllenamento {
 
   List<Allenamento> get allenamenti => _allenamenti;
 
-  void addAllenamento(Allenamento allenamento) => allenamenti.add(allenamento);
+  void addAllenamento(Allenamento allenamento) => _allenamenti.add(allenamento);
 
   void removeAllenamento(Allenamento allenamento) =>
       allenamenti.remove(allenamento);

@@ -2,6 +2,8 @@
 
 import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'Utente.dart';
 
 class Allenamento {
@@ -20,8 +22,14 @@ class Allenamento {
 
   Allenamento.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
-    _oraInizio = json['oraInizio'];
-    _oraFine = json['oraFine'];
+    if(json['oraInizio']!=null){
+      Timestamp oraIn = json['oraInizio'];
+      _oraInizio = oraIn.toDate();
+    }
+    if(json['oraFine']!=null){
+      Timestamp oraFi = json['oraFine'];
+      _oraFine = oraFi.toDate();
+    }
     _tempoPerKm = json['tempoPerKm'];
     _tempoTotale = json['tempoTot'];
     _velocitaMedia = json['velocitaMed'];

@@ -6,13 +6,17 @@ import 'package:healthy_app/Model/CronometroProgrammabile.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
 
 import 'Controller/HealthyAppController.dart';
+import 'Model/Allenamento.dart';
 import 'Model/AnagraficaUtente.dart';
 import 'Model/Esercizio.dart';
+import 'Model/Utente.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
+  HealthyAppController c = HealthyAppController.instance;
+  c.getAllenamenti();
 }
 
 class MyApp extends StatelessWidget {
@@ -60,9 +64,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  HealthyAppController c = HealthyAppController.instance;
   void _incrementCounter() {
-    setState(() {
+    setState(() async {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values. If we changed
@@ -72,8 +75,13 @@ class _MyHomePageState extends State<MyHomePage> {
    //   AnagraficaUtente(170, DateTime.now(), "test", 7.0, true);
    //   c.registrazione(
    //       c.createUtente(a, "alessandrot47@gmail.com", "passwordtest"));
-      c.createAllenamento("prova1", "namoooo");
-      _counter = 10;
+
+/*      String? email = users.elementAt(0).email;
+      if(email!="")
+        print("ennamooo");
+      else
+        print("polini in fiamme");
+      _counter = 10;*/
     });
   }
 
