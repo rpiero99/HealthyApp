@@ -4,7 +4,6 @@ import 'Pasto.dart';
 import 'Utente.dart';
 
 class PianoAlimentare {
-  int? _id = 0;
   List<Pasto?> _pasti = List.empty(growable: true);
   DateTime? _dataInizio;
   DateTime? _dataFine;
@@ -14,7 +13,6 @@ class PianoAlimentare {
   PianoAlimentare(this._dataFine, this._dataInizio, this._descrizione, this._utente);
 
   PianoAlimentare.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
     if (json['pasti'] != null) {
       _pasti = <Pasto>[];
       json['pasti'].forEach((p) {
@@ -31,7 +29,6 @@ class PianoAlimentare {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = _id;
     data['pasti'] = _pasti.map((v) => v?.toJson()).toList();
     data['dataInizio'] = _dataInizio;
     data['descrizione'] = _descrizione;

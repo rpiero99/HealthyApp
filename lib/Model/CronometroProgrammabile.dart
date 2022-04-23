@@ -4,29 +4,26 @@ import 'dart:async';
 
 class CronometroProgrammabile {
   Timer? _timer;
-  int? _tempoPreparazione;
-  int? _tempoRiposo;
-  int? _tempoLavoro;
-  int? _tempoTotale;
-  int? _id;
+  num? _tempoPreparazione;
+  num? _tempoRiposo;
+  num? _tempoLavoro;
+  num? _tempoTotale;
 
   CronometroProgrammabile(this._tempoLavoro, this._tempoPreparazione,
       this._tempoRiposo, this._tempoTotale, this._timer);
 
   CronometroProgrammabile.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
-    _tempoPreparazione = json['tempoPreparazione'];
-    _tempoTotale = json['tempoTotale'];
-    _tempoLavoro = json['tempoWork'];
+    _tempoPreparazione = num.tryParse(json['tempoPreparazione']);
+    _tempoTotale = num.tryParse(json['tempoTotale']);
+    _tempoLavoro = num.tryParse(json['tempoWork']);
     _timer = json['timer'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = _id;
-    data['tempoPreparazione'] = _tempoPreparazione;
-    data['tempoTotale'] = _tempoTotale;
-    data['tempoWork'] = _tempoLavoro;
+    data['tempoPreparazione'] = _tempoPreparazione?.toInt();
+    data['tempoTotale'] = _tempoTotale?.toInt();
+    data['tempoWork'] = _tempoLavoro?.toInt();
     data['timer'] = _timer;
     return data;
   }
@@ -35,22 +32,22 @@ class CronometroProgrammabile {
 
   set timer(Timer? timer) => _timer = timer;
 
-  int? get tempoLavoro => _tempoLavoro;
+  num? get tempoLavoro => _tempoLavoro;
 
-  set tempoLavoro(int? tempoLavoro) => _tempoLavoro = tempoLavoro;
+  set tempoLavoro(num? tempoLavoro) => _tempoLavoro = tempoLavoro;
 
-  int? get tempoPreparazione => _tempoPreparazione;
+  num? get tempoPreparazione => _tempoPreparazione;
 
-  set tempoPreparazione(int? tempoPreparazione) =>
+  set tempoPreparazione(num? tempoPreparazione) =>
       _tempoPreparazione = tempoPreparazione;
 
-  int? get tempoRiposo => _tempoRiposo;
+  num? get tempoRiposo => _tempoRiposo;
 
-  set tempoRiposo(int? tempoRiposo) => _tempoRiposo = tempoRiposo;
+  set tempoRiposo(num? tempoRiposo) => _tempoRiposo = tempoRiposo;
 
-  int? get tempoTotale => _tempoTotale;
+  num? get tempoTotale => _tempoTotale;
 
-  set tempoTotale(int? tempoTotale) => _tempoTotale = tempoTotale;
+  set tempoTotale(num? tempoTotale) => _tempoTotale = tempoTotale;
 
   void startTimer() {}
 

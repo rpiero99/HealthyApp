@@ -1,13 +1,13 @@
 import 'package:healthy_app/Model/Esercizio.dart';
 
 class MapEserciziDay {
-  int? _giorno;
+  num? _giorno;
   List<Esercizio?> _esercizi = List.empty(growable: true);
 
   MapEserciziDay(this._giorno);
 
   MapEserciziDay.fromJson(Map<String, dynamic> json) {
-    _giorno = json["giorno"];
+    _giorno = num.tryParse(json["giorno"]);
     if (json['esercizi'] != null) {
       _esercizi = <Esercizio>[];
       json['esercizi'].forEach((p) {
@@ -18,7 +18,7 @@ class MapEserciziDay {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['giorno'] = _giorno;
+    data['giorno'] = _giorno?.toInt();
     data['esercizi'] = _esercizi.map((v) => v?.toJson()).toList();
     return data;
   }

@@ -3,46 +3,38 @@
 import 'CronometroProgrammabile.dart';
 
 class Esercizio {
-  int? _id = 0;
   String? _nome;
   String? _descrizione;
-  String? _image;
-  int? _nRep;
-  int? _nSerie;
-  int? _tempoRiposo;
+  num? _nRep;
+  num? _nSerie;
+  num? _tempoRiposo;
   CronometroProgrammabile? _cronometro;
 
-  Esercizio(this._cronometro, this._descrizione, this._image, this._nome,
+  Esercizio(this._cronometro, this._descrizione, this._nome,
       this._nSerie, this._nRep, this._tempoRiposo);
 
   Esercizio.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
     _cronometro = json['cronometroProg'] != null
         ? CronometroProgrammabile.fromJson(json['cronometroProg'])
         : null;
-    _nRep = json['numRep'];
-    _nSerie = json['numSerie'];
-    _tempoRiposo = json['tempoRiposo'];
+    _nRep = num.tryParse(json['numRep']);
+    _nSerie = num.tryParse(json['numSerie']);
+    _tempoRiposo = num.tryParse(json['tempoRiposo']);
     _descrizione = json['descrizione'];
-    _image = json['image'];
     _nome = json['nome'];
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = _id;
-    data['tempoRiposo'] = _tempoRiposo;
-    data['numSerie'] = _nSerie;
-    data['numRep'] = _nRep;
+    data['tempoRiposo'] = _tempoRiposo?.toInt();
+    data['numSerie'] = _nSerie?.toInt();
+    data['numRep'] = _nRep?.toInt();
     if (_cronometro != null) {
       data['cronometroProg'] = _cronometro?.toJson();
     }
     data['descrizione'] = _descrizione;
-    data['image'] = _image;
     data['nome'] = _nome;
     return data;
   }
-
-  int? get id => _id;
 
   String? get nome => _nome;
 
@@ -52,21 +44,17 @@ class Esercizio {
 
   set descrizione(String? descrizione) => _descrizione = descrizione;
 
-  String? get image => _image;
+  num? get nRep => _nRep;
 
-  set image(String? im) => _image = im;
+  set nRep(num? rep) => _nRep = rep;
 
-  int? get nRep => _nRep;
+  num? get nSerie => _nSerie;
 
-  set nRep(int? rep) => _nRep = rep;
+  set nSerie(num? nSerie) => _nSerie = nSerie;
 
-  int? get nSerie => _nSerie;
+  num? get tempoRiposo => _tempoRiposo;
 
-  set nSerie(int? nSerie) => _nSerie = nSerie;
-
-  int? get tempoRiposo => _tempoRiposo;
-
-  set tempoRiposo(int? tempoRiposo) => _tempoRiposo = tempoRiposo;
+  set tempoRiposo(num? tempoRiposo) => _tempoRiposo = tempoRiposo;
 
   CronometroProgrammabile? get cronometroProg => _cronometro;
 

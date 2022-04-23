@@ -6,7 +6,6 @@ import 'CronometroProgrammabile.dart';
 import 'Esercizio.dart';
 
 class SchedaPalestra {
-  int? _id = 0;
   String? _name;
   String? _descrizione;
   List<MapEserciziDay>? _map;
@@ -14,13 +13,12 @@ class SchedaPalestra {
   DateTime? _dataFine;
 
   SchedaPalestra(this._descrizione, this._name, this._dataInizio, this._dataFine){
-    for(int i = 1; i<8; i++){
+    for(num i = 1; i<8; i++){
      _map?.add(MapEserciziDay(i));
     }
   }
 
   SchedaPalestra.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
     if (json['eserciziOfDay'] != null) {
       _map = <MapEserciziDay>[];
       json['eserciziOfDay'].forEach((v) {
@@ -33,7 +31,6 @@ class SchedaPalestra {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = _id;
     if (_map != null) {
       data['eserciziOfDay'] = _map!.map((v) => v.toJson()).toList();
     }
@@ -42,10 +39,8 @@ class SchedaPalestra {
     return data;
   }
 
-  int? get id => _id;
-
   Esercizio createEsercizio(CronometroProgrammabile cronometro, String descrizione, String image, String nome, int numeroSerie, int numeroRipetizioni, int tempoRiposo) =>
-      Esercizio(cronometro, descrizione, image, nome, numeroSerie, numeroRipetizioni, tempoRiposo);
+      Esercizio(cronometro, descrizione, nome, numeroSerie, numeroRipetizioni, tempoRiposo);
 
   addEsercizio(Esercizio? esercizio, int? day) {
     _map?[day!].addEsercizio(esercizio!);

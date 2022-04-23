@@ -7,21 +7,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Utente.dart';
 
 class Allenamento {
-  int? _id = 0;
   DateTime? _oraInizio;
   DateTime? _oraFine;
-  int? _tempoTotale;
-  double? _velocitaMedia;
-  double? _calorieConsumate;
-  double? _distanza;
-  double? _tempoPerKm;
+  num? _tempoTotale;
+  num? _velocitaMedia;
+  num? _calorieConsumate;
+  num? _distanza;
+  num? _tempoPerKm;
   String? _descrizione;
   String? _nome;
 
   Allenamento(this._descrizione, this._nome);
 
-  Allenamento.fromJson(Map<String, dynamic> json) {
-    _id = json['id'];
+  Allenamento.fromJson(Map<String?, dynamic> json) {
     if(json['oraInizio']!=null){
       Timestamp oraIn = json['oraInizio'];
       _oraInizio = oraIn.toDate();
@@ -30,31 +28,28 @@ class Allenamento {
       Timestamp oraFi = json['oraFine'];
       _oraFine = oraFi.toDate();
     }
-    _tempoPerKm = json['tempoPerKm'];
-    _tempoTotale = json['tempoTot'];
-    _velocitaMedia = json['velocitaMed'];
-    _calorieConsumate = json['calorieCons'];
+    _tempoPerKm = num.tryParse(json['tempoPerKm']);
+    _tempoTotale = num.tryParse(json['tempoTot']);
+    _velocitaMedia = num.tryParse(json['velocitaMed']);
+    _calorieConsumate = num.tryParse(json['calorieCons']);
     _descrizione = json['descrizione'];
-    _distanza = json['distanza'];
+    _distanza = num.tryParse(json['distanza']);
     _nome = json['nome'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = _id;
     data['oraInizio'] = _oraInizio;
     data['oraFine'] = _oraFine;
-    data['tempoPerKm'] = _tempoPerKm;
-    data['tempoTotale'] = _tempoTotale;
-    data['velocitaMed'] = _velocitaMedia;
-    data['calorieCons'] = _calorieConsumate;
+    data['tempoPerKm'] = _tempoPerKm?.toInt();
+    data['tempoTotale'] = _tempoTotale?.toInt();
+    data['velocitaMed'] = _velocitaMedia?.toDouble();
+    data['calorieCons'] = _calorieConsumate?.toInt();
     data['descrizione'] = _descrizione;
     data['distanza'] = _distanza;
     data['nome'] = _nome;
     return data;
   }
-
-  int? get id => _id;
 
   DateTime? get oraInizio => _oraInizio;
 
@@ -64,28 +59,28 @@ class Allenamento {
 
   set oraFine(DateTime? oraFine) => _oraFine = oraFine;
 
-  int? get tempoTotale {
+  num? get tempoTotale {
     _tempoTotale = oraFine?.difference(oraInizio!).inMinutes;
     return _tempoTotale;
   }
 
-  double? get tempoPerKm {
+  num? get tempoPerKm {
     _tempoPerKm = (tempoTotale! * 60 / distanza!);
     return _tempoPerKm;
   }
 
-  double? get velocitaMedia {
+  num? get velocitaMedia {
     _velocitaMedia = (distanza! / (tempoTotale! / 60));
     return _velocitaMedia;
   }
 
-  double? get calorieConsumate => _calorieConsumate;
+  num? get calorieConsumate => _calorieConsumate;
 
-  set calorieConsumate(double? calorie) => _calorieConsumate = calorie;
+  set calorieConsumate(num? calorie) => _calorieConsumate = calorie;
 
-  double? get distanza => _distanza;
+  num? get distanza => _distanza;
 
-  set distanza(double? distance) => _distanza = distance;
+  set distanza(num? distance) => _distanza = distance;
 
   String? get descrizione => _descrizione;
 
@@ -95,7 +90,7 @@ class Allenamento {
 
   set nome(String? nome) => _nome = nome;
 
-  double? calcoloCalorie(Utente utente) {
+  num? calcoloCalorie(Utente utente) {
     calorieConsumate = utente.anagraficaUtente!.pesoUtente! * distanza!;
     return calorieConsumate;
   }
