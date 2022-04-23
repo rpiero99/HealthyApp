@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
+import 'package:healthy_app/Utils/MapEserciziDay.dart';
 import '../Model/Allenamento.dart';
 import '../Model/Esercizio.dart';
 import '../Model/Handlers/GestoreAllenamento.dart';
@@ -95,6 +96,18 @@ class HealthyAppController {
     SchedaPalestra scheda = gestoreSchedaPalestra.createSchedaPalestra(
         descrizione, nome, dataInizio, dataFine);
     gestoreDatabase.schedaPalestraRef.add(scheda.toJson());
+    List<MapEserciziDay> mapList = List.empty(growable: true);
+    for(int i=1; i<8; i++){
+      List<Esercizio>? esercizi = scheda.getEserciziFromDay(i);
+      MapEserciziDay map = MapEserciziDay(i);
+      for(Esercizio esercizio in esercizi!) {
+        map.addEsercizio(esercizio);
+      }
+      mapList.add(map);
+    }
+    for(MapEserciziDay map in mapList) {
+      gestoreDatabase.eserciziOfDayRef.add(map.toJson());
+    }
     return scheda;
   }
 
@@ -124,15 +137,14 @@ class HealthyAppController {
   ///Metodi cronometro programmabile
 
   CronometroProgrammabile createCronometroProgrammabile(
-      Timer timer,
       int tempoPreparazione,
       int tempoRiposo,
       int tempoLavoro,
       int tempoTotale) {
     CronometroProgrammabile cronometroProgrammabile =
         gestoreSchedaPalestra.createCronometroProgrammabile(
-            timer, tempoPreparazione, tempoRiposo, tempoLavoro, tempoTotale);
-    gestoreDatabase.schedaPalestraRef.add(cronometroProgrammabile.toJson());
+             tempoPreparazione, tempoRiposo, tempoLavoro, tempoTotale);
+    gestoreDatabase.cronometroProgRef.add(cronometroProgrammabile.toJson());
     return cronometroProgrammabile;
   }
 
@@ -140,7 +152,7 @@ class HealthyAppController {
     QuerySnapshot querySnapshot = await gestoreDatabase.cronometroProgRef.get();
     final allCroInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var value in allCroInDB) {
-      await gestoreDatabase.schedaPalestraRef
+      await gestoreDatabase.cronometroProgRef
           .doc(value)
           .get()
           .then((element) async {
@@ -156,7 +168,7 @@ class HealthyAppController {
 
   updateCrometroProgrammabile(
           CronometroProgrammabile cronometroProgrammabile) =>
-      gestoreDatabase.schedaPalestraRef
+      gestoreDatabase.cronometroProgRef
           .doc()
           .set(cronometroProgrammabile.toJson());
 
@@ -192,13 +204,11 @@ class HealthyAppController {
 
   ///Metodi anagrafica utente
 
-  AnagraficaUtente createAnagraficaUtente(Utente user, int altezza,
+  AnagraficaUtente createAnagraficaUtente(int altezza,
       DateTime dataNascita, String nome, double peso, String sesso) {
     AnagraficaUtente anagrafica = gestoreUtente.createAnagraficaUtente(
         altezza, dataNascita, nome, peso, sesso);
     gestoreDatabase.anagraficaUtenteRef.add(anagrafica.toJson());
-    user.anagraficaUtente = anagrafica;
-    updateUtente(user);
     return anagrafica;
   }
 

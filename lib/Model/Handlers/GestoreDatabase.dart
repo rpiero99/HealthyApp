@@ -9,7 +9,9 @@ class GestoreDatabase {
   final anagraficaUtenteRef =
       FirebaseFirestore.instance.collection('AnagraficaUtente');
   final cronometroProgRef =
-      FirebaseFirestore.instance.collection('CronomentroProgrammabile');
+      FirebaseFirestore.instance.collection('CronometroProgrammabile');
+  final eserciziOfDayRef =
+      FirebaseFirestore.instance.collection("EserciziOfDay");
   final esercizioRef = FirebaseFirestore.instance.collection('Esercizio');
   final pastoRef = FirebaseFirestore.instance.collection('Pasto');
   final pianoAlimentareRef =
@@ -17,4 +19,6 @@ class GestoreDatabase {
   final schedaPalestraRef =
       FirebaseFirestore.instance.collection('SchedaPalestra');
   final utenteRef = FirebaseFirestore.instance.collection('Utente');
+
+  
 }

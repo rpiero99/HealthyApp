@@ -3,34 +3,29 @@
 import 'dart:async';
 
 class CronometroProgrammabile {
-  Timer? _timer;
   num? _tempoPreparazione;
   num? _tempoRiposo;
   num? _tempoLavoro;
   num? _tempoTotale;
 
   CronometroProgrammabile(this._tempoLavoro, this._tempoPreparazione,
-      this._tempoRiposo, this._tempoTotale, this._timer);
+      this._tempoRiposo, this._tempoTotale);
 
   CronometroProgrammabile.fromJson(Map<String, dynamic> json) {
     _tempoPreparazione = json['tempoPreparazione'];
     _tempoTotale = json['tempoTotale'];
     _tempoLavoro = json['tempoWork'];
-    _timer = json['timer'];
+    _tempoRiposo = json['tempoRiposo'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['tempoRiposo'] = _tempoRiposo?.toInt();
     data['tempoPreparazione'] = _tempoPreparazione?.toInt();
     data['tempoTotale'] = _tempoTotale?.toInt();
     data['tempoWork'] = _tempoLavoro?.toInt();
-    data['timer'] = _timer;
     return data;
   }
-
-  Timer? get timer => _timer;
-
-  set timer(Timer? timer) => _timer = timer;
 
   num? get tempoLavoro => _tempoLavoro;
 

@@ -36,8 +36,14 @@ class Allenamento {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['oraInizio'] = _oraInizio;
-    data['oraFine'] = _oraFine;
+    if(oraInizio != null){
+      Timestamp timestamp = Timestamp.fromDate(_oraInizio!);
+      data['oraInizio'] = timestamp;
+    }
+    if(oraFine != null){
+      Timestamp timestamp = Timestamp.fromDate(_oraFine!);
+      data['oraFine'] = timestamp;
+    }
     data['tempoPerKm'] = _tempoPerKm?.toInt();
     data['tempoTotale'] = _tempoTotale?.toInt();
     data['velocitaMed'] = _velocitaMedia?.toDouble();

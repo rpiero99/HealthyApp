@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'Pasto.dart';
 import 'Utente.dart';
 
@@ -19,9 +21,15 @@ class PianoAlimentare {
         _pasti.add(Pasto.fromJson(p));
       });
     }
-    _dataInizio = json['dataInizio'];
+    if(json['dataInizio']!=null){
+      Timestamp oraFi = json['dataInizio'];
+      _dataInizio = oraFi.toDate();
+    }
     _descrizione = json['descrizione'];
-    _dataFine = json['dataFine'];
+    if(json['dataFine']!=null){
+      Timestamp oraFi = json['dataFine'];
+      _dataFine = oraFi.toDate();
+    }
     _utente = json['utente'] != null ?
       Utente.fromJson(json['utente'])
         : null;
@@ -30,9 +38,15 @@ class PianoAlimentare {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['pasti'] = _pasti.map((v) => v?.toJson()).toList();
-    data['dataInizio'] = _dataInizio;
+    if(_dataInizio != null){
+      Timestamp timestamp = Timestamp.fromDate(_dataInizio!);
+      data['dataInizio'] = timestamp;
+    }
     data['descrizione'] = _descrizione ?? "";
-    data['dataFine'] = _dataFine;
+    if(dataFine != null){
+      Timestamp timestamp = Timestamp.fromDate(dataFine!);
+      data['dataFine'] = timestamp;
+    }
     data['utente'] = _utente != null ? _utente?.toJson() : "";
     return data;
   }

@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Pasto {
   Enum? _categoria;
   String? _nome;
@@ -17,7 +19,11 @@ class Pasto {
     _categoria = json['categoria'];
     _descrizione = json['descrizione'];
     _nome = json['nome'];
-    _ora = json['ora'];
+    if(json['ora']!=null) {
+      Timestamp oraFi = json['ora'];
+      _ora = oraFi.toDate();
+    }
+      _ora = json['ora'];
     _quantita = num.tryParse(json['quantita']);
     _type = json['tipo'];
   }
@@ -28,6 +34,10 @@ class Pasto {
     data['categoria'] = _categoria;
     data['descrizione'] = _descrizione ?? "";
     data['nome'] = _nome ?? "";
+    if(_ora != null){
+      Timestamp timestamp = Timestamp.fromDate(_ora!);
+      data['ora'] = timestamp;
+    }
     data['ora'] = _ora;
     data['quantita'] = _quantita?.toInt();
     data['tipo'] = _type ?? "";

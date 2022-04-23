@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/Utils/MapEserciziDay.dart';
 
 import 'CronometroProgrammabile.dart';
@@ -27,6 +28,14 @@ class SchedaPalestra {
     }
     _name = json['nome'] ?? "";
     _descrizione = json['descrizione'] ?? "";
+    if(json['dataInizio']!=null){
+      Timestamp oraIn = json['dataInizio'];
+      dataInizio = oraIn.toDate();
+    }
+    if(json['dataFine']!=null){
+      Timestamp oraIn = json['dataFine'];
+      dataFine = oraIn.toDate();
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -36,6 +45,14 @@ class SchedaPalestra {
     }
     data['nome'] = _name;
     data['descrizione'] = _descrizione;
+    if(dataInizio == null){
+      Timestamp timestamp = Timestamp.fromDate(dataInizio!);
+      data['dataInizio'] = timestamp;
+    }
+    if(dataFine == null){
+      Timestamp timestamp = Timestamp.fromDate(dataFine!);
+      data['dataFine'] = timestamp;
+    }
     return data;
   }
 

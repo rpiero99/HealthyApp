@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class AnagraficaUtente {
   String? _nomeUtente;
   num? _altezzaUtente;
@@ -14,7 +16,10 @@ class AnagraficaUtente {
     _nomeUtente = json['nome'];
     _sesso = json['sesso'];
     _altezzaUtente = json['altezza'];
-    _dataNascitaUtente = json['dataNascita'];
+    if(json['dataNascita']!=null){
+      Timestamp dataNascita = json['dataNascita'];
+      _dataNascitaUtente = dataNascita.toDate();
+    }
     _pesoUtente = json['peso'];
   }
 
@@ -23,7 +28,10 @@ class AnagraficaUtente {
     data['nome'] = _nomeUtente;
     data['sesso'] = _sesso;
     data['altezza'] = _altezzaUtente;
-    data['dataNascita'] = _dataNascitaUtente;
+    if(dataNascitaUtente != null){
+      Timestamp timestamp = Timestamp.fromDate(_dataNascitaUtente!);
+      data['dataNascita'] = timestamp;
+    }
     data['peso'] = _pesoUtente;
     return data;
   }

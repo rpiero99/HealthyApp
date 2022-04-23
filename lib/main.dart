@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/Model/CategoriaPasto.dart';
 import 'package:healthy_app/Model/CronometroProgrammabile.dart';
+import 'package:healthy_app/Model/PianoAlimentare.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
 
 import 'Controller/HealthyAppController.dart';
@@ -16,7 +19,19 @@ Future<void> main() async{
   await Firebase.initializeApp();
   runApp(const MyApp());
   HealthyAppController c = HealthyAppController.instance;
+  Utente user = c.createUtente(c.createAnagraficaUtente(0,DateTime.now(),"aa", 8, "poco"),"_email", "_password");
+  SchedaPalestra scheda = c.createSchedaPalestra("eeee", "aaaaaa", DateTime.now(),  DateTime.now());
+  c.createEsercizio(scheda, c.createCronometroProgrammabile(0,0,0,0), "descrizione", "image", "nome", 7, 10, 0, 0);
+  PianoAlimentare piano = c.createPianoAlimentare(DateTime.now(), DateTime.now(), "descrizione", user );
+  c.createPasto(piano, CategoriaPasto.SPUNTINO_POMERIGGIO, 712, "spuntino abbondante", "merenna", DateTime.now(), 1, "contorno");
   c.getAllenamenti();
+  c.getUtenti();
+  c.getCronometriProgrammabili();
+  c.getCurrentPianoAlimentareOf(user);
+}
+
+aa(){
+
 }
 
 class MyApp extends StatelessWidget {

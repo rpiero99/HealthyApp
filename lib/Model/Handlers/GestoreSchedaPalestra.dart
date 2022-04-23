@@ -15,13 +15,12 @@ class GestoreSchedaPalestra {
       SchedaPalestra(descrizione, nome, dataInizio, dataFine);
 
   CronometroProgrammabile createCronometroProgrammabile(
-          Timer timer,
           int tempoPreparazione,
           int tempoRiposo,
           int tempoLavoro,
           int tempoTotale) =>
       CronometroProgrammabile(
-          tempoLavoro, tempoPreparazione, tempoRiposo, tempoTotale, timer);
+          tempoLavoro, tempoPreparazione, tempoRiposo, tempoTotale);
 
   List<SchedaPalestra> get schedePalestra => _schede;
 
