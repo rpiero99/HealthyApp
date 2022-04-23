@@ -23,7 +23,6 @@ class Pasto {
       Timestamp oraFi = json['ora'];
       _ora = oraFi.toDate();
     }
-      _ora = json['ora'];
     _quantita = num.tryParse(json['quantita']);
     _type = json['tipo'];
   }
@@ -38,7 +37,6 @@ class Pasto {
       Timestamp timestamp = Timestamp.fromDate(_ora!);
       data['ora'] = timestamp;
     }
-    data['ora'] = _ora;
     data['quantita'] = _quantita?.toInt();
     data['tipo'] = _type ?? "";
     return data;

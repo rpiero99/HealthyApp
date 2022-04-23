@@ -5,9 +5,8 @@ import 'AnagraficaUtente.dart';
 class Utente {
   AnagraficaUtente? _anagraficaUtente;
   String? _email;
-  String? _password;
 
-  Utente(this._anagraficaUtente, this._email, this._password);
+  Utente(this._anagraficaUtente, this._email);
 
   Utente.fromJson(Map<String, dynamic> json) {
     _anagraficaUtente = json['anagraficaUtente'] != null
@@ -33,8 +32,4 @@ class Utente {
   String? get email => _email;
 
   set email(String? email) => _email = email;
-
-  String? get password => _password;
-
-  set password(String? password) => _password = password;
 }

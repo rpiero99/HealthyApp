@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
 import 'package:healthy_app/Utils/MapEserciziDay.dart';
 import '../Model/Allenamento.dart';
@@ -33,9 +34,9 @@ class HealthyAppController {
 
   ///Metodi per login e registrazione
 
-  login(Utente utente) => gestoreAuth.login(utente);
+  login(String email, String password) => gestoreAuth.login(email,password);
 
-  registrazione(Utente utente) => gestoreAuth.registrazione(utente);
+  registrazione(String email, String password) => gestoreAuth.registrazione(email, password);
 
   ///Metodi per allenamento
 
@@ -172,11 +173,19 @@ class HealthyAppController {
           .doc()
           .set(cronometroProgrammabile.toJson());
 
+  void startTimer(CronometroProgrammabile cronometroProgrammabile) {
+    cronometroProgrammabile.startTimer();
+  }
+
+  void stopTimer(CronometroProgrammabile cronometroProgrammabile){
+    cronometroProgrammabile.stopTimer();
+  }
+
   ///Metodi utente
 
   Utente createUtente(
-      AnagraficaUtente anagrafica, String email, String password) {
-    Utente user = gestoreUtente.createUtente(anagrafica, email, password);
+      AnagraficaUtente anagrafica, String email) {
+    Utente user = gestoreUtente.createUtente(anagrafica, email);
     gestoreDatabase.utenteRef.add(user.toJson());
     return user;
   }

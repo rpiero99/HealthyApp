@@ -45,11 +45,11 @@ class SchedaPalestra {
     }
     data['nome'] = _name;
     data['descrizione'] = _descrizione;
-    if(dataInizio == null){
+    if(dataInizio != null){
       Timestamp timestamp = Timestamp.fromDate(dataInizio!);
       data['dataInizio'] = timestamp;
     }
-    if(dataFine == null){
+    if(dataFine != null){
       Timestamp timestamp = Timestamp.fromDate(dataFine!);
       data['dataFine'] = timestamp;
     }

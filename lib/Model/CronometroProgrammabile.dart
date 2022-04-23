@@ -7,6 +7,8 @@ class CronometroProgrammabile {
   num? _tempoRiposo;
   num? _tempoLavoro;
   num? _tempoTotale;
+  Timer? _timer;
+
 
   CronometroProgrammabile(this._tempoLavoro, this._tempoPreparazione,
       this._tempoRiposo, this._tempoTotale);
@@ -27,6 +29,10 @@ class CronometroProgrammabile {
     return data;
   }
 
+  Timer? get timer => _timer;
+
+  set timer(Timer? timer) => _timer = timer;
+
   num? get tempoLavoro => _tempoLavoro;
 
   set tempoLavoro(num? tempoLavoro) => _tempoLavoro = tempoLavoro;
@@ -40,13 +46,15 @@ class CronometroProgrammabile {
 
   set tempoRiposo(num? tempoRiposo) => _tempoRiposo = tempoRiposo;
 
-  num? get tempoTotale => _tempoTotale;
+  num? get tempoTotale => _tempoTotale! + _tempoPreparazione!;
 
   set tempoTotale(num? tempoTotale) => _tempoTotale = tempoTotale;
 
-  void startTimer() {}
+  void startTimer() {
+    timer = Timer(Duration(minutes: tempoTotale!.toInt()), stopTimer);
+  }
 
-  void stopTimer() {}
-
-  void resetTimer() {}
+  void stopTimer() {
+    timer?.cancel();
+  }
 }

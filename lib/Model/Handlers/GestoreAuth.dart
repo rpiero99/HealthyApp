@@ -9,22 +9,22 @@ class GestoreAuth {
   GestoreAuth._privateConstructor();
   static final instance = GestoreAuth._privateConstructor();
 
-  Future<UserCredential?> login(Utente utente) async {
+  Future<UserCredential?> login(String email, String password) async {
     try {
       return await firebaseAuth.signInWithEmailAndPassword(
-        email: utente.email as String,
-        password: utente.password as String,
+        email: email,
+        password: password,
       );
     } on FirebaseAuthException catch (e) {
       return null;
     }
   }
 
-  Future<UserCredential?> registrazione(Utente utente) async {
+  Future<UserCredential?> registrazione(String email, String password) async {
     try {
       return await firebaseAuth.createUserWithEmailAndPassword(
-        email: utente.email as String,
-        password: utente.password as String,
+        email: email,
+        password: password,
       );
     } on FirebaseAuthException catch (e) {
       return null;

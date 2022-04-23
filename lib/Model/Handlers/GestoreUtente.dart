@@ -19,8 +19,8 @@ class GestoreUtente {
   List<PianoAlimentare> get piani => _piani;
 
   Utente createUtente(
-          AnagraficaUtente anagrafica, String email, String password) =>
-      Utente(anagrafica, email, password);
+          AnagraficaUtente anagrafica, String email) =>
+      Utente(anagrafica, email);
 
   AnagraficaUtente createAnagraficaUtente(int altezza, DateTime dataNascita, String nome,  double peso, String sesso)=>
     AnagraficaUtente(altezza, dataNascita, nome, peso, sesso);
