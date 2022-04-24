@@ -20,5 +20,4 @@ class GestoreAllenamento {
   void removeAllenamento(Allenamento allenamento) =>
       allenamenti.remove(allenamento);
 
-  void scheduleAllenamenti() {}
 }

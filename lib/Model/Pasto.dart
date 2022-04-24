@@ -15,16 +15,16 @@ class Pasto {
       this._ora, this._quantita, this._type);
 
   Pasto.fromJson(Map<String, dynamic> json) {
-    _calorie = num.tryParse(json['calorie']);
+    _calorie = json['calorie'];
     _categoria = json['categoria'];
-    _descrizione = json['descrizione'];
-    _nome = json['nome'];
+    _descrizione = json['descrizione'] ?? "";
+    _nome = json['nome'] ?? "";
     if(json['ora']!=null) {
       Timestamp oraFi = json['ora'];
       _ora = oraFi.toDate();
     }
-    _quantita = num.tryParse(json['quantita']);
-    _type = json['tipo'];
+    _quantita = json['quantita'];
+    _type = json['tipo'] ?? "";
   }
 
   Map<String, dynamic> toJson() {

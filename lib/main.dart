@@ -14,6 +14,7 @@ Future<void> main() async{
   await Firebase.initializeApp();
   runApp(const MyApp());
   HealthyAppController c = HealthyAppController.instance;
+  c.notificator?.init();
   Utente user = c.createUtente(c.createAnagraficaUtente(0,DateTime.now(),"aa", 8, "poco"),"_email");
   SchedaPalestra scheda = c.createSchedaPalestra("eeee", "aaaaaa", DateTime.now(),  DateTime.now());
   c.createEsercizio(scheda, c.createCronometroProgrammabile(0,0,0,0), "descrizione", "image", "nome", 7, 10, 0, 0);

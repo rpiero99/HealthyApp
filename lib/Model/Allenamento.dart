@@ -29,9 +29,9 @@ class Allenamento {
     _tempoTotale = json['tempoTot'];
     _velocitaMedia = json['velocitaMed'];
     _calorieConsumate = json['calorieCons'];
-    _descrizione = json['descrizione'];
+    _descrizione = json['descrizione'] ?? "";
     _distanza = json['distanza'];
-    _nome = json['nome'];
+    _nome = json['nome'] ?? "";
   }
 
   Map<String, dynamic> toJson() {

@@ -10,7 +10,7 @@ class Esercizio {
   num? _tempoRiposo;
   CronometroProgrammabile? _cronometro;
 
-  Esercizio(this._cronometro, this._descrizione, this._nome,
+  Esercizio(this._descrizione, this._nome,
       this._nSerie, this._nRep, this._tempoRiposo);
 
   Esercizio.fromJson(Map<String, dynamic> json) {

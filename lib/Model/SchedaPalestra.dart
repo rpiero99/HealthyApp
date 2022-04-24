@@ -43,8 +43,8 @@ class SchedaPalestra {
     if (_map != null) {
       data['eserciziOfDay'] = _map!.map((v) => v.toJson()).toList();
     }
-    data['nome'] = _name;
-    data['descrizione'] = _descrizione;
+    data['nome'] = _name ?? "";
+    data['descrizione'] = _descrizione ?? "";
     if(dataInizio != null){
       Timestamp timestamp = Timestamp.fromDate(dataInizio!);
       data['dataInizio'] = timestamp;
@@ -56,8 +56,8 @@ class SchedaPalestra {
     return data;
   }
 
-  Esercizio createEsercizio(CronometroProgrammabile cronometro, String descrizione, String image, String nome, int numeroSerie, int numeroRipetizioni, int tempoRiposo) =>
-      Esercizio(cronometro, descrizione, nome, numeroSerie, numeroRipetizioni, tempoRiposo);
+  Esercizio createEsercizio(String descrizione, String image, String nome, int numeroSerie, int numeroRipetizioni, int tempoRiposo) =>
+      Esercizio(descrizione, nome, numeroSerie, numeroRipetizioni, tempoRiposo);
 
   addEsercizio(Esercizio? esercizio, int? day) {
     _map?[day!].addEsercizio(esercizio!);

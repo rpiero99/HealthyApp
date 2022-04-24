@@ -1,10 +1,11 @@
 // ignore_for_file: file_names
 
 import 'dart:async';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
 import 'package:healthy_app/Utils/MapEserciziDay.dart';
+import 'package:healthy_app/Utils/NotificationService.dart';
 import '../Model/Allenamento.dart';
 import '../Model/Esercizio.dart';
 import '../Model/Handlers/GestoreAllenamento.dart';
@@ -27,6 +28,7 @@ class HealthyAppController {
   GestoreSchedaPalestra gestoreSchedaPalestra = GestoreSchedaPalestra.instance;
   GestoreUtente gestoreUtente = GestoreUtente.instance;
   GeoLocService? geoLocService;
+  final NotificationService? _notificationService = NotificationService.instance;
 
   HealthyAppController._privateConstructor();
 
@@ -239,7 +241,7 @@ class HealthyAppController {
       int numeroRipetizioni,
       int tempoRiposo,
       int day) {
-    Esercizio esercizio = schedaPalestra.createEsercizio(cronometro,
+    Esercizio esercizio = schedaPalestra.createEsercizio(
         descrizione, image, nome, numeroSerie, numeroRipetizioni, tempoRiposo);
     schedaPalestra.addEsercizio(esercizio, day);
     gestoreDatabase.esercizioRef.add(esercizio.toJson());
@@ -318,5 +320,21 @@ class HealthyAppController {
             element.utente == utente &&
             element.dataFine!.isAfter(DateTime.now()))
         .first;
+  }
+
+  ///metodi per gestire notifiche
+
+  NotificationService? get notificator => _notificationService;
+
+  void sendNotificationWhen(String titolo, String body, DateTime data){
+    Random random = Random();
+    var id = 0 + random.nextInt(1000000 - 0);
+    notificator?.scheduleNotifications(id, titolo, body, data);
+  }
+
+  void sendNotification(String titolo, String body, String payload){
+    Random random = Random();
+    var id = 0 + random.nextInt(1000000 - 0);
+    notificator?.showNotifications(id, titolo, body, payload);
   }
 }

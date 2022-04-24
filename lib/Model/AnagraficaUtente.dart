@@ -8,6 +8,7 @@ class AnagraficaUtente {
   num? _pesoUtente;
   DateTime? _dataNascitaUtente;
   String? _sesso;
+  num? _bmi;
 
   AnagraficaUtente(this._altezzaUtente, this._dataNascitaUtente,
       this._nomeUtente, this._pesoUtente, this._sesso);
@@ -21,6 +22,7 @@ class AnagraficaUtente {
       _dataNascitaUtente = dataNascita.toDate();
     }
     _pesoUtente = json['peso'];
+    _bmi = json['bmi'];
   }
 
   Map<String, dynamic> toJson() {
@@ -33,6 +35,7 @@ class AnagraficaUtente {
       data['dataNascita'] = timestamp;
     }
     data['peso'] = _pesoUtente;
+    data['bmi'] = _bmi;
     return data;
   }
 
@@ -55,4 +58,6 @@ class AnagraficaUtente {
   String? get sessoUtente => _sesso;
 
   set sessoUtente(String? sesso) => _sesso = sesso;
+
+  get bmi => pesoUtente!/(altezzaUtente!/100)*(altezzaUtente!/100);
 }
