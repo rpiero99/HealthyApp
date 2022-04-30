@@ -19,6 +19,7 @@ class PianoAlimentare {
   }
 
   PianoAlimentare.fromJson(Map<String, dynamic> json) {
+    _id = json['id'] ?? "";
     if (json['pasti'] != null) {
       _pasti = <Pasto>[];
       json['pasti'].forEach((p) {
@@ -41,6 +42,7 @@ class PianoAlimentare {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = _id ?? "";
     data['pasti'] = _pasti.map((v) => v?.toJson()).toList();
     if(_dataInizio != null){
       Timestamp timestamp = Timestamp.fromDate(_dataInizio!);

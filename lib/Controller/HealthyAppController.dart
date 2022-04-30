@@ -104,11 +104,6 @@ class HealthyAppController {
     return scheda;
   }
 
-  Future<SchedaPalestra?> getSchedaPalestraById(String id) async{
-    DocumentSnapshot doc = await gestoreDatabase.schedaPalestraRef.doc(id).get();
-    return SchedaPalestra.fromJson(doc.data() as Map<String, dynamic>);
-  }
-
   Future<List<SchedaPalestra>> getSchedePalestra() async {
     QuerySnapshot querySnapshot = await gestoreDatabase.schedaPalestraRef.get();
     final allSchedePalestraInDB = querySnapshot.docs.map((doc) => doc.id);
@@ -180,7 +175,7 @@ class HealthyAppController {
           CronometroProgrammabile cronometroProgrammabile) =>
       gestoreDatabase.cronometroProgRef
           .doc(cronometroProgrammabile.id)
-          .set(cronometroProgrammabile.toJson());
+          .update(cronometroProgrammabile.toJson());
 
   void startTimer(CronometroProgrammabile cronometroProgrammabile) {
     cronometroProgrammabile.startTimer();
@@ -214,7 +209,7 @@ class HealthyAppController {
   }
 
   updateUtente(Utente user) =>
-      gestoreDatabase.utenteRef.doc(user.id).set(user.toJson());
+      gestoreDatabase.utenteRef.doc(user.id).update(user.toJson());
 
   void addUtente(Utente item) {
     gestoreUtente.addUtente(item);
@@ -236,6 +231,9 @@ class HealthyAppController {
     updateUtente(user);
   }
 
+  updateAnagraficaUtente(AnagraficaUtente anagrafica) =>
+    gestoreDatabase.anagraficaUtenteRef.doc(anagrafica.id).update(anagrafica.toJson());
+
   ///Metodi esercizio
 
   Esercizio createEsercizio(
@@ -255,7 +253,7 @@ class HealthyAppController {
   }
 
   updateEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio) {
-    gestoreDatabase.esercizioRef.doc(esercizio.id).set(esercizio.toJson());
+    gestoreDatabase.esercizioRef.doc(esercizio.id).update(esercizio.toJson());
     schedaPalestra.updateEsercizio(esercizio);
     updateSchedaPalestra(schedaPalestra);
   }
@@ -281,8 +279,14 @@ class HealthyAppController {
     return piano;
   }
 
-  updatePianoAlimentare(PianoAlimentare pianoAlimentare) =>
-      gestoreDatabase.pianoAlimentareRef.doc(pianoAlimentare.id).set(pianoAlimentare.toJson());
+  updatePianoAlimentare(PianoAlimentare pianoAlimentare){
+    DocumentReference a = gestoreDatabase.pianoAlimentareRef.doc(pianoAlimentare.id);
+    a.update(pianoAlimentare.toJson());
+    for(Pasto? pasto in pianoAlimentare.pasti){
+      a.update({"pasti": FieldValue.arrayUnion([pasto?.toJson()])});
+    }
+  }
+
 
   addPianoAlimentare(PianoAlimentare pianoAlimentare) =>
       gestoreUtente.addPianoAlimentare(pianoAlimentare);
@@ -354,6 +358,11 @@ class HealthyAppController {
     updatePianoAlimentare(piano);
   }
 
+  updatePasto(Pasto pasto) {
+    gestoreDatabase.pastoRef.doc(pasto.id).update(pasto.toJson());
+  }
+
+
   PianoAlimentare getCurrentPianoAlimentareOf(Utente utente) {
     return gestoreUtente.piani
         .where((element) =>
@@ -376,5 +385,47 @@ class HealthyAppController {
     Random random = Random();
     var id = 0 + random.nextInt(1000000 - 0);
     notificator?.showNotifications(0, titolo, body, payload);
+  }
+
+  ///metodi get by id
+
+  Future<SchedaPalestra> getSchedaPalestraById(String id) async{
+    DocumentSnapshot doc = await gestoreDatabase.schedaPalestraRef.doc(id).get();
+    return SchedaPalestra.fromJson(doc.data() as Map<String, dynamic>);
+  }
+
+  Future<Allenamento?> getAllenamentoById(String id) async{
+    DocumentSnapshot doc = await gestoreDatabase.allenamentoRef.doc(id).get();
+    return Allenamento.fromJson(doc.data() as Map<String, dynamic>);
+  }
+
+  Future<AnagraficaUtente?> getAnagraficaById(String id) async{
+    DocumentSnapshot doc = await gestoreDatabase.anagraficaUtenteRef.doc(id).get();
+    return AnagraficaUtente.fromJson(doc.data() as Map<String, dynamic>);
+  }
+
+  Future<CronometroProgrammabile?> getCronometroProgrammabileById(String id) async{
+    DocumentSnapshot doc = await gestoreDatabase.cronometroProgRef.doc(id).get();
+    return CronometroProgrammabile.fromJson(doc.data() as Map<String, dynamic>);
+  }
+
+  Future<Esercizio> getEsercizioById(String id) async{
+    DocumentSnapshot doc = await gestoreDatabase.esercizioRef.doc(id).get();
+    return Esercizio.fromJson(doc.data() as Map<String, dynamic>);
+  }
+
+  Future<Pasto?> getPastoById(String id) async{
+    DocumentSnapshot doc = await gestoreDatabase.pastoRef.doc(id).get();
+    return Pasto.fromJson(doc.data() as Map<String, dynamic>);
+  }
+
+  Future<PianoAlimentare?> getPianoAlimentareById(String id) async{
+    DocumentSnapshot doc = await gestoreDatabase.pianoAlimentareRef.doc(id).get();
+    return PianoAlimentare.fromJson(doc.data() as Map<String, dynamic>);
+  }
+
+  Future<Utente?> getUtenteById(String id) async{
+    DocumentSnapshot doc = await gestoreDatabase.utenteRef.doc(id).get();
+    return Utente.fromJson(doc.data() as Map<String, dynamic>);
   }
 }

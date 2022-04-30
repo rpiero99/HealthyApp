@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:healthy_app/Model/CategoriaPasto.dart';
 
 import '../Utils/IdGenerator.dart';
 
@@ -36,7 +37,7 @@ class Pasto {
   Pasto.fromJson(Map<String, dynamic> json) {
     _id = json['id'] ?? "";
     _calorie = json['calorie'];
-    _categoria = json['categoria'];
+    _categoria = CategoriaPasto.values.firstWhere((e) => e.toString().contains(json['categoria']));
     _oraPasto = _oraPasto != null ? json['oraPasto'] : 0;
     _giornoPasto = _giornoPasto != null ? json['giorno'] : 0;
     _isMangiato = json['isMangiato'];
@@ -54,7 +55,7 @@ class Pasto {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = _id ?? "";
     data['calorie'] = _calorie?.toInt();
-    data['categoria'] = _categoria;
+    data['categoria'] = _categoria.toString().split('.').last;
     data['oraPasto'] = _oraPasto?.toInt();
     data['giorno'] = _giornoPasto?.toInt();
     data['isMangiato'] = _isMangiato;

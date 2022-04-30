@@ -10,6 +10,8 @@ import 'package:healthy_app/Model/SchedaPalestra.dart';
 import 'Controller/HealthyAppController.dart';
 import 'Model/Allenamento.dart';
 import 'Model/AnagraficaUtente.dart';
+import 'Model/Esercizio.dart';
+import 'Model/Pasto.dart';
 import 'Model/Utente.dart';
 
 Future<void> main() async{
@@ -20,11 +22,6 @@ Future<void> main() async{
 //  c.test();
 //  c.notificator?.init();
 //  c.notificator?.initDetails();
-
-  SchedaPalestra scheda = c.createSchedaPalestra("descrizione", "nome", DateTime.now(), DateTime.now());
-  c.gestoreDatabase.schedaPalestraRef.doc(scheda.id).set(scheda.toJson());
-
-//  c.sendNotificationWhen("Daje", "body, guarda questa che body", scheda.dataFine!);
 }
 
 class MyApp extends StatelessWidget {

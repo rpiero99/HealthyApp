@@ -60,7 +60,7 @@ class SchedaPalestra {
   }
 
   Esercizio createEsercizio(String descrizione, String nome, int numeroSerie, int numeroRipetizioni, int tempoRiposo, int day) =>
-      Esercizio(descrizione, nome, numeroSerie, numeroRipetizioni, tempoRiposo, day);
+      Esercizio(descrizione, nome, numeroSerie, numeroRipetizioni, tempoRiposo, day, id);
 
   addEsercizio(Esercizio? esercizio) {
     _esercizi?.add(esercizio!);
