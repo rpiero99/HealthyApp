@@ -42,8 +42,6 @@ class GestoreUtente {
 
   //aggiunta di un pasto fatto in un certo giorno e che potrebbe essere incluso nel piano come no.
   addPastoOfDay(Pasto pasto){
-    //todo - da vedere dove settare l'ora del pasto.
-    pasto.ora = DateTime.now();
     pastiOfDay.add(pasto);
   }
 }

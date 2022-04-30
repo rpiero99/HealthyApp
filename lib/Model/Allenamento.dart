@@ -1,9 +1,11 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../Utils/IdGenerator.dart';
 import 'Utente.dart';
 
 class Allenamento {
+  String? _id;
   DateTime? _oraInizio;
   DateTime? _oraFine;
   num? _tempoTotale;
@@ -14,9 +16,12 @@ class Allenamento {
   String? _descrizione;
   String? _nome;
 
-  Allenamento(this._descrizione, this._nome);
+  Allenamento(this._descrizione, this._nome){
+    id = IdGenerator.generate();
+  }
 
   Allenamento.fromJson(Map<String?, dynamic> json) {
+    _id = json['id'] ?? "";
     if(json['oraInizio']!=null){
       Timestamp oraIn = json['oraInizio'];
       _oraInizio = oraIn.toDate();
@@ -36,6 +41,7 @@ class Allenamento {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = _id ?? "";
     if(oraInizio != null){
       Timestamp timestamp = Timestamp.fromDate(_oraInizio!);
       data['oraInizio'] = timestamp;
@@ -53,6 +59,9 @@ class Allenamento {
     data['nome'] = _nome ?? "";
     return data;
   }
+  String? get id => _id;
+
+  set id(String? id) => _id = id;
 
   DateTime? get oraInizio => _oraInizio;
 

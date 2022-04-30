@@ -27,7 +27,6 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: selectNotification);
-    initDetails();
   }
 
 void initDetails(){
@@ -69,7 +68,7 @@ void initDetails(){
         id.toInt(),
         titolo,
         body,
-        tz.TZDateTime.from(data, tz.local).add(const Duration(minutes: 5)),
+        tz.TZDateTime.from(data, tz.local).add(const Duration(seconds: 5)),
         platformChannelSpecifics!,
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:

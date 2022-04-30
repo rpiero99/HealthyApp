@@ -1,33 +1,45 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
+import 'package:healthy_app/Utils/IdGenerator.dart';
+
 import 'CronometroProgrammabile.dart';
 
 class Esercizio {
+  String? _id;
   String? _nome;
   String? _descrizione;
   num? _nRep;
   num? _nSerie;
   num? _tempoRiposo;
   CronometroProgrammabile? _cronometro;
+  num? _day;
 
   Esercizio(this._descrizione, this._nome,
-      this._nSerie, this._nRep, this._tempoRiposo);
+      this._nSerie, this._nRep, this._tempoRiposo, this._day) {
+    id = IdGenerator.generate();
+  }
+
 
   Esercizio.fromJson(Map<String, dynamic> json) {
+    _id = json['id'] ?? "";
     _cronometro = json['cronometroProg'] != null
         ? CronometroProgrammabile.fromJson(json['cronometroProg'])
         : null;
     _nRep = json['numRep'];
     _nSerie = json['numSerie'];
+    _day = json['day'];
     _tempoRiposo = json['tempoRiposo'];
     _descrizione = json['descrizione'] ?? "";
     _nome = json['nome'] ?? "";
   }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = _id ?? "";
     data['tempoRiposo'] = _tempoRiposo?.toInt();
     data['numSerie'] = _nSerie?.toInt();
     data['numRep'] = _nRep?.toInt();
+    data['day'] = _day?.toInt();
     if (_cronometro != null) {
       data['cronometroProg'] = _cronometro?.toJson();
     }
@@ -35,6 +47,10 @@ class Esercizio {
     data['nome'] = _nome ?? "";
     return data;
   }
+
+  String? get id => _id;
+
+  set id(String? id) => _id = id;
 
   String? get nome => _nome;
 
@@ -55,6 +71,10 @@ class Esercizio {
   num? get tempoRiposo => _tempoRiposo;
 
   set tempoRiposo(num? tempoRiposo) => _tempoRiposo = tempoRiposo;
+
+  num? get day => _day;
+
+  set day(num? day) => _day = day;
 
   CronometroProgrammabile? get cronometroProg => _cronometro;
 

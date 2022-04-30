@@ -2,7 +2,10 @@
 
 import 'dart:async';
 
+import '../Utils/IdGenerator.dart';
+
 class CronometroProgrammabile {
+  String? _id;
   num? _tempoPreparazione;
   num? _tempoRiposo;
   num? _tempoLavoro;
@@ -11,9 +14,12 @@ class CronometroProgrammabile {
 
 
   CronometroProgrammabile(this._tempoLavoro, this._tempoPreparazione,
-      this._tempoRiposo, this._tempoTotale);
+      this._tempoRiposo, this._tempoTotale){
+    id = IdGenerator.generate();
+  }
 
   CronometroProgrammabile.fromJson(Map<String, dynamic> json) {
+    _id = json['id'] ?? "";
     _tempoPreparazione = json['tempoPreparazione'];
     _tempoTotale = json['tempoTotale'];
     _tempoLavoro = json['tempoWork'];
@@ -22,12 +28,17 @@ class CronometroProgrammabile {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = _id ?? "";
     data['tempoRiposo'] = _tempoRiposo?.toInt();
     data['tempoPreparazione'] = _tempoPreparazione?.toInt();
     data['tempoTotale'] = _tempoTotale?.toInt();
     data['tempoWork'] = _tempoLavoro?.toInt();
     return data;
   }
+
+  String? get id => _id;
+
+  set id(String? id) => _id = id;
 
   Timer? get timer => _timer;
 

@@ -2,17 +2,21 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../Utils/IdGenerator.dart';
 import 'Pasto.dart';
 import 'Utente.dart';
 
 class PianoAlimentare {
+  String? _id;
   List<Pasto?> _pasti = List.empty(growable: true);
   DateTime? _dataInizio;
   DateTime? _dataFine;
   Utente? _utente;
   String? _descrizione;
 
-  PianoAlimentare(this._dataFine, this._dataInizio, this._descrizione, this._utente);
+  PianoAlimentare(this._dataFine, this._dataInizio, this._descrizione, this._utente){
+    id = IdGenerator.generate();
+  }
 
   PianoAlimentare.fromJson(Map<String, dynamic> json) {
     if (json['pasti'] != null) {
@@ -52,13 +56,17 @@ class PianoAlimentare {
   }
 
   Pasto createPasto(Enum categoria, int calorie, String descrizione,
-      String nome, DateTime ora, int quantita, String type) {
-    return Pasto(categoria, calorie, descrizione, nome, ora, quantita, type);
+      String nome, int oraPasto, int giornoPasto,  int quantita, String type) {
+    return Pasto.pianoAlimentare(categoria, calorie, descrizione, nome, oraPasto, giornoPasto, quantita, type);
   }
 
   void addPasto(Pasto? pasto) => _pasti.add(pasto);
 
   void removePasto(Pasto? pasto) => _pasti.remove(pasto);
+
+  String? get id => _id;
+
+  set id(String? id) => _id = id;
 
   DateTime? get dataInizio => _dataInizio;
 
@@ -81,7 +89,7 @@ class PianoAlimentare {
   List<Pasto?> getPastiFromDayWeek(DateTime timestamp){
     List<Pasto?> toReturn = List.empty(growable: true);
    for (Pasto? element in pasti) {
-      if(element?.ora?.weekday == timestamp.weekday)toReturn.add(element);}
+      if(element?.oraDelGiorno?.weekday == timestamp.weekday)toReturn.add(element);}
    return toReturn;
   }
 }

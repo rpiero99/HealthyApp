@@ -45,7 +45,7 @@ class HealthyAppController {
   Allenamento createAllenamento(String descrizione, String nome) {
     Allenamento allenamento =
         gestoreAllenamento.createAllenamento(descrizione, nome);
-    gestoreDatabase.allenamentoRef.add(allenamento.toJson());
+    gestoreDatabase.allenamentoRef.doc(allenamento.id).set(allenamento.toJson());
     return allenamento;
   }
 
@@ -63,8 +63,10 @@ class HealthyAppController {
     return gestoreAllenamento.allenamenti;
   }
 
-  updateAllenamento(Allenamento allenamento) =>
-      gestoreDatabase.allenamentoRef.doc().set(allenamento.toJson());
+  updateAllenamento(Allenamento allenamento) {
+    gestoreDatabase.allenamentoRef.doc(allenamento.id).set(allenamento.toJson());
+  }
+
 
   void addAllenamento(Allenamento item) {
     gestoreAllenamento.addAllenamento(item);
@@ -98,20 +100,13 @@ class HealthyAppController {
       String descrizione, String nome, DateTime dataInizio, DateTime dataFine) {
     SchedaPalestra scheda = gestoreSchedaPalestra.createSchedaPalestra(
         descrizione, nome, dataInizio, dataFine);
-    gestoreDatabase.schedaPalestraRef.add(scheda.toJson());
-    List<MapEserciziDay> mapList = List.empty(growable: true);
-    for(int i=1; i<8; i++){
-      List<Esercizio>? esercizi = scheda.getEserciziFromDay(i);
-      MapEserciziDay map = MapEserciziDay(i);
-      for(Esercizio esercizio in esercizi!) {
-        map.addEsercizio(esercizio);
-      }
-      mapList.add(map);
-    }
-    for(MapEserciziDay map in mapList) {
-      gestoreDatabase.eserciziOfDayRef.add(map.toJson());
-    }
+    gestoreDatabase.schedaPalestraRef.doc(scheda.id).set(scheda.toJson());
     return scheda;
+  }
+
+  Future<SchedaPalestra?> getSchedaPalestraById(String id) async{
+    DocumentSnapshot doc = await gestoreDatabase.schedaPalestraRef.doc(id).get();
+    return SchedaPalestra.fromJson(doc.data() as Map<String, dynamic>);
   }
 
   Future<List<SchedaPalestra>> getSchedePalestra() async {
@@ -122,20 +117,32 @@ class HealthyAppController {
           .doc(value)
           .get()
           .then((element) async {
-        addSchedaPalestra(SchedaPalestra.fromJson(element.data()!));
+            SchedaPalestra scheda = SchedaPalestra.fromJson(element.data()!);
+            scheda.id = value;
+        addSchedaPalestra(scheda);
       });
     }
     return gestoreSchedaPalestra.schedePalestra;
   }
 
-  updateSchedaPalestra(SchedaPalestra scheda) =>
-      gestoreDatabase.schedaPalestraRef.doc().set(scheda.toJson());
+  updateSchedaPalestra(SchedaPalestra scheda) async{
+    DocumentReference a = gestoreDatabase.schedaPalestraRef.doc(scheda.id);
+    a.update(scheda.toJson());
+    for(Esercizio es in scheda.getAllEsercizi()){
+      a.update({"esercizi": FieldValue.arrayUnion([es.toJson()])});
+    }
+  }
 
   addSchedaPalestra(SchedaPalestra scheda) =>
       gestoreSchedaPalestra.addSchedaPalestra(scheda);
 
-  removeSchedaPalestra(SchedaPalestra scheda) =>
-      gestoreSchedaPalestra.removeSchedaPalestra(scheda);
+  removeSchedaPalestra(SchedaPalestra scheda) {
+    gestoreSchedaPalestra.removeSchedaPalestra(scheda);
+    DocumentReference a = gestoreDatabase.schedaPalestraRef.doc(scheda.id);
+    //todo rimuovere gli esercizi al suo interno
+    a.delete();
+  }
+
 
   ///Metodi cronometro programmabile
 
@@ -147,7 +154,7 @@ class HealthyAppController {
     CronometroProgrammabile cronometroProgrammabile =
         gestoreSchedaPalestra.createCronometroProgrammabile(
              tempoPreparazione, tempoRiposo, tempoLavoro, tempoTotale);
-    gestoreDatabase.cronometroProgRef.add(cronometroProgrammabile.toJson());
+    gestoreDatabase.cronometroProgRef.doc(cronometroProgrammabile.id).set(cronometroProgrammabile.toJson());
     return cronometroProgrammabile;
   }
 
@@ -172,7 +179,7 @@ class HealthyAppController {
   updateCrometroProgrammabile(
           CronometroProgrammabile cronometroProgrammabile) =>
       gestoreDatabase.cronometroProgRef
-          .doc()
+          .doc(cronometroProgrammabile.id)
           .set(cronometroProgrammabile.toJson());
 
   void startTimer(CronometroProgrammabile cronometroProgrammabile) {
@@ -188,7 +195,7 @@ class HealthyAppController {
   Utente createUtente(
       AnagraficaUtente anagrafica, String email) {
     Utente user = gestoreUtente.createUtente(anagrafica, email);
-    gestoreDatabase.utenteRef.add(user.toJson());
+    gestoreDatabase.utenteRef.doc(user.id).set(user.toJson());
     return user;
   }
 
@@ -207,7 +214,7 @@ class HealthyAppController {
   }
 
   updateUtente(Utente user) =>
-      gestoreDatabase.utenteRef.doc().set(user.toJson());
+      gestoreDatabase.utenteRef.doc(user.id).set(user.toJson());
 
   void addUtente(Utente item) {
     gestoreUtente.addUtente(item);
@@ -219,12 +226,12 @@ class HealthyAppController {
       DateTime dataNascita, String nome, double peso, String sesso) {
     AnagraficaUtente anagrafica = gestoreUtente.createAnagraficaUtente(
         altezza, dataNascita, nome, peso, sesso);
-    gestoreDatabase.anagraficaUtenteRef.add(anagrafica.toJson());
+    gestoreDatabase.anagraficaUtenteRef.doc(anagrafica.id).set(anagrafica.toJson());
     return anagrafica;
   }
 
   setAnagraficaUtente(Utente user, AnagraficaUtente anagrafica) {
-    gestoreDatabase.anagraficaUtenteRef.doc().set(anagrafica.toJson());
+    gestoreDatabase.anagraficaUtenteRef.doc(anagrafica.id).set(anagrafica.toJson());
     user.anagraficaUtente = anagrafica;
     updateUtente(user);
   }
@@ -233,35 +240,33 @@ class HealthyAppController {
 
   Esercizio createEsercizio(
       SchedaPalestra schedaPalestra,
-      CronometroProgrammabile cronometro,
       String descrizione,
-      String image,
       String nome,
       int numeroSerie,
       int numeroRipetizioni,
       int tempoRiposo,
       int day) {
     Esercizio esercizio = schedaPalestra.createEsercizio(
-        descrizione, image, nome, numeroSerie, numeroRipetizioni, tempoRiposo);
-    schedaPalestra.addEsercizio(esercizio, day);
-    gestoreDatabase.esercizioRef.add(esercizio.toJson());
+        descrizione, nome, numeroSerie, numeroRipetizioni, tempoRiposo, day);
+    schedaPalestra.addEsercizio(esercizio);
+    gestoreDatabase.esercizioRef.doc(esercizio.id).set(esercizio.toJson());
     updateSchedaPalestra(schedaPalestra);
     return esercizio;
   }
 
-  updateEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio, int day) {
-    gestoreDatabase.esercizioRef.doc().set(esercizio.toJson());
-    schedaPalestra.updateEsercizio(esercizio, day);
+  updateEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio) {
+    gestoreDatabase.esercizioRef.doc(esercizio.id).set(esercizio.toJson());
+    schedaPalestra.updateEsercizio(esercizio);
     updateSchedaPalestra(schedaPalestra);
   }
 
-  addEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio, int day) {
-    schedaPalestra.addEsercizio(esercizio, day);
+  addEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio) {
+    schedaPalestra.addEsercizio(esercizio);
     updateSchedaPalestra(schedaPalestra);
   }
 
-  removeEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio, int day) {
-    schedaPalestra.removeEsercizio(esercizio, day);
+  removeEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio) {
+    schedaPalestra.removeEsercizio(esercizio);
     updateSchedaPalestra(schedaPalestra);
   }
 
@@ -272,12 +277,12 @@ class HealthyAppController {
     PianoAlimentare piano = gestoreUtente.createPianoAlimentare(
         dataFine, dataInizio, descrizione, utente);
     gestoreUtente.addPianoAlimentare(piano);
-    gestoreDatabase.pianoAlimentareRef.add(piano.toJson());
+    gestoreDatabase.pianoAlimentareRef.doc(piano.id).set(piano.toJson());
     return piano;
   }
 
   updatePianoAlimentare(PianoAlimentare pianoAlimentare) =>
-      gestoreDatabase.pianoAlimentareRef.doc().set(pianoAlimentare.toJson());
+      gestoreDatabase.pianoAlimentareRef.doc(pianoAlimentare.id).set(pianoAlimentare.toJson());
 
   addPianoAlimentare(PianoAlimentare pianoAlimentare) =>
       gestoreUtente.addPianoAlimentare(pianoAlimentare);
@@ -287,21 +292,56 @@ class HealthyAppController {
 
   ///Metodi pasto
 
-  Pasto createPasto(
+  Pasto createPastoPianoAlimentare(
       PianoAlimentare piano,
       Enum categoria,
       int calorie,
       String descrizione,
       String nome,
-      DateTime ora,
+      int oraPasto,
+      int giornoPasto,
       int quantita,
       String type) {
     Pasto pasto = piano.createPasto(
-        categoria, calorie, descrizione, nome, ora, quantita, type);
+        categoria, calorie, descrizione, nome, oraPasto, giornoPasto, quantita, type);
     piano.addPasto(pasto);
-    gestoreDatabase.pastoRef.add(pasto.toJson());
+    gestoreDatabase.pastoRef.doc(pasto.id).set(pasto.toJson());
     updatePianoAlimentare(piano);
     return pasto;
+  }
+
+  Pasto createPastoOfDay(
+      Enum categoria,
+      int calorie,
+      String descrizione,
+      String nome,
+      int quantita,
+      String type
+      ){
+    Pasto pasto = Pasto(categoria, calorie, descrizione, nome, quantita, type);
+    gestoreUtente.addPastoOfDay(pasto);
+    gestoreDatabase.pastoRef.doc(pasto.id).set(pasto.toJson());
+    return pasto;
+  }
+
+  Future<List<Pasto>> getPastOfDay(DateTime day) async{
+    QuerySnapshot querySnapshot = await gestoreDatabase.pastoRef.get();
+    final allPastiInDb = querySnapshot.docs.map((doc) => doc.id);
+    for (var item in allPastiInDb) {
+      await gestoreDatabase.pastoRef
+          .doc(item)
+          .get()
+          .then((element) async {
+            Pasto pasto = Pasto.fromJson(element.data()!);
+            int? year = pasto.oraDelGiorno?.year;
+            int? month = pasto.oraDelGiorno?.month;
+            int? giorno = pasto.oraDelGiorno?.day;
+            if(giorno == day.day && month == day.month && year == day.year) {
+              gestoreUtente.addPastoOfDay(pasto);
+            }
+      });
+    }
+    return gestoreUtente.pastiOfDay;
   }
 
   addPasto(PianoAlimentare piano, Pasto pasto) {
@@ -329,12 +369,12 @@ class HealthyAppController {
   void sendNotificationWhen(String titolo, String body, DateTime data){
     Random random = Random();
     var id = 0 + random.nextInt(1000000 - 0);
-    notificator?.scheduleNotifications(id, titolo, body, data);
+    notificator?.scheduleNotifications(0, titolo, body, data);
   }
 
   void sendNotification(String titolo, String body, String payload){
     Random random = Random();
     var id = 0 + random.nextInt(1000000 - 0);
-    notificator?.showNotifications(id, titolo, body, payload);
+    notificator?.showNotifications(0, titolo, body, payload);
   }
 }

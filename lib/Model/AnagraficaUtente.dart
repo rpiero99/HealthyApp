@@ -2,7 +2,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../Utils/IdGenerator.dart';
+
 class AnagraficaUtente {
+  String? _id;
   String? _nomeUtente;
   num? _altezzaUtente;
   num? _pesoUtente;
@@ -11,9 +14,12 @@ class AnagraficaUtente {
   num? _bmi;
 
   AnagraficaUtente(this._altezzaUtente, this._dataNascitaUtente,
-      this._nomeUtente, this._pesoUtente, this._sesso);
+      this._nomeUtente, this._pesoUtente, this._sesso){
+    id = IdGenerator.generate();
+  }
 
   AnagraficaUtente.fromJson(Map<String, dynamic> json) {
+    _id = json['id'] ?? "";
     _nomeUtente = json['nome'];
     _sesso = json['sesso'];
     _altezzaUtente = json['altezza'];
@@ -27,6 +33,7 @@ class AnagraficaUtente {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = _id ?? "";
     data['nome'] = _nomeUtente;
     data['sesso'] = _sesso;
     data['altezza'] = _altezzaUtente;
@@ -38,6 +45,10 @@ class AnagraficaUtente {
     data['bmi'] = _bmi;
     return data;
   }
+
+  String? get id => _id;
+
+  set id(String? id) => _id = id;
 
   String? get nomeUtente => _nomeUtente;
 

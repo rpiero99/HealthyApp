@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Model/CategoriaPasto.dart';
@@ -7,6 +8,8 @@ import 'package:healthy_app/Model/PianoAlimentare.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
 
 import 'Controller/HealthyAppController.dart';
+import 'Model/Allenamento.dart';
+import 'Model/AnagraficaUtente.dart';
 import 'Model/Utente.dart';
 
 Future<void> main() async{
@@ -14,20 +17,14 @@ Future<void> main() async{
   await Firebase.initializeApp();
   runApp(const MyApp());
   HealthyAppController c = HealthyAppController.instance;
-  c.notificator?.init();
-  Utente user = c.createUtente(c.createAnagraficaUtente(0,DateTime.now(),"aa", 8, "poco"),"_email");
-  SchedaPalestra scheda = c.createSchedaPalestra("eeee", "aaaaaa", DateTime.now(),  DateTime.now());
-  c.createEsercizio(scheda, c.createCronometroProgrammabile(0,0,0,0), "descrizione", "image", "nome", 7, 10, 0, 0);
-  PianoAlimentare piano = c.createPianoAlimentare(DateTime.now(), DateTime.now(), "descrizione", user );
-  c.createPasto(piano, CategoriaPasto.SPUNTINO_POMERIGGIO, 712, "spuntino abbondante", "merenna", DateTime.now(), 1, "contorno");
-  c.getAllenamenti();
-  c.getUtenti();
-  c.getCronometriProgrammabili();
-  c.getCurrentPianoAlimentareOf(user);
-}
+//  c.test();
+//  c.notificator?.init();
+//  c.notificator?.initDetails();
 
-aa(){
+  SchedaPalestra scheda = c.createSchedaPalestra("descrizione", "nome", DateTime.now(), DateTime.now());
+  c.gestoreDatabase.schedaPalestraRef.doc(scheda.id).set(scheda.toJson());
 
+//  c.sendNotificationWhen("Daje", "body, guarda questa che body", scheda.dataFine!);
 }
 
 class MyApp extends StatelessWidget {
@@ -48,7 +45,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -88,10 +85,6 @@ class _MyHomePageState extends State<MyHomePage> {
    //       c.createUtente(a, "alessandrot47@gmail.com", "passwordtest"));
 
 /*      String? email = users.elementAt(0).email;
-      if(email!="")
-        print("ennamooo");
-      else
-        print("polini in fiamme");
       _counter = 10;*/
     });
   }
