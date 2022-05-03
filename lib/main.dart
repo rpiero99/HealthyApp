@@ -22,6 +22,7 @@ Future<void> main() async{
 //  c.test();
 //  c.notificator?.init();
 //  c.notificator?.initDetails();
+//  Allenamento allenamento = await c.startAllenamento("namoo", "allenamento 1 - plaza");
 }
 
 class MyApp extends StatelessWidget {

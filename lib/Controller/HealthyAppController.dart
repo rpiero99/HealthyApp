@@ -3,9 +3,11 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
 import 'package:healthy_app/Utils/MapEserciziDay.dart';
 import 'package:healthy_app/Utils/NotificationService.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../Model/Allenamento.dart';
 import '../Model/Esercizio.dart';
 import '../Model/Handlers/GestoreAllenamento.dart';
@@ -29,7 +31,7 @@ class HealthyAppController {
   GestoreUtente gestoreUtente = GestoreUtente.instance;
   GeoLocService? geoLocService;
   final NotificationService? _notificationService = NotificationService.instance;
-
+  StopWatchTimer? stopwatch;
   HealthyAppController._privateConstructor();
 
   static final instance = HealthyAppController._privateConstructor();
@@ -72,26 +74,49 @@ class HealthyAppController {
     gestoreAllenamento.addAllenamento(item);
   }
 
-  void startAllenamento(String descrizione, String nome) async {
+  Future<Allenamento> startAllenamento(String descrizione, String nome, Utente utente) async {
     geoLocService = GeoLocService();
     DateTime timeStamp = DateTime.now();
     geoLocService?.initPlatformState();
     Allenamento newAllenamento = createAllenamento(descrizione, nome);
+    stopwatch = StopWatchTimer(mode: StopWatchMode.countUp,
+      onChange: (value) => print('onChange $value'),
+      onChangeRawSecond: getStatisticheAllenamentoSecondo(newAllenamento, utente),
+      onChangeRawMinute: getStatisticheAllenamentoMinuto(newAllenamento),
+    );
+
     geoLocService?.startPosition = await geoLocService?.getCurrentPosition();
     newAllenamento.oraInizio = timeStamp;
     addAllenamento(newAllenamento);
+    return newAllenamento;
   }
 
   void stopAllenamento(Allenamento allenamento) async {
     allenamento.oraFine = DateTime.now();
     geoLocService?.endPosition = await geoLocService?.getCurrentPosition();
-    allenamento.distanza = geoLocService?.calculateDistance(
+    allenamento.distanza = calculateDistance(geoLocService!.endPosition!);
+    //todo da testare
+    geoLocService?.cancelListener();
+  }
+
+  num? calculateDistance(Position position) {
+    return geoLocService?.calculateDistance(
         geoLocService?.startPosition?.latitude,
         geoLocService?.startPosition?.longitude,
         geoLocService?.endPosition?.latitude,
         geoLocService?.endPosition?.longitude);
-    //todo da testare
-    geoLocService?.cancelListener();
+  }
+
+  getStatisticheAllenamentoSecondo(Allenamento allenamento, Utente utente) async{
+    Position? current = await geoLocService?.getCurrentPosition();
+    allenamento.distanza = calculateDistance(current!);
+    allenamento.calcoloCalorie(utente);
+  }
+
+  getStatisticheAllenamentoMinuto(Allenamento allenamento){
+    allenamento.oraFine = DateTime.now();
+    allenamento.tempoPerKm;
+    allenamento.velocitaMedia;
   }
 
   ///Metodi scheda palestra
@@ -134,7 +159,9 @@ class HealthyAppController {
   removeSchedaPalestra(SchedaPalestra scheda) {
     gestoreSchedaPalestra.removeSchedaPalestra(scheda);
     DocumentReference a = gestoreDatabase.schedaPalestraRef.doc(scheda.id);
-    //todo rimuovere gli esercizi al suo interno
+    for(Esercizio esercizio in scheda.getAllEsercizi()){
+      removeEsercizio(scheda, esercizio);
+    }
     a.delete();
   }
 
@@ -265,6 +292,7 @@ class HealthyAppController {
 
   removeEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio) {
     schedaPalestra.removeEsercizio(esercizio);
+    gestoreDatabase.esercizioRef.doc(esercizio.id).delete();
     updateSchedaPalestra(schedaPalestra);
   }
 
@@ -291,8 +319,14 @@ class HealthyAppController {
   addPianoAlimentare(PianoAlimentare pianoAlimentare) =>
       gestoreUtente.addPianoAlimentare(pianoAlimentare);
 
-  removePianoAlimentare(PianoAlimentare pianoAlimentare) =>
-      gestoreUtente.removePianoAlimentare(pianoAlimentare);
+  removePianoAlimentare(PianoAlimentare pianoAlimentare) {
+    gestoreUtente.removePianoAlimentare(pianoAlimentare);
+    for(Pasto? pasto in pianoAlimentare.pasti){
+      removePastoPianoAlimentare(pianoAlimentare, pasto!);
+    }
+    gestoreDatabase.pianoAlimentareRef.doc(pianoAlimentare.id).delete();
+  }
+
 
   ///Metodi pasto
 
@@ -353,8 +387,12 @@ class HealthyAppController {
     updatePianoAlimentare(piano);
   }
 
-  removePasto(PianoAlimentare piano, Pasto pasto) {
+  removePastoGiornaliero(Pasto pasto) =>
+      gestoreDatabase.pastoRef.doc(pasto.id).delete();
+
+  removePastoPianoAlimentare(PianoAlimentare piano, Pasto pasto) {
     piano.removePasto(pasto);
+    gestoreDatabase.pastoRef.doc(pasto.id).delete();
     updatePianoAlimentare(piano);
   }
 

@@ -59,7 +59,7 @@ class PianoAlimentare {
 
   Pasto createPasto(Enum categoria, int calorie, String descrizione,
       String nome, int oraPasto, int giornoPasto,  int quantita, String type) {
-    return Pasto.pianoAlimentare(categoria, calorie, descrizione, nome, oraPasto, giornoPasto, quantita, type);
+    return Pasto.pianoAlimentare(categoria, calorie, descrizione, nome, oraPasto, giornoPasto, quantita, type, id);
   }
 
   void addPasto(Pasto? pasto) => _pasti.add(pasto);

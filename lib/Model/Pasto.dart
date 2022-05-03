@@ -20,6 +20,7 @@ class Pasto {
   bool? _isMangiato;
   String? _type;
   num? _quantita;
+  String? _idPianoAlimentare;
 
   Pasto(this._categoria, this._calorie, this._descrizione, this._nome,
       this._quantita, this._type){
@@ -29,7 +30,7 @@ class Pasto {
   }
 
   Pasto.pianoAlimentare(this._categoria, this._calorie, this._descrizione, this._nome,
-      this._oraPasto, this._giornoPasto, this._quantita, this._type){
+      this._oraPasto, this._giornoPasto, this._quantita, this._type, this._idPianoAlimentare){
     id = IdGenerator.generate();
     isMangiato = false;
   }
@@ -41,6 +42,7 @@ class Pasto {
     _oraPasto = _oraPasto != null ? json['oraPasto'] : 0;
     _giornoPasto = _giornoPasto != null ? json['giorno'] : 0;
     _isMangiato = json['isMangiato'];
+    _idPianoAlimentare = json['idPianoAlimentare'] ?? "";
     _descrizione = json['descrizione'] ?? "";
     _nome = json['nome'] ?? "";
     if(json['oraGiorno']!=null) {
@@ -59,6 +61,7 @@ class Pasto {
     data['oraPasto'] = _oraPasto?.toInt();
     data['giorno'] = _giornoPasto?.toInt();
     data['isMangiato'] = _isMangiato;
+    data['idPianoAlimentare'] = _idPianoAlimentare ?? "";
     data['descrizione'] = _descrizione ?? "";
     data['nome'] = _nome ?? "";
     if(_oraDelGiorno != null){
@@ -111,4 +114,10 @@ class Pasto {
   set type(String? type) => _type = type;
 
   set quantita(num? quantita) => _quantita = quantita;
+
+  String? get pianoAlimentare => _idPianoAlimentare;
+
+  set pianoAlimentare(String? value) {
+    _idPianoAlimentare = value;
+  }
 }
