@@ -11,6 +11,7 @@ import 'package:healthy_app/Model/SchedaPalestra.dart';
 import 'package:healthy_app/Pages/HomePage.dart';
 import 'package:healthy_app/Pages/LoginPage.dart';
 import 'package:healthy_app/Pages/RegistrationPage.dart';
+import 'package:healthy_app/Pages/WelcomeScreen.dart';
 
 import 'Controller/HealthyAppController.dart';
 import 'Model/Allenamento.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RegistrationPage(),
+      home: WelcomeScreen(),
     );
   }
 }
