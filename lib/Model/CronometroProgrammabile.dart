@@ -61,11 +61,11 @@ class CronometroProgrammabile {
 
   set tempoTotale(num? tempoTotale) => _tempoTotale = tempoTotale;
 
-  void startTimer() {
-    timer = Timer(Duration(minutes: tempoTotale!.toInt()), stopTimer);
+  Duration startTimer() {
+    return Duration(seconds: tempoTotale!.toInt());
   }
 
   void stopTimer() {
-    timer?.cancel();
+    //startTimer()
   }
 }
