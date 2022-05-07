@@ -46,6 +46,10 @@ dependencies:
   flutter_local_notifications: ^5.0.0+1
   flutter_speed_dial:
   pedometer:
+  curved_navigation_bar:
+  animations:
+  intl:
+  vector_math: any
   flutter:
     sdk: flutter
 

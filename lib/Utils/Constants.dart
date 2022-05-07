@@ -1,7 +1,6 @@
-
 import 'package:flutter/material.dart';
 
-class Constants{
+class Constants {
   static const Color backgroundColor = Color.fromRGBO(58, 66, 86, 1.0);
   static const Color backgroundButtonColor = Colors.white;
   static const Color textButtonColor = Colors.black;
@@ -9,12 +8,22 @@ class Constants{
   static const Color backgroundColorLoginButton = Colors.white54;
   static const Color errorSnackBar = Colors.redAccent;
 
-  static SnackBar createSnackBar(String label, Color color){
+  static SnackBar createSnackBar(String label, Color color) {
     return SnackBar(
       content: Text(label),
       backgroundColor: color,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+    );
+  }
+
+  static void redirectTo(BuildContext context, Widget page) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return page;
+        },
+      ),
     );
   }
 }

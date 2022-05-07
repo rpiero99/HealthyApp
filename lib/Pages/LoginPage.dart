@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:healthy_app/Model/Handlers/GestoreAuth.dart';
 import 'package:healthy_app/Pages/HomePage.dart';
 import 'package:healthy_app/Pages/RegistrationPage.dart';
+import 'package:healthy_app/Pages/Widgets/TopAppBar.dart';
 import 'package:healthy_app/Utils/Constants.dart';
 
 import '../Controller/HealthyAppController.dart';
@@ -22,7 +21,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Constants.backgroundColor,
-        appBar: AppBar(
+         appBar: AppBar(
           elevation: 0,
           backgroundColor: Constants.backgroundColor,
           leading: IconButton(
@@ -104,20 +103,13 @@ class LoginPage extends StatelessWidget {
                                 passwordController.text.isNotEmpty) {
                               if (await c.login(emailController.text.trim(),
                                       passwordController.text.trim()) !=
-                                  "ok") {
+                                  "signUp") {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     Constants.createSnackBar(
                                         'Credenziali errate',
                                         Constants.errorSnackBar));
                               } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return HomePage();
-                                    },
-                                  ),
-                                );
+                               Constants.redirectTo(context, HomePage());
                               }
                             }
                             else{

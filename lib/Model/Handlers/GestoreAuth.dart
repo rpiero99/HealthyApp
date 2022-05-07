@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Utils/Constants.dart';
 import '../Utente.dart';
-import 'package:get/get.dart';
 
 class GestoreAuth {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -20,7 +19,7 @@ class GestoreAuth {
           email: email,
           password: password,
         );
-       return "ok";
+       return "signUp";
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
