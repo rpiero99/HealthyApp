@@ -3,6 +3,7 @@ import 'package:healthy_app/Pages/LoginPage.dart';
 
 import '../Controller/HealthyAppController.dart';
 import '../Utils/Constants.dart';
+import 'Widgets/InputWidget.dart';
 
 class RegistrationPage extends StatelessWidget {
   static HealthyAppController c = HealthyAppController.instance;
@@ -69,7 +70,7 @@ class RegistrationPage extends StatelessWidget {
                         makeInput(label: "Email", controller: emailController),
                         makeInput(
                             label: "Password",
-                            obsureText: true,
+                            obscureText: true,
                             controller: passwordController)
                       ]),
                     ),
@@ -135,8 +136,9 @@ class RegistrationPage extends StatelessWidget {
                           "Login",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 18,
+                            fontSize: 16,
                             color: Constants.text,
+                            decoration: TextDecoration.underline,
                           ),
                         ),
                         onTap: () {
@@ -160,38 +162,38 @@ class RegistrationPage extends StatelessWidget {
   }
 }
 
-Widget makeInput(
-    {label, obsureText = false, TextEditingController? controller}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const SizedBox(
-        height: 5,
-      ),
-      TextField(
-        controller: controller,
-        obscureText: obsureText,
-        decoration: InputDecoration(
-          hintText: label,
-          filled: true,
-          fillColor: Constants.backgroundButtonColor,
-          contentPadding:
-              const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.white),
-            borderRadius: BorderRadius.circular(25.7),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: const BorderSide(color: Colors.white),
-            borderRadius: BorderRadius.circular(25.7),
-          ),
-          border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey[400]!)),
-        ),
-      ),
-      const SizedBox(
-        height: 30,
-      )
-    ],
-  );
-}
+// Widget makeInput(
+//     {label, obsureText = false, TextEditingController? controller}) {
+//   return Column(
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       const SizedBox(
+//         height: 5,
+//       ),
+//       TextField(
+//         controller: controller,
+//         obscureText: obsureText,
+//         decoration: InputDecoration(
+//           hintText: label,
+//           filled: true,
+//           fillColor: Constants.backgroundButtonColor,
+//           contentPadding:
+//               const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+//           focusedBorder: OutlineInputBorder(
+//             borderSide: const BorderSide(color: Colors.white),
+//             borderRadius: BorderRadius.circular(25.7),
+//           ),
+//           enabledBorder: UnderlineInputBorder(
+//             borderSide: const BorderSide(color: Colors.white),
+//             borderRadius: BorderRadius.circular(25.7),
+//           ),
+//           border: OutlineInputBorder(
+//               borderSide: BorderSide(color: Colors.grey[400]!)),
+//         ),
+//       ),
+//       const SizedBox(
+//         height: 30,
+//       )
+//     ],
+//   );
+// }

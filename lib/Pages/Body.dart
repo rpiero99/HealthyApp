@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:healthy_app/Pages/LoginPage.dart';
 import 'package:healthy_app/Pages/RegistrationPage.dart';
 import 'package:healthy_app/Pages/Widgets/RoundedButton.dart';
+import 'package:healthy_app/Utils/Constants.dart';
 
 import 'Background.dart';
 
@@ -21,14 +21,8 @@ class Body extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              "Healthy App",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-
-            ),
-            SizedBox(height: size.height * 0.05),
-            SvgPicture.asset(
-              "assets/images/pesi.jpeg",
-              height: size.height * 0.45,
+              "Bentornato in Healthy App!",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Constants.text),
             ),
             SizedBox(height: size.height * 0.05),
             RoundedButton(

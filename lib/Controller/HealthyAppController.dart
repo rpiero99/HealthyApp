@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
 import 'package:healthy_app/Utils/MapEserciziDay.dart';
@@ -38,9 +39,11 @@ class HealthyAppController {
 
   ///Metodi per login e registrazione
 
-  bool login(String email, String password) { return gestoreAuth.login(email,password);}
+  Future<String?> login(String email, String password) { return gestoreAuth.login(email,password);}
 
   registrazione(String email, String password) => gestoreAuth.registrazione(email, password);
+
+  signOut() => gestoreAuth.signOut();
 
   ///Metodi per allenamento
 
