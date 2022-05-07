@@ -14,6 +14,7 @@ class SchedaPalestra {
   List<Esercizio>? _esercizi;
   DateTime? _dataInizio;
   DateTime? _dataFine;
+  String? _idUtente;
 
   SchedaPalestra(this._descrizione, this._name, this._dataInizio, this._dataFine){
     id = IdGenerator.generate();
@@ -28,6 +29,7 @@ class SchedaPalestra {
         _esercizi!.add(Esercizio.fromJson(v));
       });
     }
+    _idUtente = json['idUtente'] ?? "";
     _name = json['nome'] ?? "";
     _descrizione = json['descrizione'] ?? "";
     if(json['dataInizio']!=null){
@@ -52,6 +54,7 @@ class SchedaPalestra {
       Timestamp timestamp = Timestamp.fromDate(dataInizio!);
       data['dataInizio'] = timestamp;
     }
+    data['idUtente'] = _idUtente ?? "";
     if(dataFine != null){
       Timestamp timestamp = Timestamp.fromDate(dataFine!);
       data['dataFine'] = timestamp;
@@ -94,6 +97,12 @@ class SchedaPalestra {
   DateTime? get dataFine => _dataFine;
 
   set dataFine(DateTime? dateTime) => _dataFine = dateTime;
+
+  String? get idUtente => _idUtente;
+
+  set idUtente(String? value) {
+    _idUtente = value;
+  }
 
   Esercizio? getEsercizioFromName(String? name){
     return filterEsercizi((element) => (element).nome == name).first;

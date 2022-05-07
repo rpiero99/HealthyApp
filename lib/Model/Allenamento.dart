@@ -15,6 +15,7 @@ class Allenamento {
   num? _tempoPerKm;
   String? _descrizione;
   String? _nome;
+  String? _idUtente;
 
   Allenamento(this._descrizione, this._nome){
     id = IdGenerator.generate();
@@ -30,6 +31,7 @@ class Allenamento {
       Timestamp oraFi = json['oraFine'];
       _oraFine = oraFi.toDate();
     }
+    _idUtente = json['idUtente'] ?? "";
     _tempoPerKm = json['tempoPerKm'];
     _tempoTotale = json['tempoTot'];
     _velocitaMedia = json['velocitaMed'];
@@ -56,6 +58,7 @@ class Allenamento {
     data['calorieCons'] = _calorieConsumate?.toInt();
     data['descrizione'] = _descrizione ?? "";
     data['distanza'] = _distanza?.toDouble();
+    data['idUtente'] = _idUtente ?? "";
     data['nome'] = _nome ?? "";
     return data;
   }
@@ -105,5 +108,11 @@ class Allenamento {
   num? calcoloCalorie(Utente utente) {
     calorieConsumate = utente.anagraficaUtente!.pesoUtente! * distanza!;
     return calorieConsumate;
+  }
+
+  String? get idUtente => _idUtente;
+
+  set idUtente(String? value) {
+    _idUtente = value;
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Utils/Constants.dart';
+
 class Background extends StatelessWidget {
   final Widget child;
   const Background({
@@ -35,7 +37,7 @@ class Background extends StatelessWidget {
           child,
         ],
       ),
-      color: Colors.white,
+      color: Constants.backgroundColor,
     );
   }
 }

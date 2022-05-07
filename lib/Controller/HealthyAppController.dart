@@ -38,7 +38,7 @@ class HealthyAppController {
 
   ///Metodi per login e registrazione
 
-  login(String email, String password) {gestoreAuth.login(email,password);}
+  bool login(String email, String password) { return gestoreAuth.login(email,password);}
 
   registrazione(String email, String password) => gestoreAuth.registrazione(email, password);
 

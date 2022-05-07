@@ -9,14 +9,15 @@ class GestoreAuth {
   GestoreAuth._privateConstructor();
   static final instance = GestoreAuth._privateConstructor();
 
-  Future<UserCredential?> login(String email, String password) async {
+  bool login(String email, String password) {
     try {
-      return await firebaseAuth.signInWithEmailAndPassword(
+      firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      return true;
     } on FirebaseAuthException catch (e) {
-      return null;
+      return false;
     }
   }
 

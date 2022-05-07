@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthy_app/Pages/LoginPage.dart';
 
 import '../Controller/HealthyAppController.dart';
+import '../Utils/Constants.dart';
 
 class RegistrationPage extends StatelessWidget {
   static HealthyAppController c = HealthyAppController.instance;
@@ -13,39 +14,38 @@ class RegistrationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Constants.backgroundColor,
         appBar: AppBar(
           elevation: 0,
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: Constants.backgroundColor,
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios,
                 size: 20,
-                color: Colors.black,
+                color: Constants.text,
               )),
         ),
         body: SafeArea(
-            child: SingleChildScrollView(
           child: Container(
             height: MediaQuery.of(context).size.height,
             width: double.infinity,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
                   children: [
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const Text(
+                      children: const [
+                        Text(
                           "Registrati",
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
+                            color: Constants.text,
                           ),
                         ),
                         SizedBox(
@@ -55,7 +55,7 @@ class RegistrationPage extends StatelessWidget {
                           "Prova questa fantastica app!",
                           style: TextStyle(
                             fontSize: 15,
-                            color: Colors.grey[700],
+                            color: Constants.text,
                           ),
                         ),
                         SizedBox(
@@ -74,9 +74,9 @@ class RegistrationPage extends StatelessWidget {
                       ]),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: Container(
-                        padding: EdgeInsets.only(top: 3, left: 3),
+                        padding: const EdgeInsets.only(top: 3, left: 3),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
                             border: const Border(
@@ -88,33 +88,55 @@ class RegistrationPage extends StatelessWidget {
                           minWidth: double.infinity,
                           height: 60,
                           onPressed: () {
-                            c.registrazione(emailController.text.trim(),
-                                passwordController.text.trim());
+                            if(emailController.text.trim()!="" && passwordController.text.trim()!="" &&
+                                  passwordController.text.trim().length>=6){
+                              c.registrazione(emailController.text.trim(),
+                                  passwordController.text.trim());
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return LoginPage();
+                                  },
+                                ),
+                              );
+                            }else{
+                              // Find the ScaffoldMessenger in the widget tree
+                              // and use it to show a SnackBar.
+                              ScaffoldMessenger.of(context).showSnackBar(Constants.createSnackBar('Nome utente e/o password non corretti (la password deve contenere almeno 6 caratteri', Constants.errorSnackBar));
+                            }
                           },
-                          color: Colors.redAccent,
+                          color: Constants.backgroundColorLoginButton,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40)),
                           child: const Text(
                             "Registrazione",
                             style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                color: Constants.textButtonColor),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text("Sei già registrato? "),
+                      const Text(
+                        "Sei già registrato? ",
+                        style: TextStyle(
+                          color: Constants.text,
+                          fontSize: 14,
+                        ),
+                      ),
                       GestureDetector(
                         child: const Text(
                           "Login",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
+                            color: Constants.text,
                           ),
                         ),
                         onTap: () {
@@ -134,7 +156,7 @@ class RegistrationPage extends StatelessWidget {
               ],
             ),
           ),
-        )));
+        ));
   }
 }
 
@@ -143,11 +165,6 @@ Widget makeInput(
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        label,
-        style: const TextStyle(
-            fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black87),
-      ),
       const SizedBox(
         height: 5,
       ),
@@ -155,18 +172,24 @@ Widget makeInput(
         controller: controller,
         obscureText: obsureText,
         decoration: InputDecoration(
+          hintText: label,
+          filled: true,
+          fillColor: Constants.backgroundButtonColor,
           contentPadding:
-              const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.grey[400]!,
-            ),
+              const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(25.7),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(25.7),
           ),
           border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey[400]!)),
         ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 30,
       )
     ],
