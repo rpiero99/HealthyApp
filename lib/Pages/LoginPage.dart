@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healthy_app/Model/Handlers/GestoreAuth.dart';
+import 'package:healthy_app/Pages/DashBoard.dart';
 import 'package:healthy_app/Pages/HomePage.dart';
 import 'package:healthy_app/Pages/RegistrationPage.dart';
 import 'package:healthy_app/Pages/Widgets/TopAppBar.dart';

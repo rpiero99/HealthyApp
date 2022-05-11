@@ -61,7 +61,7 @@ class HealthyAppController {
       await gestoreDatabase.allenamentoRef
           .doc(value)
           .get()
-          .then((element) async {
+          .then((element) {
         addAllenamento(Allenamento.fromJson(element.data()!));
       });
     }

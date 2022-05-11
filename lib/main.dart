@@ -8,7 +8,7 @@ import 'package:healthy_app/Model/CategoriaPasto.dart';
 import 'package:healthy_app/Model/CronometroProgrammabile.dart';
 import 'package:healthy_app/Model/PianoAlimentare.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
-import 'package:healthy_app/Pages/HomePage.dart';
+import 'package:healthy_app/Pages/DashBoard.dart';
 import 'package:healthy_app/Pages/LoginPage.dart';
 import 'package:healthy_app/Pages/RegistrationPage.dart';
 import 'package:healthy_app/Pages/WelcomeScreen.dart';
