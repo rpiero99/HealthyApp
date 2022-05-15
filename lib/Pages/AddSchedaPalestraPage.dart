@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fleva_icons/fleva_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,11 +12,16 @@ import '../Utils/Constants.dart';
 import 'HomePage.dart';
 import 'Widgets/InputWidget.dart';
 
-class AddSchedaPalestraPage extends StatelessWidget {
-  AddSchedaPalestraPage({Key? key}) : super(key: key);
+class AddSchedaPalestraPage extends StatefulWidget {
+  const AddSchedaPalestraPage({Key? key}) : super(key: key);
 
-  static HealthyAppController c = HealthyAppController.instance;
+  @override
+  _AddSchedaPalestraPage createState() => _AddSchedaPalestraPage();
+}
 
+class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
+
+  String? item = 'Giorno..';
   SchedaPalestra? schedaNew;
   List<Esercizio> esercizi = [];
 
@@ -25,16 +31,12 @@ class AddSchedaPalestraPage extends StatelessWidget {
   TextEditingController dataFineController = TextEditingController();
 
   TextEditingController dayEsercizioController = TextEditingController();
-  TextEditingController descrizioneEsercizioController =
-      TextEditingController();
+  TextEditingController descrizioneEsercizioController = TextEditingController();
   TextEditingController nomeEsercizioController = TextEditingController();
   TextEditingController numRepEsercizioController = TextEditingController();
   TextEditingController numSerieEsercizioController = TextEditingController();
   TextEditingController tempoRestEsercizioController = TextEditingController();
 
-  String? getCurrentIdUser() {
-    return c.gestoreAuth.firebaseAuth.currentUser?.uid;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +111,7 @@ class AddSchedaPalestraPage extends StatelessWidget {
                         color: Constants.backgroundButtonColor,
                         textColor: Constants.textButtonColor,
                         press: () {
+                          clearFieldsEsercizio();
                           openAddEsercizioDialog(context);
                         },
                         key: GlobalKey(),
@@ -118,53 +121,53 @@ class AddSchedaPalestraPage extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 3, left: 3),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        border: const Border(
-                            bottom: BorderSide(color: Colors.black),
-                            top: BorderSide(color: Colors.black),
-                            right: BorderSide(color: Colors.black),
-                            left: BorderSide(color: Colors.black))),
-                    child: MaterialButton(
-                      minWidth: double.infinity,
-                      height: 60,
-                      onPressed: () async {
-                        if (nomeController.text.isNotEmpty &&
-                            descrizioneController.text.isNotEmpty &&
-                            DateTime.parse(dataFineController.text).isBefore(DateTime.parse(dataInizioController.text))) {
-                          schedaNew = c.createSchedaPalestra(descrizioneController.text,
-                              nomeController.text, DateTime.parse(dataInizioController.text),
-                              DateTime.parse(dataFineController.text), getCurrentIdUser());
-                          for (var element in esercizi) {
-                            element.idSchedaPalestra = schedaNew?.id;
-                            c.createEsercizio(schedaNew!, element.descrizione!,
-                                element.nome!, element.nSerie!.toInt(), element.nRep!.toInt(),
-                                element.tempoRiposo!.toInt(), element.day!.toInt());
-                            schedaNew?.updateEsercizio(element);
-                          }
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              Constants.createSnackBar(
-                                  'Scheda creata correttamente.',
-                                  Constants.successSnackBar));
-                          Constants.redirectTo(context, HomePage());
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              Constants.createSnackBar('Inserire tutti i dati o controllare che la data di fine sia dopo la data di inizio.',
-                                  Constants.errorSnackBar));
+                  child: MaterialButton(
+                    minWidth: double.infinity,
+                    height: 60,
+                    onPressed: () async {
+                      if (nomeController.text.isNotEmpty &&
+                          descrizioneController.text.isNotEmpty &&
+                          DateTime.parse(dataFineController.text).isAfter(
+                              DateTime.parse(dataInizioController.text))) {
+                        schedaNew = Constants.controller.createSchedaPalestra(
+                            descrizioneController.text,
+                            nomeController.text,
+                            DateTime.parse(dataInizioController.text),
+                            DateTime.parse(dataFineController.text),
+                            Constants.getCurrentIdUser());
+                        for (var element in esercizi) {
+                          element.idSchedaPalestra = schedaNew?.id;
+                          Constants.controller.createEsercizio(
+                              schedaNew!,
+                              element.descrizione!,
+                              element.nome!,
+                              element.nSerie!.toInt(),
+                              element.nRep!.toInt(),
+                              element.tempoRiposo!.toInt(),
+                              element.day!.toInt());
+                          schedaNew?.updateEsercizio(element);
                         }
-                      },
-                      color: Constants.backgroundColorLoginButton,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40)),
-                      child: const Text(
-                        "Crea Scheda palestra",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: Constants.textButtonColor),
-                      ),
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            Constants.createSnackBar(
+                                'Scheda creata correttamente.',
+                                Constants.successSnackBar));
+                        Constants.redirectTo(context, HomePage());
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            Constants.createSnackBar(
+                                'Inserire tutti i dati o controllare che la data di fine sia dopo la data di inizio.',
+                                Constants.errorSnackBar));
+                      }
+                    },
+                    color: Constants.backgroundColorLoginButton,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40)),
+                    child: const Text(
+                      "Crea Scheda palestra",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: Constants.textButtonColor),
                     ),
                   ),
                 ),
@@ -176,78 +179,119 @@ class AddSchedaPalestraPage extends StatelessWidget {
     );
   }
 
-  Future openAddEsercizioDialog(context) => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          scrollable: true,
-          title: const Text("Nuovo Esercizio"),
-          content: Column(children: [
-            TextField(
-              controller: nomeEsercizioController,
-              decoration: const InputDecoration(hintText: "Nome.."),
-            ),
-            TextField(
-              controller: descrizioneEsercizioController,
-              decoration: const InputDecoration(hintText: "Descrizione.."),
-            ),
-            TextField(
-              controller: dayEsercizioController,
-              decoration: const InputDecoration(hintText: "Giorno.."),
-            ),
-            TextField(
-              controller: numRepEsercizioController,
-              decoration:
-                  const InputDecoration(hintText: "Numero ripetizioni.."),
-            ),
-            TextField(
-              controller: numSerieEsercizioController,
-              decoration: const InputDecoration(hintText: "Numero serie.."),
-            ),
-            TextField(
-              controller: tempoRestEsercizioController,
-              decoration: const InputDecoration(hintText: "Tempo di riposo.."),
-            ),
-            CheckboxListTile(
-              //todo --
-              title: const Text("Cronometro programmabile"),
-              value: false,
-              onChanged: (newValue) {},
-              controlAffinity: ListTileControlAffinity.leading,
-            )
-          ]),
-          actions: [
-            TextButton(
-              child: const Text("Crea"),
-              onPressed: () {
-                if(nomeEsercizioController.text.isNotEmpty &&
-                descrizioneEsercizioController.text.isNotEmpty &&
-                dayEsercizioController.text.isNotEmpty &&
-                numRepEsercizioController.text.isNotEmpty &&
-                numSerieEsercizioController.text.isNotEmpty &&
-                tempoRestEsercizioController.text.isNotEmpty){
-                  esercizi.add(Esercizio(descrizioneEsercizioController.text, nomeEsercizioController.text,
-                      int.parse(numSerieEsercizioController.text), int.parse(numRepEsercizioController.text),
-                      int.parse(tempoRestEsercizioController.text), int.parse(dayEsercizioController.text),
-                      ""));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      Constants.createSnackBar('Esercizio creato correttamente.',
-                          Constants.successSnackBar));
-                }
-                else{
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      Constants.createSnackBar('Esercizio non creato. Uno o piu campi non validi.',
-                          Constants.errorSnackBar));
-                }
-                nomeEsercizioController.clear();
-                descrizioneController.clear();
-                dayEsercizioController.clear();
-                numRepEsercizioController.clear();
-                numSerieEsercizioController.clear();
-                tempoRestEsercizioController.clear();
-                Navigator.pop(context);
+  void clearFieldsEsercizio() {
+      nomeEsercizioController.clear();
+    descrizioneEsercizioController.clear();
+    dayEsercizioController.clear();
+    numRepEsercizioController.clear();
+    numSerieEsercizioController.clear();
+    tempoRestEsercizioController.clear();
+    item = Constants.daysWeek[0];
+  }
+
+  Future openAddEsercizioDialog(context) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        scrollable: true,
+        title: const Text("Nuovo Esercizio"),
+        content: Column(children: [
+          TextField(
+            controller: nomeEsercizioController,
+            decoration: const InputDecoration(hintText: "Nome.."),
+          ),
+          TextField(
+            controller: descrizioneEsercizioController,
+            decoration: const InputDecoration(hintText: "Descrizione.."),
+          ),
+            StatefulBuilder(
+              builder: (BuildContext context, StateSetter dropDownState){
+               return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child:
+                    Container(
+                        height: 40,
+                        width: 270,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(style: BorderStyle.solid, width: 0.80),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            items: Constants.daysWeek
+                                .map((String item) => DropdownMenuItem<String>(
+                                child: Text(item), value: item))
+                                .toList(),
+                            onChanged: (value) {
+                              dropDownState(() {
+                                item = value as String?;
+                              });
+                            },
+                            value: item,
+                          ),
+                        ),
+                    ),
+                );
               },
-            )
-          ],
-        ),
-      );
+          ),
+          TextField(
+            controller: numRepEsercizioController,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
+            decoration: const InputDecoration(hintText: "Numero ripetizioni.."),
+          ),
+          TextField(
+            controller: numSerieEsercizioController,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
+            decoration: const InputDecoration(hintText: "Numero serie.."),
+          ),
+          TextField(
+            controller: tempoRestEsercizioController,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
+            decoration: const InputDecoration(hintText: "Tempo di riposo.. (in secondi)"),
+          ),
+        ]),
+        actions: [
+          TextButton(
+            child: const Text("Crea"),
+            onPressed: () {
+              if (nomeEsercizioController.text.isNotEmpty &&
+                  descrizioneEsercizioController.text.isNotEmpty &&
+                  numRepEsercizioController.text.isNotEmpty &&
+                  numSerieEsercizioController.text.isNotEmpty &&
+                  tempoRestEsercizioController.text.isNotEmpty &&
+                  item != Constants.daysWeek[0]) {
+                esercizi.add(Esercizio(
+                    descrizioneEsercizioController.text,
+                    nomeEsercizioController.text,
+                    int.parse(numSerieEsercizioController.text),
+                    int.parse(numRepEsercizioController.text),
+                    int.parse(tempoRestEsercizioController.text),
+                    Constants.convertDayWeekInInt(item!),
+                    ""));
+                ScaffoldMessenger.of(context).showSnackBar(
+                    Constants.createSnackBar('Esercizio creato correttamente.',
+                        Constants.successSnackBar));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    Constants.createSnackBar(
+                        'Esercizio non creato. Uno o piu campi non validi.',
+                        Constants.errorSnackBar));
+              }
+              clearFieldsEsercizio();
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+  }
 }
