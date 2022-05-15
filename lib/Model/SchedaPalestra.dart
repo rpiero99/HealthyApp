@@ -16,7 +16,7 @@ class SchedaPalestra {
   DateTime? _dataFine;
   String? _idUtente;
 
-  SchedaPalestra(this._descrizione, this._name, this._dataInizio, this._dataFine){
+  SchedaPalestra(this._descrizione, this._name, this._dataInizio, this._dataFine, this._idUtente){
     id = IdGenerator.generate();
     _esercizi = List.empty(growable: true);
   }

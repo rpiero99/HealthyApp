@@ -11,8 +11,8 @@ class GestoreSchedaPalestra {
   GestoreSchedaPalestra._privateConstructor();
   static final instance = GestoreSchedaPalestra._privateConstructor();
 
-  SchedaPalestra createSchedaPalestra(String descrizione, String nome, DateTime dataInizio, DateTime dataFine) =>
-      SchedaPalestra(descrizione, nome, dataInizio, dataFine);
+  SchedaPalestra createSchedaPalestra(String descrizione, String nome, DateTime? dataInizio, DateTime? dataFine, String idUtente) =>
+      SchedaPalestra(descrizione, nome, dataInizio, dataFine, idUtente);
 
   CronometroProgrammabile createCronometroProgrammabile(
           int tempoPreparazione,

@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/Pages/AddSchedaPalestraPage.dart';
 import 'package:healthy_app/Pages/Background.dart';
 import 'package:healthy_app/Pages/DashBoard.dart';
 
@@ -42,6 +43,15 @@ class _HomePageState extends State<HomePage> {
         onTap: (index) {
           //Handle button tap
         },
+      ),
+      body: TextButton(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+        ),
+        onPressed: () {
+          Constants.redirectTo(context, AddSchedaPalestraPage());
+        },
+        child: Text('vai a scheda palestra'),
       ),
     );
   }

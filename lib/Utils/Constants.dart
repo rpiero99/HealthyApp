@@ -7,6 +7,8 @@ class Constants {
   static const Color text = Colors.white;
   static const Color backgroundColorLoginButton = Colors.white54;
   static const Color errorSnackBar = Colors.redAccent;
+  static const Color successSnackBar = Colors.lightGreen;
+
 
   static SnackBar createSnackBar(String label, Color color) {
     return SnackBar(

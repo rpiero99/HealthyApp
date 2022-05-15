@@ -125,9 +125,9 @@ class HealthyAppController {
   ///Metodi scheda palestra
 
   SchedaPalestra createSchedaPalestra(
-      String descrizione, String nome, DateTime dataInizio, DateTime dataFine) {
+      String descrizione, String nome, DateTime dataInizio, DateTime dataFine, idUtente) {
     SchedaPalestra scheda = gestoreSchedaPalestra.createSchedaPalestra(
-        descrizione, nome, dataInizio, dataFine);
+        descrizione, nome, dataInizio, dataFine, idUtente);
     gestoreDatabase.schedaPalestraRef.doc(scheda.id).set(scheda.toJson());
     return scheda;
   }
