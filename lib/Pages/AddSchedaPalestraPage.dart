@@ -1,13 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fleva_icons/fleva_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healthy_app/Model/Esercizio.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
 import 'package:healthy_app/Pages/Widgets/RoundedButton.dart';
 
-import '../Controller/HealthyAppController.dart';
 import '../Utils/Constants.dart';
 import 'HomePage.dart';
 import 'Widgets/InputWidget.dart';

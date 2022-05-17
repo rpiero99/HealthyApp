@@ -37,7 +37,7 @@ dependencies:
   firebase_core: ^1.2.1
   line_awesome_icons: ^1.0.4+2
 #  flutter_icons: ^1.0.0+1
-  fleva_icons: ^1.0.0
+#  fleva_icons: ^1.0.0
   flutter_svg: ^0.22.0
   cached_network_image: ^3.0.0
   image_picker: ^0.8.0+3

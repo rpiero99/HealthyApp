@@ -31,17 +31,22 @@ class HealthyAppController {
   GestoreSchedaPalestra gestoreSchedaPalestra = GestoreSchedaPalestra.instance;
   GestoreUtente gestoreUtente = GestoreUtente.instance;
   GeoLocService? geoLocService;
-  final NotificationService? _notificationService = NotificationService.instance;
+  final NotificationService? _notificationService =
+      NotificationService.instance;
   StopWatchTimer? stopwatch;
+
   HealthyAppController._privateConstructor();
 
   static final instance = HealthyAppController._privateConstructor();
 
   ///Metodi per login e registrazione
 
-  Future<String?> login(String email, String password) { return gestoreAuth.login(email,password);}
+  Future<String?> login(String email, String password) {
+    return gestoreAuth.login(email, password);
+  }
 
-  registrazione(String email, String password) => gestoreAuth.registrazione(email, password);
+  registrazione(String email, String password) =>
+      gestoreAuth.registrazione(email, password);
 
   signOut() => gestoreAuth.signOut();
 
@@ -50,7 +55,9 @@ class HealthyAppController {
   Allenamento createAllenamento(String descrizione, String nome) {
     Allenamento allenamento =
         gestoreAllenamento.createAllenamento(descrizione, nome);
-    gestoreDatabase.allenamentoRef.doc(allenamento.id).set(allenamento.toJson());
+    gestoreDatabase.allenamentoRef
+        .doc(allenamento.id)
+        .set(allenamento.toJson());
     return allenamento;
   }
 
@@ -58,10 +65,7 @@ class HealthyAppController {
     QuerySnapshot querySnapshot = await gestoreDatabase.allenamentoRef.get();
     final allAllenamentiInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var value in allAllenamentiInDB) {
-      await gestoreDatabase.allenamentoRef
-          .doc(value)
-          .get()
-          .then((element) {
+      await gestoreDatabase.allenamentoRef.doc(value).get().then((element) {
         addAllenamento(Allenamento.fromJson(element.data()!));
       });
     }
@@ -69,22 +73,26 @@ class HealthyAppController {
   }
 
   updateAllenamento(Allenamento allenamento) {
-    gestoreDatabase.allenamentoRef.doc(allenamento.id).set(allenamento.toJson());
+    gestoreDatabase.allenamentoRef
+        .doc(allenamento.id)
+        .set(allenamento.toJson());
   }
-
 
   void addAllenamento(Allenamento item) {
     gestoreAllenamento.addAllenamento(item);
   }
 
-  Future<Allenamento> startAllenamento(String descrizione, String nome, Utente utente) async {
+  Future<Allenamento> startAllenamento(
+      String descrizione, String nome, Utente utente) async {
     geoLocService = GeoLocService();
     DateTime timeStamp = DateTime.now();
     geoLocService?.initPlatformState();
     Allenamento newAllenamento = createAllenamento(descrizione, nome);
-    stopwatch = StopWatchTimer(mode: StopWatchMode.countUp,
+    stopwatch = StopWatchTimer(
+      mode: StopWatchMode.countUp,
       onChange: (value) => print('onChange $value'),
-      onChangeRawSecond: getStatisticheAllenamentoSecondo(newAllenamento, utente),
+      onChangeRawSecond:
+          getStatisticheAllenamentoSecondo(newAllenamento, utente),
       onChangeRawMinute: getStatisticheAllenamentoMinuto(newAllenamento),
     );
 
@@ -110,13 +118,14 @@ class HealthyAppController {
         geoLocService?.endPosition?.longitude);
   }
 
-  getStatisticheAllenamentoSecondo(Allenamento allenamento, Utente utente) async{
+  getStatisticheAllenamentoSecondo(
+      Allenamento allenamento, Utente utente) async {
     Position? current = await geoLocService?.getCurrentPosition();
     allenamento.distanza = calculateDistance(current!);
     allenamento.calcoloCalorie(utente);
   }
 
-  getStatisticheAllenamentoMinuto(Allenamento allenamento){
+  getStatisticheAllenamentoMinuto(Allenamento allenamento) {
     allenamento.oraFine = DateTime.now();
     allenamento.tempoPerKm;
     allenamento.velocitaMedia;
@@ -140,19 +149,21 @@ class HealthyAppController {
           .doc(value)
           .get()
           .then((element) async {
-            SchedaPalestra scheda = SchedaPalestra.fromJson(element.data()!);
-            scheda.id = value;
+        SchedaPalestra scheda = SchedaPalestra.fromJson(element.data()!);
+        scheda.id = value;
         addSchedaPalestra(scheda);
       });
     }
     return gestoreSchedaPalestra.schedePalestra;
   }
 
-  updateSchedaPalestra(SchedaPalestra scheda) async{
+  updateSchedaPalestra(SchedaPalestra scheda) async {
     DocumentReference a = gestoreDatabase.schedaPalestraRef.doc(scheda.id);
     a.update(scheda.toJson());
-    for(Esercizio es in scheda.getAllEsercizi()){
-      a.update({"esercizi": FieldValue.arrayUnion([es.toJson()])});
+    for (Esercizio es in scheda.getAllEsercizi()) {
+      a.update({
+        "esercizi": FieldValue.arrayUnion([es.toJson()])
+      });
     }
   }
 
@@ -162,24 +173,22 @@ class HealthyAppController {
   removeSchedaPalestra(SchedaPalestra scheda) {
     gestoreSchedaPalestra.removeSchedaPalestra(scheda);
     DocumentReference a = gestoreDatabase.schedaPalestraRef.doc(scheda.id);
-    for(Esercizio esercizio in scheda.getAllEsercizi()){
+    for (Esercizio esercizio in scheda.getAllEsercizi()) {
       removeEsercizio(scheda, esercizio);
     }
     a.delete();
   }
 
-
   ///Metodi cronometro programmabile
 
-  CronometroProgrammabile createCronometroProgrammabile(
-      int tempoPreparazione,
-      int tempoRiposo,
-      int tempoLavoro,
-      int tempoTotale) {
+  CronometroProgrammabile createCronometroProgrammabile(int tempoPreparazione,
+      int tempoRiposo, int tempoLavoro, int tempoTotale) {
     CronometroProgrammabile cronometroProgrammabile =
         gestoreSchedaPalestra.createCronometroProgrammabile(
-             tempoPreparazione, tempoRiposo, tempoLavoro, tempoTotale);
-    gestoreDatabase.cronometroProgRef.doc(cronometroProgrammabile.id).set(cronometroProgrammabile.toJson());
+            tempoPreparazione, tempoRiposo, tempoLavoro, tempoTotale);
+    gestoreDatabase.cronometroProgRef
+        .doc(cronometroProgrammabile.id)
+        .set(cronometroProgrammabile.toJson());
     return cronometroProgrammabile;
   }
 
@@ -191,13 +200,15 @@ class HealthyAppController {
           .doc(value)
           .get()
           .then((element) async {
-        addCronometroProgrammabile(CronometroProgrammabile.fromJson(element.data()!));
+        addCronometroProgrammabile(
+            CronometroProgrammabile.fromJson(element.data()!));
       });
     }
     return gestoreSchedaPalestra.cronometriProg;
   }
 
-  void addCronometroProgrammabile(CronometroProgrammabile cronometroProgrammabile) {
+  void addCronometroProgrammabile(
+      CronometroProgrammabile cronometroProgrammabile) {
     gestoreSchedaPalestra.addCronProg(cronometroProgrammabile);
   }
 
@@ -211,15 +222,14 @@ class HealthyAppController {
     cronometroProgrammabile.startTimer();
   }
 
-  void stopTimer(CronometroProgrammabile cronometroProgrammabile){
+  void stopTimer(CronometroProgrammabile cronometroProgrammabile) {
     cronometroProgrammabile.stopTimer();
   }
 
   ///Metodi utente
 
-  Utente createUtente(
-      AnagraficaUtente anagrafica, String email) {
-    Utente user = gestoreUtente.createUtente(anagrafica, email);
+  Utente createUtente(String id, AnagraficaUtente anagrafica, String email) {
+    Utente user = gestoreUtente.createUtente(id, anagrafica, email);
     gestoreDatabase.utenteRef.doc(user.id).set(user.toJson());
     return user;
   }
@@ -228,10 +238,7 @@ class HealthyAppController {
     QuerySnapshot querySnapshot = await gestoreDatabase.utenteRef.get();
     final allUsersInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var item in allUsersInDB) {
-      await gestoreDatabase.utenteRef
-          .doc(item)
-          .get()
-          .then((element) async {
+      await gestoreDatabase.utenteRef.doc(item).get().then((element) async {
         addUtente(Utente.fromJson(element.data()!));
       });
     }
@@ -247,22 +254,28 @@ class HealthyAppController {
 
   ///Metodi anagrafica utente
 
-  AnagraficaUtente createAnagraficaUtente(int altezza,
-      DateTime dataNascita, String nome, double peso, String sesso) {
+  AnagraficaUtente createAnagraficaUtente(int altezza, DateTime dataNascita,
+      String nome, double peso, String sesso) {
     AnagraficaUtente anagrafica = gestoreUtente.createAnagraficaUtente(
         altezza, dataNascita, nome, peso, sesso);
-    gestoreDatabase.anagraficaUtenteRef.doc(anagrafica.id).set(anagrafica.toJson());
+    gestoreDatabase.anagraficaUtenteRef
+        .doc(anagrafica.id)
+        .set(anagrafica.toJson());
     return anagrafica;
   }
 
   setAnagraficaUtente(Utente user, AnagraficaUtente anagrafica) {
-    gestoreDatabase.anagraficaUtenteRef.doc(anagrafica.id).set(anagrafica.toJson());
+    gestoreDatabase.anagraficaUtenteRef
+        .doc(anagrafica.id)
+        .set(anagrafica.toJson());
     user.anagraficaUtente = anagrafica;
     updateUtente(user);
   }
 
   updateAnagraficaUtente(AnagraficaUtente anagrafica) =>
-    gestoreDatabase.anagraficaUtenteRef.doc(anagrafica.id).update(anagrafica.toJson());
+      gestoreDatabase.anagraficaUtenteRef
+          .doc(anagrafica.id)
+          .update(anagrafica.toJson());
 
   ///Metodi esercizio
 
@@ -310,26 +323,27 @@ class HealthyAppController {
     return piano;
   }
 
-  updatePianoAlimentare(PianoAlimentare pianoAlimentare){
-    DocumentReference a = gestoreDatabase.pianoAlimentareRef.doc(pianoAlimentare.id);
+  updatePianoAlimentare(PianoAlimentare pianoAlimentare) {
+    DocumentReference a =
+        gestoreDatabase.pianoAlimentareRef.doc(pianoAlimentare.id);
     a.update(pianoAlimentare.toJson());
-    for(Pasto? pasto in pianoAlimentare.pasti){
-      a.update({"pasti": FieldValue.arrayUnion([pasto?.toJson()])});
+    for (Pasto? pasto in pianoAlimentare.pasti) {
+      a.update({
+        "pasti": FieldValue.arrayUnion([pasto?.toJson()])
+      });
     }
   }
-
 
   addPianoAlimentare(PianoAlimentare pianoAlimentare) =>
       gestoreUtente.addPianoAlimentare(pianoAlimentare);
 
   removePianoAlimentare(PianoAlimentare pianoAlimentare) {
     gestoreUtente.removePianoAlimentare(pianoAlimentare);
-    for(Pasto? pasto in pianoAlimentare.pasti){
+    for (Pasto? pasto in pianoAlimentare.pasti) {
       removePastoPianoAlimentare(pianoAlimentare, pasto!);
     }
     gestoreDatabase.pianoAlimentareRef.doc(pianoAlimentare.id).delete();
   }
-
 
   ///Metodi pasto
 
@@ -343,43 +357,34 @@ class HealthyAppController {
       int giornoPasto,
       int quantita,
       String type) {
-    Pasto pasto = piano.createPasto(
-        categoria, calorie, descrizione, nome, oraPasto, giornoPasto, quantita, type);
+    Pasto pasto = piano.createPasto(categoria, calorie, descrizione, nome,
+        oraPasto, giornoPasto, quantita, type);
     piano.addPasto(pasto);
     gestoreDatabase.pastoRef.doc(pasto.id).set(pasto.toJson());
     updatePianoAlimentare(piano);
     return pasto;
   }
 
-  Pasto createPastoOfDay(
-      Enum categoria,
-      int calorie,
-      String descrizione,
-      String nome,
-      int quantita,
-      String type
-      ){
+  Pasto createPastoOfDay(Enum categoria, int calorie, String descrizione,
+      String nome, int quantita, String type) {
     Pasto pasto = Pasto(categoria, calorie, descrizione, nome, quantita, type);
     gestoreUtente.addPastoOfDay(pasto);
     gestoreDatabase.pastoRef.doc(pasto.id).set(pasto.toJson());
     return pasto;
   }
 
-  Future<List<Pasto>> getPastOfDay(DateTime day) async{
+  Future<List<Pasto>> getPastOfDay(DateTime day) async {
     QuerySnapshot querySnapshot = await gestoreDatabase.pastoRef.get();
     final allPastiInDb = querySnapshot.docs.map((doc) => doc.id);
     for (var item in allPastiInDb) {
-      await gestoreDatabase.pastoRef
-          .doc(item)
-          .get()
-          .then((element) async {
-            Pasto pasto = Pasto.fromJson(element.data()!);
-            int? year = pasto.oraDelGiorno?.year;
-            int? month = pasto.oraDelGiorno?.month;
-            int? giorno = pasto.oraDelGiorno?.day;
-            if(giorno == day.day && month == day.month && year == day.year) {
-              gestoreUtente.addPastoOfDay(pasto);
-            }
+      await gestoreDatabase.pastoRef.doc(item).get().then((element) async {
+        Pasto pasto = Pasto.fromJson(element.data()!);
+        int? year = pasto.oraDelGiorno?.year;
+        int? month = pasto.oraDelGiorno?.month;
+        int? giorno = pasto.oraDelGiorno?.day;
+        if (giorno == day.day && month == day.month && year == day.year) {
+          gestoreUtente.addPastoOfDay(pasto);
+        }
       });
     }
     return gestoreUtente.pastiOfDay;
@@ -403,7 +408,6 @@ class HealthyAppController {
     gestoreDatabase.pastoRef.doc(pasto.id).update(pasto.toJson());
   }
 
-
   PianoAlimentare getCurrentPianoAlimentareOf(Utente utente) {
     return gestoreUtente.piani
         .where((element) =>
@@ -416,13 +420,13 @@ class HealthyAppController {
 
   NotificationService? get notificator => _notificationService;
 
-  void sendNotificationWhen(String titolo, String body, DateTime data){
+  void sendNotificationWhen(String titolo, String body, DateTime data) {
     Random random = Random();
     var id = 0 + random.nextInt(1000000 - 0);
     notificator?.scheduleNotifications(0, titolo, body, data);
   }
 
-  void sendNotification(String titolo, String body, String payload){
+  void sendNotification(String titolo, String body, String payload) {
     Random random = Random();
     var id = 0 + random.nextInt(1000000 - 0);
     notificator?.showNotifications(0, titolo, body, payload);
@@ -430,42 +434,47 @@ class HealthyAppController {
 
   ///metodi get by id
 
-  Future<SchedaPalestra> getSchedaPalestraById(String id) async{
-    DocumentSnapshot doc = await gestoreDatabase.schedaPalestraRef.doc(id).get();
+  Future<SchedaPalestra> getSchedaPalestraById(String id) async {
+    DocumentSnapshot doc =
+        await gestoreDatabase.schedaPalestraRef.doc(id).get();
     return SchedaPalestra.fromJson(doc.data() as Map<String, dynamic>);
   }
 
-  Future<Allenamento?> getAllenamentoById(String id) async{
+  Future<Allenamento?> getAllenamentoById(String id) async {
     DocumentSnapshot doc = await gestoreDatabase.allenamentoRef.doc(id).get();
     return Allenamento.fromJson(doc.data() as Map<String, dynamic>);
   }
 
-  Future<AnagraficaUtente?> getAnagraficaById(String id) async{
-    DocumentSnapshot doc = await gestoreDatabase.anagraficaUtenteRef.doc(id).get();
+  Future<AnagraficaUtente?> getAnagraficaById(String id) async {
+    DocumentSnapshot doc =
+        await gestoreDatabase.anagraficaUtenteRef.doc(id).get();
     return AnagraficaUtente.fromJson(doc.data() as Map<String, dynamic>);
   }
 
-  Future<CronometroProgrammabile?> getCronometroProgrammabileById(String id) async{
-    DocumentSnapshot doc = await gestoreDatabase.cronometroProgRef.doc(id).get();
+  Future<CronometroProgrammabile?> getCronometroProgrammabileById(
+      String id) async {
+    DocumentSnapshot doc =
+        await gestoreDatabase.cronometroProgRef.doc(id).get();
     return CronometroProgrammabile.fromJson(doc.data() as Map<String, dynamic>);
   }
 
-  Future<Esercizio> getEsercizioById(String id) async{
+  Future<Esercizio> getEsercizioById(String id) async {
     DocumentSnapshot doc = await gestoreDatabase.esercizioRef.doc(id).get();
     return Esercizio.fromJson(doc.data() as Map<String, dynamic>);
   }
 
-  Future<Pasto?> getPastoById(String id) async{
+  Future<Pasto?> getPastoById(String id) async {
     DocumentSnapshot doc = await gestoreDatabase.pastoRef.doc(id).get();
     return Pasto.fromJson(doc.data() as Map<String, dynamic>);
   }
 
-  Future<PianoAlimentare?> getPianoAlimentareById(String id) async{
-    DocumentSnapshot doc = await gestoreDatabase.pianoAlimentareRef.doc(id).get();
+  Future<PianoAlimentare?> getPianoAlimentareById(String id) async {
+    DocumentSnapshot doc =
+        await gestoreDatabase.pianoAlimentareRef.doc(id).get();
     return PianoAlimentare.fromJson(doc.data() as Map<String, dynamic>);
   }
 
-  Future<Utente?> getUtenteById(String id) async{
+  Future<Utente?> getUtenteById(String id) async {
     DocumentSnapshot doc = await gestoreDatabase.utenteRef.doc(id).get();
     return Utente.fromJson(doc.data() as Map<String, dynamic>);
   }

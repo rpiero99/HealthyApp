@@ -132,7 +132,7 @@ class AddAnagraficaPage extends StatelessWidget {
                             sessoController.text.isNotEmpty) {
                           
                           anagraficaNew = c.createAnagraficaUtente(int.parse(altezaController.text), DateTime.parse(dataNascitaController.text), nomeController.text, double.parse(pesoController.text), sessoController.text);
-                          utenteNew = c.createUtente(anagraficaNew!, emailController.text);
+                          utenteNew = c.createUtente(getCurrentIdUser()!, anagraficaNew!, emailController.text);
                           ScaffoldMessenger.of(context).showSnackBar(
                               Constants.createSnackBar(
                                   'Utente creato correttamente.',

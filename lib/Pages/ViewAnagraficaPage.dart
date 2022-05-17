@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,8 +12,7 @@ import 'Widgets/InputWidget.dart';
 class ViewAnagraficaPage extends StatelessWidget {
   ViewAnagraficaPage({Key? key}) : super(key: key);
 
-  static HealthyAppController c = HealthyAppController.instance;
-
+  final FirebaseAuth auth = FirebaseAuth.instance;
   AnagraficaUtente? anagraficaSelected;
   Utente?  utenteSelected;
 
@@ -23,12 +23,22 @@ class ViewAnagraficaPage extends StatelessWidget {
   TextEditingController pesoController = TextEditingController();
   TextEditingController sessoController = TextEditingController();
 
-  String? getCurrentIdUser() {
-    return c.gestoreAuth.firebaseAuth.currentUser?.uid;
+  Future<void> getCurrentUser() async {
+    final User? user = auth.currentUser;
+    String? uid = user?.uid;
+    utenteSelected = await Constants.controller.getUtenteById(uid!);
+    anagraficaSelected = utenteSelected?.anagraficaUtente;
+/*    nomeController.text = anagraficaSelected!.nomeUtente!;
+    altezaController.text = anagraficaSelected!.altezzaUtente.toString();
+    dataNascitaController.text = anagraficaSelected!.dataNascitaUtente.toString();
+    emailController.text = utenteSelected!.email!;
+    sessoController.text = anagraficaSelected!.sessoUtente!;
+    pesoController.text = anagraficaSelected!.pesoUtente.toString();*/
   }
 
   @override
   Widget build(BuildContext context) {
+    getCurrentUser();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.backgroundColor,
@@ -57,7 +67,7 @@ class ViewAnagraficaPage extends StatelessWidget {
                 Column(
                   children: const [
                     Text(
-                      "Crea Scheda Palestra",
+                      "Modifica scheda anagrafica",
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -74,34 +84,34 @@ class ViewAnagraficaPage extends StatelessWidget {
                   child: Column(
                     children: [
                       makeInput(
-                          label: "Nome..",
+                          label: anagraficaSelected?.nomeUtente,
                           obscureText: false,
                           controller: nomeController),
                       makeInput(
-                          label: "Email..",
+                          label: utenteSelected?.email,
                           obscureText: false,
                           controller: emailController),
                       makeInput(
-                        label: "Data di nascita..",
+                        label: anagraficaSelected?.dataNascitaUtente.toString(),
                         obscureText: false,
                         controller: dataNascitaController,
                         isDate: true,
                         context: context,
                       ),
                       makeInput(
-                        label: "Sesso..",
+                        label: anagraficaSelected?.sessoUtente,
                         obscureText: false,
                         controller: sessoController,
                         context: context,
                       ),
                       makeInput(
-                        label: "Altezza (in cm)..",
+                        label: anagraficaSelected?.altezzaUtente.toString(),
                         obscureText: false,
                         controller: altezaController,
                         context: context,
                       ),
                       makeInput(
-                        label: "Peso (in kg)..",
+                        label: anagraficaSelected?.pesoUtente.toString(),
                         obscureText: false,
                         controller: pesoController,
                         context: context,
@@ -131,11 +141,20 @@ class ViewAnagraficaPage extends StatelessWidget {
                             pesoController.text.isNotEmpty &&
                             sessoController.text.isNotEmpty) {
 
-                          anagraficaSelected = c.createAnagraficaUtente(int.parse(altezaController.text), DateTime.parse(dataNascitaController.text), nomeController.text, double.parse(pesoController.text), sessoController.text);
-                          utenteSelected = c.createUtente(anagraficaSelected!, emailController.text);
+                          anagraficaSelected?.nomeUtente = nomeController.text;
+                          anagraficaSelected?.dataNascitaUtente = DateTime.parse(dataNascitaController.text);
+                          anagraficaSelected?.altezzaUtente = int.parse(altezaController.text);
+                          anagraficaSelected?.pesoUtente = int.parse(pesoController.text);
+                          anagraficaSelected?.sessoUtente = sessoController.text;
+
+                          Constants.controller.updateAnagraficaUtente(anagraficaSelected!);
+                          utenteSelected?.anagraficaUtente = anagraficaSelected;
+                          utenteSelected?.email = emailController.text;
+                          Constants.controller.updateUtente(utenteSelected!);
+
                           ScaffoldMessenger.of(context).showSnackBar(
                               Constants.createSnackBar(
-                                  'Utente creato correttamente.',
+                                  'Utente modificato correttamente.',
                                   Constants.successSnackBar));
                           Constants.redirectTo(context, HomePage());
                         } else {
@@ -148,7 +167,7 @@ class ViewAnagraficaPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40)),
                       child: const Text(
-                        "Crea Utente",
+                        "Modifica Utente",
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,

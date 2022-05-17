@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Controller/HealthyAppController.dart';
+import 'package:healthy_app/Model/CategoriaPasto.dart';
 
 class Constants {
   static HealthyAppController controller = HealthyAppController.instance;
@@ -22,6 +23,7 @@ class Constants {
     'Domenica',
   ];
 
+
   static int convertDayWeekInInt(String el) {
     if (el.toLowerCase() == "Lunedi".toLowerCase()) {
       return 1;
@@ -39,6 +41,23 @@ class Constants {
       return 7;
     }
     return -1;
+  }
+
+  static List<String> categoriePastoString(){
+    List<String> categorie = [];
+    for (var element in CategoriaPasto.values) {categorie.add(element.toString().split('.').last);}
+    return categorie;
+  }
+
+  static CategoriaPasto getCategoriaFromString(String pasto){
+    CategoriaPasto cat = CategoriaPasto.COLAZIONE;
+    for(var element in CategoriaPasto.values){
+      if(element.toString().split('.').last == pasto){
+        cat = element;
+        break;
+      }
+    }
+    return cat;
   }
 
   static SnackBar createSnackBar(String label, Color color) {

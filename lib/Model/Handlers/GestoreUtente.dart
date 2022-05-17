@@ -12,26 +12,26 @@ class GestoreUtente {
   final List<Pasto> _pastiOfDay = List.empty(growable: true);
 
   GestoreUtente._privateConstructor();
+
   static final instance = GestoreUtente._privateConstructor();
 
   List<Utente> get utenti => _utenti;
 
   List<PianoAlimentare> get piani => _piani;
 
-  Utente createUtente(
-          AnagraficaUtente anagrafica, String email) =>
-      Utente(anagrafica, email);
+  Utente createUtente(String id, AnagraficaUtente anagrafica, String email) =>
+      Utente(id, anagrafica, email);
 
-  AnagraficaUtente createAnagraficaUtente(int altezza, DateTime dataNascita, String nome,  double peso, String sesso)=>
-    AnagraficaUtente(altezza, dataNascita, nome, peso, sesso);
+  AnagraficaUtente createAnagraficaUtente(int altezza, DateTime dataNascita,
+          String nome, double peso, String sesso) =>
+      AnagraficaUtente(altezza, dataNascita, nome, peso, sesso);
 
-  addUtente(Utente utente) =>
-    _utenti.add(utente);
+  addUtente(Utente utente) => _utenti.add(utente);
 
-  removeUtente(Utente utente) =>
-    _utenti.remove(utente);
+  removeUtente(Utente utente) => _utenti.remove(utente);
 
-  PianoAlimentare createPianoAlimentare(DateTime dataFine, DateTime dataInizio, String descrizione, Utente utente) =>
+  PianoAlimentare createPianoAlimentare(DateTime dataFine, DateTime dataInizio,
+          String descrizione, Utente utente) =>
       PianoAlimentare(dataFine, dataInizio, descrizione, utente);
 
   addPianoAlimentare(PianoAlimentare piano) => _piani.add(piano);
@@ -41,7 +41,7 @@ class GestoreUtente {
   List<Pasto> get pastiOfDay => _pastiOfDay;
 
   //aggiunta di un pasto fatto in un certo giorno e che potrebbe essere incluso nel piano come no.
-  addPastoOfDay(Pasto pasto){
+  addPastoOfDay(Pasto pasto) {
     pastiOfDay.add(pasto);
   }
 }
