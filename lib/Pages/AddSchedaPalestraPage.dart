@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:healthy_app/Model/Esercizio.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
 import 'package:healthy_app/Pages/Widgets/RoundedButton.dart';
+import 'package:healthy_app/Pages/Widgets/TopAppBar.dart';
 
 import '../Utils/Constants.dart';
 import 'HomePage.dart';
@@ -40,20 +41,7 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.backgroundColor,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Constants.backgroundColor,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-              color: Constants.text,
-            )),
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-      ),
+      appBar: makeTopAppBar(context, "Scheda Palestra", Constants.controller),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: double.infinity,

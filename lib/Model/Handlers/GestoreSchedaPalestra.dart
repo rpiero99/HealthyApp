@@ -24,6 +24,8 @@ class GestoreSchedaPalestra {
 
   List<SchedaPalestra> get schedePalestra => _schede;
 
+  set schedePalestra(List<SchedaPalestra> schede) => schedePalestra = schede;
+
   addSchedaPalestra(SchedaPalestra scheda) => _schede.add(scheda);
 
   removeSchedaPalestra(SchedaPalestra scheda) => _schede.remove(scheda);

@@ -69,8 +69,7 @@ class Constants {
   }
 
   static void redirectTo(BuildContext context, Widget page) {
-    Navigator.push(
-      context,
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
           return page;

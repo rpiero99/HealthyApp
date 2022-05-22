@@ -79,7 +79,11 @@ class HealthyAppController {
   }
 
   void addAllenamento(Allenamento item) {
-    gestoreAllenamento.addAllenamento(item);
+    if (gestoreAllenamento.allenamenti
+        .where((element) => element.id == item.id)
+        .isEmpty) {
+      gestoreAllenamento.addAllenamento(item);
+    }
   }
 
   Future<Allenamento> startAllenamento(
@@ -133,8 +137,8 @@ class HealthyAppController {
 
   ///Metodi scheda palestra
 
-  SchedaPalestra createSchedaPalestra(
-      String descrizione, String nome, DateTime dataInizio, DateTime dataFine, idUtente) {
+  SchedaPalestra createSchedaPalestra(String descrizione, String nome,
+      DateTime dataInizio, DateTime dataFine, idUtente) {
     SchedaPalestra scheda = gestoreSchedaPalestra.createSchedaPalestra(
         descrizione, nome, dataInizio, dataFine, idUtente);
     gestoreDatabase.schedaPalestraRef.doc(scheda.id).set(scheda.toJson());
@@ -167,8 +171,13 @@ class HealthyAppController {
     }
   }
 
-  addSchedaPalestra(SchedaPalestra scheda) =>
+  addSchedaPalestra(SchedaPalestra scheda) {
+    if (gestoreSchedaPalestra.schedePalestra
+        .where((element) => element.id == scheda.id)
+        .isEmpty) {
       gestoreSchedaPalestra.addSchedaPalestra(scheda);
+    }
+  }
 
   removeSchedaPalestra(SchedaPalestra scheda) {
     gestoreSchedaPalestra.removeSchedaPalestra(scheda);
@@ -209,7 +218,11 @@ class HealthyAppController {
 
   void addCronometroProgrammabile(
       CronometroProgrammabile cronometroProgrammabile) {
-    gestoreSchedaPalestra.addCronProg(cronometroProgrammabile);
+    if (gestoreSchedaPalestra.cronometriProg
+        .where((element) => element.id == cronometroProgrammabile.id)
+        .isEmpty) {
+      gestoreSchedaPalestra.addCronProg(cronometroProgrammabile);
+    }
   }
 
   updateCrometroProgrammabile(
@@ -249,7 +262,11 @@ class HealthyAppController {
       gestoreDatabase.utenteRef.doc(user.id).update(user.toJson());
 
   void addUtente(Utente item) {
-    gestoreUtente.addUtente(item);
+    if (gestoreUtente.utenti
+        .where((element) => element.id == item.id)
+        .isEmpty) {
+      gestoreUtente.addUtente(item);
+    }
   }
 
   ///Metodi anagrafica utente
@@ -302,8 +319,13 @@ class HealthyAppController {
   }
 
   addEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio) {
-    schedaPalestra.addEsercizio(esercizio);
-    updateSchedaPalestra(schedaPalestra);
+    if (schedaPalestra
+        .getAllEsercizi()
+        .where((element) => element.id == esercizio.id)
+        .isEmpty) {
+      schedaPalestra.addEsercizio(esercizio);
+      updateSchedaPalestra(schedaPalestra);
+    }
   }
 
   removeEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio) {
@@ -334,8 +356,13 @@ class HealthyAppController {
     }
   }
 
-  addPianoAlimentare(PianoAlimentare pianoAlimentare) =>
+  addPianoAlimentare(PianoAlimentare pianoAlimentare) {
+    if (gestoreUtente.piani
+        .where((element) => element.id == pianoAlimentare.id)
+        .isEmpty) {
       gestoreUtente.addPianoAlimentare(pianoAlimentare);
+    }
+  }
 
   removePianoAlimentare(PianoAlimentare pianoAlimentare) {
     gestoreUtente.removePianoAlimentare(pianoAlimentare);
@@ -391,8 +418,10 @@ class HealthyAppController {
   }
 
   addPasto(PianoAlimentare piano, Pasto pasto) {
-    piano.addPasto(pasto);
-    updatePianoAlimentare(piano);
+    if (piano.pasti.where((element) => element?.id == pasto.id).isEmpty) {
+      piano.addPasto(pasto);
+      updatePianoAlimentare(piano);
+    }
   }
 
   removePastoGiornaliero(Pasto pasto) =>
