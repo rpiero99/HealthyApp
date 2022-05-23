@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healthy_app/Model/Esercizio.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
+import 'package:healthy_app/Pages/GetEserciziPage.dart';
 import 'package:healthy_app/Pages/Widgets/RoundedButton.dart';
 import 'package:healthy_app/Pages/Widgets/TopAppBar.dart';
 
@@ -91,10 +92,12 @@ class _EditSchedaPalestraPage extends State<EditSchedaPalestraPage> {
                         context: context,
                       ),
                       RoundedButton(
-                        text: 'Aggiungi Esercizio',
+                        text: 'Modifica Esercizio',
                         color: Constants.backgroundButtonColor,
                         textColor: Constants.textButtonColor,
-                        press: () {
+                        press: () async {
+                          SchedaPalestra schedaToEdit = await Constants.controller.getSchedaPalestraById(widget.idController.text);
+                          Constants.redirectTo(context, GetEserciziPage(scheda:  schedaToEdit));
                           //clearFieldsEsercizio();
                           //openAddEsercizioDialog(context);
                         },
@@ -116,21 +119,9 @@ class _EditSchedaPalestraPage extends State<EditSchedaPalestraPage> {
                         var scheda = await Constants.controller.getSchedaPalestraById(widget.idController.text);
                         scheda.nome = widget.nomeController.text;
                         scheda.descrizione = widget.descrizioneController.text;
-                        scheda.dataInizio = DateTime.tryParse(widget.dataInizioController.text);
+                        scheda.dataInizio = DateTime.parse(widget.dataInizioController.text);
                         scheda.dataFine = DateTime.parse(widget.dataFineController.text);
                         Constants.controller.updateSchedaPalestra(scheda);
-                        // for (var element in esercizi) {
-                        //   element.idSchedaPalestra = schedaNew?.id;
-                        //   Constants.controller.createEsercizio(
-                        //       schedaNew!,
-                        //       element.descrizione!,
-                        //       element.nome!,
-                        //       element.nSerie!.toInt(),
-                        //       element.nRep!.toInt(),
-                        //       element.tempoRiposo!.toInt(),
-                        //       element.day!.toInt());
-                        //   schedaNew?.updateEsercizio(element);
-                        // }
                         ScaffoldMessenger.of(context).showSnackBar(
                             Constants.createSnackBar(
                                 'Scheda modificata correttamente.',

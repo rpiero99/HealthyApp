@@ -334,6 +334,19 @@ class HealthyAppController {
     updateSchedaPalestra(schedaPalestra);
   }
 
+  Future<List<Esercizio>> getAllEserciziOf(SchedaPalestra scheda) async {
+    QuerySnapshot querySnapshot = await gestoreDatabase.esercizioRef.get();
+    final schedaPalestra = await getSchedaPalestraById(scheda.id!);
+    final allEserciziInDB = querySnapshot.docs.map((doc) => doc.id);
+    for(var idEs in allEserciziInDB){
+      var es = await getEsercizioById(idEs);
+      if(es.idSchedaPalestra == schedaPalestra.id){
+        schedaPalestra.getAllEsercizi().add(es);
+      }
+    }
+    return schedaPalestra.getAllEsercizi();
+  }
+
   ///Metodi piano alimentare
 
   PianoAlimentare createPianoAlimentare(DateTime dataFine, DateTime dataInizio,
