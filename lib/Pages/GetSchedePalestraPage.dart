@@ -26,31 +26,31 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
       backgroundColor: Constants.backgroundColor,
       appBar: makeTopAppBar(context, "Scheda Palestra", Constants.controller),
       body: SingleChildScrollView(
-        child: Column(children: <Widget>[
-          TextField(
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                hintText: "cerca..",
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  searchString = value;
-                });
-              }),
-          const Divider(),
-          Container(
-            child: showCards(),
-          )
-        ]),
-      ),
+          child: SizedBox(
+              child: Column(
+                  children: <Widget>[
+                      TextField(
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.search),
+                            hintText: "cerca..",
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(color: Colors.white),
+                            ),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              searchString = value;
+                            });
+                          }),
+                      const Divider(),
+                      Container(
+                        child: showCards(),
+                      )
+                    ]),
+            )),
     );
-    // TODO: implement build
-    throw UnimplementedError();
   }
 
   Widget showCards() {

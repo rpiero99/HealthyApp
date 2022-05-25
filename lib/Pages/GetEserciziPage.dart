@@ -12,10 +12,10 @@ import 'Widgets/RoundedButton.dart';
 import 'Widgets/TopAppBar.dart';
 
 class GetEserciziPage extends StatefulWidget {
-
   SchedaPalestra? schedaToEdit;
 
-  GetEserciziPage({Key? key, required SchedaPalestra scheda}) : super(key: key){
+  GetEserciziPage({Key? key, required SchedaPalestra scheda})
+      : super(key: key) {
     schedaToEdit = scheda;
   }
 
@@ -27,7 +27,8 @@ class _GetEserciziPage extends State<GetEserciziPage> {
   String? item = 'Giorno..';
   String searchString = "";
   TextEditingController dayEsercizioController = TextEditingController();
-  TextEditingController descrizioneEsercizioController = TextEditingController();
+  TextEditingController descrizioneEsercizioController =
+      TextEditingController();
   TextEditingController nomeEsercizioController = TextEditingController();
   TextEditingController numRepEsercizioController = TextEditingController();
   TextEditingController numSerieEsercizioController = TextEditingController();
@@ -38,42 +39,45 @@ class _GetEserciziPage extends State<GetEserciziPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.backgroundColor,
-      appBar: makeTopAppBar(context, "Esercizi di: " +  widget.schedaToEdit!.nome!, Constants.controller),
+      appBar: makeTopAppBar(context,
+          "Esercizi di: " + widget.schedaToEdit!.nome!, Constants.controller),
       body: SingleChildScrollView(
-        child: Column(children: <Widget>[
-          TextField(
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                hintText: "cerca..",
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  searchString = value;
-                });
-              }),
-          const Divider(),
-          RoundedButton(
-            text: 'Aggiungi Esercizio',
-            color: Constants.backgroundButtonColor,
-            textColor: Constants.textButtonColor,
-            press: () async {
-        //      SchedaPalestra schedaToEdit = await Constants.controller.getSchedaPalestraById(widget.schedaToEdit!.id!);
-              return openAddEsercizioDialog(context);
-              //clearFieldsEsercizio();
-              //openAddEsercizioDialog(context);
-            },
-            key: GlobalKey(),
-          ),
-          const Divider(),
-          Container(
-            child: showCards(),
-          )
-        ]),
+        child: SizedBox(
+            child: Column(
+                children: <Widget>[
+                    TextField(
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: "cerca..",
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: const BorderSide(color: Colors.white),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            searchString = value;
+                          });
+                        }),
+                    const Divider(),
+                    RoundedButton(
+                      text: 'Aggiungi Esercizio',
+                      color: Constants.backgroundButtonColor,
+                      textColor: Constants.textButtonColor,
+                      press: () async {
+                        //      SchedaPalestra schedaToEdit = await Constants.controller.getSchedaPalestraById(widget.schedaToEdit!.id!);
+                        return openAddEsercizioDialog(context);
+                        //clearFieldsEsercizio();
+                        //openAddEsercizioDialog(context);
+                      },
+                      key: GlobalKey(),
+                    ),
+                    const Divider(),
+                    Container(
+                      child: showCards(),
+                    )
+        ])),
       ),
     );
   }
@@ -91,7 +95,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
             itemBuilder: (context, index) {
               if (searchString != "") {
                 return _buildItem(d[index].nome!.contains(searchString) ||
-                    d[index].descrizione!.contains(searchString)
+                        d[index].descrizione!.contains(searchString)
                     ? d[index]
                     : null);
               }
@@ -122,7 +126,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
                 children: <Widget>[
                   ListTile(
                     leading:
-                    const Icon(Icons.sports_gymnastics_outlined, size: 100),
+                        const Icon(Icons.sports_gymnastics_outlined, size: 100),
                     title: Text(obj.nome!,
                         style: const TextStyle(color: Colors.white)),
                     subtitle: Text(obj.descrizione!,
@@ -132,27 +136,28 @@ class _GetEserciziPage extends State<GetEserciziPage> {
                     child: ButtonBar(
                       children: <Widget>[
                         TextButton(
-                          child: const Text('Modifica',
-                              style: TextStyle(color: Colors.white)),
-                          onPressed: () {
-                            //todo : pagina per modificare esercizio
-                          }
-                          //   Constants.redirectTo(
-                          //       context,
-                          //       EditSchedaPalestraPage(
-                          //           id: obj.id!,
-                          //           nome: obj.nome!,
-                          //           descrizione: obj.descrizione!,
-                          //           dataInizio: obj.dataInizio!,
-                          //           dataFine: obj.dataFine!));
-                          // },
-                        ),
+                            child: const Text('Modifica',
+                                style: TextStyle(color: Colors.white)),
+                            onPressed: () {
+                              //todo : pagina per modificare esercizio
+                            }
+                            //   Constants.redirectTo(
+                            //       context,
+                            //       EditSchedaPalestraPage(
+                            //           id: obj.id!,
+                            //           nome: obj.nome!,
+                            //           descrizione: obj.descrizione!,
+                            //           dataInizio: obj.dataInizio!,
+                            //           dataFine: obj.dataFine!));
+                            // },
+                            ),
                         TextButton(
                           child: const Text('Rimuovi',
                               style: TextStyle(color: Colors.white)),
                           onPressed: () {
                             setState(() {
-                              Constants.controller.removeEsercizio(widget.schedaToEdit!, obj);
+                              Constants.controller
+                                  .removeEsercizio(widget.schedaToEdit!, obj);
                             });
                           },
                         ),
@@ -183,11 +188,10 @@ class _GetEserciziPage extends State<GetEserciziPage> {
             decoration: const InputDecoration(hintText: "Descrizione.."),
           ),
           StatefulBuilder(
-            builder: (BuildContext context, StateSetter dropDownState){
+            builder: (BuildContext context, StateSetter dropDownState) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                child:
-                Container(
+                child: Container(
                   height: 40,
                   width: 270,
                   decoration: BoxDecoration(
@@ -198,7 +202,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
                     child: DropdownButton(
                       items: Constants.daysWeek
                           .map((String item) => DropdownMenuItem<String>(
-                          child: Text(item), value: item))
+                              child: Text(item), value: item))
                           .toList(),
                       onChanged: (value) {
                         dropDownState(() {
@@ -234,7 +238,8 @@ class _GetEserciziPage extends State<GetEserciziPage> {
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
             ],
-            decoration: const InputDecoration(hintText: "Tempo di riposo.. (in secondi)"),
+            decoration: const InputDecoration(
+                hintText: "Tempo di riposo.. (in secondi)"),
           ),
         ]),
         actions: [
@@ -247,14 +252,16 @@ class _GetEserciziPage extends State<GetEserciziPage> {
                   numSerieEsercizioController.text.isNotEmpty &&
                   tempoRestEsercizioController.text.isNotEmpty &&
                   item != Constants.daysWeek[0]) {
-                Constants.controller.addEsercizio(widget.schedaToEdit!, Esercizio(
-                    descrizioneEsercizioController.text,
-                    nomeEsercizioController.text,
-                    int.parse(numSerieEsercizioController.text),
-                    int.parse(numRepEsercizioController.text),
-                    int.parse(tempoRestEsercizioController.text),
-                    Constants.convertDayWeekInInt(item!),
-                    ""));
+                Constants.controller.addEsercizio(
+                    widget.schedaToEdit!,
+                    Esercizio(
+                        descrizioneEsercizioController.text,
+                        nomeEsercizioController.text,
+                        int.parse(numSerieEsercizioController.text),
+                        int.parse(numRepEsercizioController.text),
+                        int.parse(tempoRestEsercizioController.text),
+                        Constants.convertDayWeekInInt(item!),
+                        ""));
                 ScaffoldMessenger.of(context).showSnackBar(
                     Constants.createSnackBar('Esercizio creato correttamente.',
                         Constants.successSnackBar));

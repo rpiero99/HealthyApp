@@ -42,29 +42,21 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.backgroundColor,
       appBar: makeTopAppBar(context, "Scheda Palestra", Constants.controller),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Column(
-              children: [
-                Column(
-                  children: const [
-                    Text(
-                      "Crea Scheda Palestra",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Constants.text,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    )
-                  ],
-                ),
+            const Text(
+              "Crea Scheda Palestra",
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Constants.text,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
@@ -156,8 +148,6 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
                     ),
                   ),
                 ),
-              ],
-            ),
           ],
         ),
       ),

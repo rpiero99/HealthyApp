@@ -15,7 +15,7 @@ class Body extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     // This size provide us total height and width of our screen
     return Background(
-      key:  Key(random.nextInt(9999999).toString()),
+      key:  GlobalKey(),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -28,28 +28,14 @@ class Body extends StatelessWidget {
             RoundedButton(
               text: "LOGIN",
               press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return LoginPage();
-                    },
-                  ),
-                );
-              }, key: Key(random.nextInt(9999999).toString()),
+                Constants.redirectTo(context, LoginPage());
+              }, key: GlobalKey(),
             ),
             RoundedButton(
               text: "REGISTRATI",
               press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return RegistrationPage();
-                    },
-                  ),
-                );
-              }, key: Key(random.nextInt(9999999).toString()),
+                Constants.redirectTo(context, RegistrationPage());
+              }, key: GlobalKey(),
             ),
           ],
         ),

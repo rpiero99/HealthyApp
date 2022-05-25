@@ -5,10 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Pages/AddAnagraficaPage.dart';
 import 'package:healthy_app/Pages/AddSchedaPalestraPage.dart';
-import 'package:healthy_app/Pages/Background.dart';
 import 'package:healthy_app/Pages/DashBoard.dart';
 import 'package:healthy_app/Pages/GetSchedePalestraPage.dart';
-import 'package:healthy_app/Pages/NuovoPianoAlimentarePage.dart';
+import 'package:healthy_app/Pages/AddPianoAlimentarePage.dart';
 import 'package:healthy_app/Pages/ViewAnagraficaPage.dart';
 
 import '../Controller/HealthyAppController.dart';
@@ -56,6 +55,14 @@ class _HomePageState extends State<HomePage> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
             ),
+            onPressed: () { Constants.redirectTo(context, AddAnagraficaPage());},
+            child: Text('add anagrafica'),
+          ),
+
+          TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            ),
             onPressed: () { Constants.redirectTo(context, ViewAnagraficaPage());},
             child: Text('view anagrafica'),
           ),
@@ -74,6 +81,14 @@ class _HomePageState extends State<HomePage> {
             ),
             onPressed: () { Constants.redirectTo(context, const AddSchedaPalestraPage());},
             child: Text('add schede palestra'),
+          ),
+
+          TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            ),
+            onPressed: () { Constants.redirectTo(context, AddPianoAlimentarePage());},
+            child: Text('add piano alimentare'),
           ),
         ],
       )
