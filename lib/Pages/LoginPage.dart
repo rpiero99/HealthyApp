@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
               .height,
           width: double.infinity,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
                 "Login",

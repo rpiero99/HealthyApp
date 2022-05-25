@@ -34,7 +34,7 @@ class RegistrationPage extends StatelessWidget {
             height: MediaQuery.of(context).size.height,
             width: double.infinity,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
                   children: [
