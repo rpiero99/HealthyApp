@@ -4,13 +4,11 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Pages/AddAnagraficaPage.dart';
-import 'package:healthy_app/Pages/AddPastoGiornaliero.dart';
 import 'package:healthy_app/Pages/AddSchedaPalestraPage.dart';
-import 'package:healthy_app/Pages/Background.dart';
 import 'package:healthy_app/Pages/DashBoard.dart';
+import 'package:healthy_app/Pages/GetSchedePalestraPage.dart';
 import 'package:healthy_app/Pages/AddPianoAlimentarePage.dart';
-import 'package:healthy_app/Pages/EditAnagraficaPage.dart';
-import 'package:healthy_app/Pages/EditPianoAlimentarePage.dart';
+import 'package:healthy_app/Pages/ViewAnagraficaPage.dart';
 
 import '../Controller/HealthyAppController.dart';
 import '../Model/Allenamento.dart';
@@ -51,76 +49,50 @@ class _HomePageState extends State<HomePage> {
           //Handle button tap
         },
       ),
-      body: Container(
-        child: TextButton(
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+      body: Column(
+        children: [
+          TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            ),
+            onPressed: () { Constants.redirectTo(context, AddAnagraficaPage());},
+            child: Text('add anagrafica'),
           ),
-          onPressed: () { Constants.redirectTo(context, AddPastoGiornaliero());},
-          child: Text('TextButton'),
-        ),
+
+          TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            ),
+            onPressed: () { Constants.redirectTo(context, ViewAnagraficaPage());},
+            child: Text('view anagrafica'),
+          ),
+
+          TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            ),
+            onPressed: () { Constants.redirectTo(context, const GetSchedePalestraPage());},
+            child: Text('view schede palestra'),
+          ),
+
+          TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            ),
+            onPressed: () { Constants.redirectTo(context, const AddSchedaPalestraPage());},
+            child: Text('add schede palestra'),
+          ),
+
+          TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            ),
+            onPressed: () { Constants.redirectTo(context, AddPianoAlimentarePage());},
+            child: Text('add piano alimentare'),
+          ),
+        ],
       )
 
-    );
-  }
-
-  Widget showCards() {
-    return FutureBuilder(
-      future: c.getAllenamenti(),
-      builder: (context, snapshot) {
-        if ((snapshot.connectionState == ConnectionState.done)) {
-          var d = (snapshot.data as List<Allenamento>).toList();
-          return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: d.length,
-            itemBuilder: (context, index) {
-              return _buildItem(d[index]);
-            },
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
-    );
-  }
-
-  Widget _buildItem(Object obj) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      color: Colors.blueGrey,
-      elevation: 10,
-      child: SizedBox(
-        width: 200,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const ListTile(
-              leading: Icon(Icons.album, size: 70),
-              title:
-                  Text('Heart Shaker', style: TextStyle(color: Colors.white)),
-              subtitle: Text('TWICE', style: TextStyle(color: Colors.white)),
-            ),
-            ButtonTheme(
-              child: ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: const Text('Edit',
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () {},
-                  ),
-                  FlatButton(
-                    child: const Text('Delete',
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import '../../Utils/Constants.dart';
 
@@ -7,7 +9,8 @@ Widget makeInput(
     label,
     obscureText = false,
     isDate = false,
-    TextEditingController? controller}) {
+    TextEditingController? controller,
+    isNumber = false}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -18,6 +21,10 @@ Widget makeInput(
           readOnly: isDate,
           controller: controller,
           obscureText: obscureText,
+          keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+          inputFormatters: isNumber ? <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          ] : null,
           decoration: InputDecoration(
             hintText: label,
             filled: true,

@@ -6,7 +6,6 @@ import '../Utils/Constants.dart';
 import 'Widgets/InputWidget.dart';
 
 class RegistrationPage extends StatelessWidget {
-  static HealthyAppController c = HealthyAppController.instance;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -35,7 +34,7 @@ class RegistrationPage extends StatelessWidget {
             height: MediaQuery.of(context).size.height,
             width: double.infinity,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
                   children: [
@@ -82,7 +81,7 @@ class RegistrationPage extends StatelessWidget {
                           onPressed: () {
                             if(emailController.text.trim()!="" && passwordController.text.trim()!="" &&
                                   passwordController.text.trim().length>=6){
-                              c.registrazione(emailController.text.trim(),
+                              Constants.controller.registrazione(emailController.text.trim(),
                                   passwordController.text.trim());
                               Navigator.push(
                                 context,
@@ -151,39 +150,3 @@ class RegistrationPage extends StatelessWidget {
         ));
   }
 }
-
-// Widget makeInput(
-//     {label, obsureText = false, TextEditingController? controller}) {
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       const SizedBox(
-//         height: 5,
-//       ),
-//       TextField(
-//         controller: controller,
-//         obscureText: obsureText,
-//         decoration: InputDecoration(
-//           hintText: label,
-//           filled: true,
-//           fillColor: Constants.backgroundButtonColor,
-//           contentPadding:
-//               const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
-//           focusedBorder: OutlineInputBorder(
-//             borderSide: const BorderSide(color: Colors.white),
-//             borderRadius: BorderRadius.circular(25.7),
-//           ),
-//           enabledBorder: UnderlineInputBorder(
-//             borderSide: const BorderSide(color: Colors.white),
-//             borderRadius: BorderRadius.circular(25.7),
-//           ),
-//           border: OutlineInputBorder(
-//               borderSide: BorderSide(color: Colors.grey[400]!)),
-//         ),
-//       ),
-//       const SizedBox(
-//         height: 30,
-//       )
-//     ],
-//   );
-// }
