@@ -7,7 +7,7 @@ import '../Utils/IdGenerator.dart';
 
 class Pasto {
   String? _id;
-  Enum? _categoria;
+  CategoriaPasto? _categoria;
   String? _nome;
   String? _descrizione;
   num? _calorie;
@@ -77,7 +77,7 @@ class Pasto {
 
   set id(String? id) => _id = id;
 
-  Enum? get categoria => _categoria;
+  CategoriaPasto? get categoria => _categoria;
 
   String? get nome => _nome;
 
@@ -103,11 +103,13 @@ class Pasto {
 
   set giornoPasto(num? giorno) => _giornoPasto = giorno;
 
-  set categoria(Enum? categoria) => _categoria = categoria;
+  set categoria(CategoriaPasto? categoria) => _categoria = categoria;
 
   set nome(String? nome) => _nome = nome;
 
   set descrizione(String? descrizione) => _descrizione = descrizione;
+
+  set calorie(num? calorie) => _calorie = calorie;
 
   set oraDelGiorno(DateTime? ora) => _oraDelGiorno = ora;
 

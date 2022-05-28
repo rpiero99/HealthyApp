@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:healthy_app/Model/CategoriaPasto.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
 import 'package:healthy_app/Utils/MapEserciziDay.dart';
 import 'package:healthy_app/Utils/NotificationService.dart';
@@ -336,6 +337,17 @@ class HealthyAppController {
 
   ///Metodi piano alimentare
 
+  Future<List<PianoAlimentare>> getPianiAlimentari() async {
+    QuerySnapshot querySnapshot = await gestoreDatabase.pianoAlimentareRef.get();
+    final allUsersInDB = querySnapshot.docs.map((doc) => doc.id);
+    for (var item in allUsersInDB) {
+      await gestoreDatabase.pianoAlimentareRef.doc(item).get().then((element) async {
+        addPianoAlimentare(PianoAlimentare.fromJson(element.data()!));
+      });
+    }
+    return gestoreUtente.piani;
+  }
+
   PianoAlimentare createPianoAlimentare(DateTime dataFine, DateTime dataInizio,
       String descrizione, Utente utente) {
     PianoAlimentare piano = gestoreUtente.createPianoAlimentare(
@@ -376,7 +388,7 @@ class HealthyAppController {
 
   Pasto createPastoPianoAlimentare(
       PianoAlimentare piano,
-      Enum categoria,
+      CategoriaPasto categoria,
       int calorie,
       String descrizione,
       String nome,
@@ -392,7 +404,7 @@ class HealthyAppController {
     return pasto;
   }
 
-  Pasto createPastoOfDay(Enum categoria, int calorie, String descrizione,
+  Pasto createPastoOfDay(CategoriaPasto categoria, int calorie, String descrizione,
       String nome, int quantita, String type) {
     Pasto pasto = Pasto(categoria, calorie, descrizione, nome, quantita, type);
     gestoreUtente.addPastoOfDay(pasto);
@@ -400,7 +412,7 @@ class HealthyAppController {
     return pasto;
   }
 
-  Future<List<Pasto>> getPastOfDay(DateTime day) async {
+  Future<List<Pasto>> getPastiOfDay(DateTime day) async {
     QuerySnapshot querySnapshot = await gestoreDatabase.pastoRef.get();
     final allPastiInDb = querySnapshot.docs.map((doc) => doc.id);
     for (var item in allPastiInDb) {
@@ -437,12 +449,19 @@ class HealthyAppController {
     gestoreDatabase.pastoRef.doc(pasto.id).update(pasto.toJson());
   }
 
-  PianoAlimentare getCurrentPianoAlimentareOf(Utente utente) {
-    return gestoreUtente.piani
+  PianoAlimentare getCurrentPianoAlimentareOf(Utente utente)  {
+    PianoAlimentare result = PianoAlimentare(null, null, "", utente);
+  /*  final querySnapshot = await gestoreDatabase.pianoAlimentareRef
+        .limit(1)
         .where((element) =>
-            element.utente == utente &&
-            element.dataFine!.isAfter(DateTime.now()))
-        .first;
+             element.utente == utente &&
+                 element.dataFine!.isAfter(DateTime.now()))
+        .get();
+    for (var doc in querySnapshot.docs) {
+        await gestoreDatabase.pianoAlimentareRef.doc().get().then((element) async {
+          result = PianoAlimentare.fromJson(element.data()!);
+        });*/
+    return result;
   }
 
   ///metodi per gestire notifiche

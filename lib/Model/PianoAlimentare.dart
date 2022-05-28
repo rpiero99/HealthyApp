@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, unnecessary_getters_setters
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:healthy_app/Model/CategoriaPasto.dart';
 
 import '../Utils/IdGenerator.dart';
 import 'Pasto.dart';
@@ -57,7 +58,7 @@ class PianoAlimentare {
     return data;
   }
 
-  Pasto createPasto(Enum categoria, int calorie, String descrizione,
+  Pasto createPasto(CategoriaPasto categoria, int calorie, String descrizione,
       String nome, int oraPasto, int giornoPasto,  int quantita, String type) {
     return Pasto.pianoAlimentare(categoria, calorie, descrizione, nome, oraPasto, giornoPasto, quantita, type, id);
   }

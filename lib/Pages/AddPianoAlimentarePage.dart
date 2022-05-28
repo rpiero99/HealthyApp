@@ -16,8 +16,8 @@ import 'Widgets/InputWidget.dart';
 import 'Widgets/RoundedButton.dart';
 import 'Widgets/TopAppBar.dart';
 
-class NuovoPianoAlimentarePage extends StatelessWidget{
-  NuovoPianoAlimentarePage({Key? key}) : super(key: key);
+class AddPianoAlimentarePage extends StatelessWidget{
+  AddPianoAlimentarePage({Key? key}) : super(key: key);
 
   TextEditingController dataInizioController = TextEditingController();
   TextEditingController dataFineController = TextEditingController();

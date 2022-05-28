@@ -9,12 +9,9 @@ import '../Utils/Constants.dart';
 import 'HomePage.dart';
 import 'Widgets/InputWidget.dart';
 
-class ViewAnagraficaPage extends StatelessWidget {
-  ViewAnagraficaPage({Key? key}) : super(key: key);
+class EditAnagraficaPage extends StatefulWidget {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
-  AnagraficaUtente? anagraficaSelected;
-  Utente?  utenteSelected;
 
   TextEditingController altezaController = TextEditingController();
   TextEditingController nomeController = TextEditingController();
@@ -22,23 +19,26 @@ class ViewAnagraficaPage extends StatelessWidget {
   TextEditingController emailController = TextEditingController();
   TextEditingController pesoController = TextEditingController();
   TextEditingController sessoController = TextEditingController();
+  Utente utenteSelected = Utente("_id", null, "_email");
 
-  Future<void> getCurrentUser() async {
-    final User? user = auth.currentUser;
-    String? uid = user?.uid;
-    utenteSelected = await Constants.controller.getUtenteById(uid!);
-    anagraficaSelected = utenteSelected?.anagraficaUtente;
-/*    nomeController.text = anagraficaSelected!.nomeUtente!;
-    altezaController.text = anagraficaSelected!.altezzaUtente.toString();
-    dataNascitaController.text = anagraficaSelected!.dataNascitaUtente.toString();
-    emailController.text = utenteSelected!.email!;
-    sessoController.text = anagraficaSelected!.sessoUtente!;
-    pesoController.text = anagraficaSelected!.pesoUtente.toString();*/
+  EditAnagraficaPage({Key? key, required Utente utente})
+      : super(key: key) {
+    utenteSelected = utente;
+    altezaController.text = utente.anagraficaUtente!.altezzaUtente.toString();
+    nomeController.text = utente.anagraficaUtente!.nomeUtente!;
+    dataNascitaController.text = utente.anagraficaUtente!.dataNascitaUtente.toString();
+    pesoController.text = utente.anagraficaUtente!.pesoUtente.toString();
+    emailController.text = utente.email!;
+    sessoController.text = utente.anagraficaUtente!.sessoUtente!;
   }
 
   @override
+  _EditAnagraficaPage createState() => _EditAnagraficaPage();
+}
+class _EditAnagraficaPage extends State<EditAnagraficaPage>{
+
+  @override
   Widget build(BuildContext context) {
-    getCurrentUser();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.backgroundColor,
@@ -84,36 +84,30 @@ class ViewAnagraficaPage extends StatelessWidget {
                   child: Column(
                     children: [
                       makeInput(
-                          label: anagraficaSelected?.nomeUtente,
                           obscureText: false,
-                          controller: nomeController),
+                          controller: widget.nomeController),
                       makeInput(
-                          label: utenteSelected?.email,
                           obscureText: false,
-                          controller: emailController),
+                          controller: widget.emailController),
                       makeInput(
-                        label: anagraficaSelected?.dataNascitaUtente.toString(),
                         obscureText: false,
-                        controller: dataNascitaController,
+                        controller: widget.dataNascitaController,
                         isDate: true,
                         context: context,
                       ),
                       makeInput(
-                        label: anagraficaSelected?.sessoUtente,
                         obscureText: false,
-                        controller: sessoController,
+                        controller: widget.sessoController,
                         context: context,
                       ),
                       makeInput(
-                        label: anagraficaSelected?.altezzaUtente.toString(),
                         obscureText: false,
-                        controller: altezaController,
+                        controller: widget.altezaController,
                         context: context,
                       ),
                       makeInput(
-                        label: anagraficaSelected?.pesoUtente.toString(),
                         obscureText: false,
-                        controller: pesoController,
+                        controller: widget.pesoController,
                         context: context,
                       ),
                     ],
@@ -130,23 +124,22 @@ class ViewAnagraficaPage extends StatelessWidget {
                       minWidth: double.infinity,
                       height: 60,
                       onPressed: () async {
-                        if (nomeController.text.isNotEmpty &&
-                            emailController.text.isNotEmpty &&
-                            DateTime.parse(dataNascitaController.text).isBefore(DateTime.now()) &&
-                            altezaController.text.isNotEmpty &&
-                            pesoController.text.isNotEmpty &&
-                            sessoController.text.isNotEmpty) {
+                        if (widget.nomeController.text.isNotEmpty &&
+                            widget.emailController.text.isNotEmpty &&
+                            DateTime.parse(widget.dataNascitaController.text).isBefore(DateTime.now()) &&
+                            widget.altezaController.text.isNotEmpty &&
+                            widget.pesoController.text.isNotEmpty &&
+                            widget.sessoController.text.isNotEmpty) {
 
-                          anagraficaSelected?.nomeUtente = nomeController.text;
-                          anagraficaSelected?.dataNascitaUtente = DateTime.parse(dataNascitaController.text);
-                          anagraficaSelected?.altezzaUtente = int.parse(altezaController.text);
-                          anagraficaSelected?.pesoUtente = int.parse(pesoController.text);
-                          anagraficaSelected?.sessoUtente = sessoController.text;
+                          widget.utenteSelected.anagraficaUtente?.nomeUtente =  widget.nomeController.text;
+                          widget.utenteSelected.anagraficaUtente?.dataNascitaUtente = DateTime.parse( widget.dataNascitaController.text);
+                          widget.utenteSelected.anagraficaUtente?.altezzaUtente = int.parse( widget.altezaController.text);
+                          widget.utenteSelected.anagraficaUtente?.pesoUtente = int.parse( widget.pesoController.text);
+                          widget.utenteSelected.anagraficaUtente?.sessoUtente =  widget.sessoController.text;
 
-                          Constants.controller.updateAnagraficaUtente(anagraficaSelected!);
-                          utenteSelected?.anagraficaUtente = anagraficaSelected;
-                          utenteSelected?.email = emailController.text;
-                          Constants.controller.updateUtente(utenteSelected!);
+                          Constants.controller.updateAnagraficaUtente(widget.utenteSelected.anagraficaUtente!);
+                          widget.utenteSelected?.email =  widget.emailController.text;
+                          Constants.controller.updateUtente(widget.utenteSelected!);
 
                           ScaffoldMessenger.of(context).showSnackBar(
                               Constants.createSnackBar(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../Controller/HealthyAppController.dart';
 import '../Model/AnagraficaUtente.dart';
 import '../Model/Utente.dart';
 import '../Utils/Constants.dart';
@@ -10,8 +9,6 @@ import 'Widgets/InputWidget.dart';
 
 class AddAnagraficaPage extends StatelessWidget {
   AddAnagraficaPage({Key? key}) : super(key: key);
-
-  static HealthyAppController c = HealthyAppController.instance;
 
   AnagraficaUtente? anagraficaNew;
   Utente? utenteNew;
@@ -24,7 +21,7 @@ class AddAnagraficaPage extends StatelessWidget {
   TextEditingController sessoController = TextEditingController();
 
   String? getCurrentIdUser() {
-    return c.gestoreAuth.firebaseAuth.currentUser?.uid;
+    return Constants.controller.gestoreAuth.firebaseAuth.currentUser?.uid;
   }
 
   @override
@@ -131,8 +128,8 @@ class AddAnagraficaPage extends StatelessWidget {
                             pesoController.text.isNotEmpty &&
                             sessoController.text.isNotEmpty) {
                           
-                          anagraficaNew = c.createAnagraficaUtente(int.parse(altezaController.text), DateTime.parse(dataNascitaController.text), nomeController.text, double.parse(pesoController.text), sessoController.text);
-                          utenteNew = c.createUtente(getCurrentIdUser()!, anagraficaNew!, emailController.text);
+                          anagraficaNew = Constants.controller.createAnagraficaUtente(int.parse(altezaController.text), DateTime.parse(dataNascitaController.text), nomeController.text, double.parse(pesoController.text), sessoController.text);
+                          utenteNew = Constants.controller.createUtente(getCurrentIdUser()!, anagraficaNew!, emailController.text);
                           ScaffoldMessenger.of(context).showSnackBar(
                               Constants.createSnackBar(
                                   'Utente creato correttamente.',
