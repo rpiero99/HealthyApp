@@ -114,30 +114,30 @@ class _EditSchedaPalestraPage extends State<EditSchedaPalestraPage> {
                   minWidth: double.infinity,
                   height: 60,
                   onPressed: () async {
-                    if (widget.nomeController.text.isNotEmpty &&
-                        widget.descrizioneController.text.isNotEmpty &&
-                        DateTime.parse(widget.dataFineController.text).isAfter(
-                            DateTime.parse(widget.dataInizioController.text))) {
-                      var scheda = await Constants.controller
-                          .getSchedaPalestraById(widget.idController.text);
-                      scheda.nome = widget.nomeController.text;
-                      scheda.descrizione = widget.descrizioneController.text;
-                      scheda.dataInizio =
-                          DateTime.parse(widget.dataInizioController.text);
-                      scheda.dataFine =
-                          DateTime.parse(widget.dataFineController.text);
-                      Constants.controller.updateSchedaPalestra(scheda);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          Constants.createSnackBar(
-                              'Scheda modificata correttamente.',
-                              Constants.successSnackBar));
-                      Constants.redirectTo(context, HomePage());
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          Constants.createSnackBar(
-                              'Inserire tutti i dati o controllare che la data di fine sia dopo la data di inizio.',
-                              Constants.errorSnackBar));
-                    }
+                      if (widget.nomeController.text.isNotEmpty &&
+                          widget.descrizioneController.text.isNotEmpty &&
+                          DateTime.parse(widget.dataFineController.text).isAfter(
+                              DateTime.parse(widget.dataInizioController.text))) {
+                        var scheda = await Constants.controller
+                            .getSchedaPalestraById(widget.idController.text);
+                        scheda.nome = widget.nomeController.text;
+                        scheda.descrizione = widget.descrizioneController.text;
+                        scheda.dataInizio =
+                            DateTime.parse(widget.dataInizioController.text);
+                        scheda.dataFine =
+                            DateTime.parse(widget.dataFineController.text);
+                        Constants.controller.updateSchedaPalestra(scheda);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            Constants.createSnackBar(
+                                'Scheda modificata correttamente.',
+                                Constants.successSnackBar));
+                        Constants.redirectTo(context, HomePage());
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            Constants.createSnackBar(
+                                'Inserire tutti i dati o controllare che la data di fine sia dopo la data di inizio.',
+                                Constants.errorSnackBar));
+                      }
                   },
                   color: Constants.backgroundColorLoginButton,
                   shape: RoundedRectangleBorder(

@@ -3,12 +3,14 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/Pages/AddAllenamentoPage.dart';
 import 'package:healthy_app/Pages/AddAnagraficaPage.dart';
 import 'package:healthy_app/Pages/AddSchedaPalestraPage.dart';
 import 'package:healthy_app/Pages/DashBoard.dart';
+import 'package:healthy_app/Pages/GetAllenamentiPage.dart';
+import 'package:healthy_app/Pages/GetPastiGiornalieriPage.dart';
 import 'package:healthy_app/Pages/GetSchedePalestraPage.dart';
 import 'package:healthy_app/Pages/AddPianoAlimentarePage.dart';
-import 'package:healthy_app/Pages/ViewAnagraficaPage.dart';
 
 import '../Controller/HealthyAppController.dart';
 import '../Model/Allenamento.dart';
@@ -63,8 +65,8 @@ class _HomePageState extends State<HomePage> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
             ),
-            onPressed: () { Constants.redirectTo(context, ViewAnagraficaPage());},
-            child: Text('view anagrafica'),
+            onPressed: () { Constants.redirectTo(context, GetPastiGiornalieriPage());},
+            child: Text('view pasti del giorno'),
           ),
 
           TextButton(
@@ -89,6 +91,22 @@ class _HomePageState extends State<HomePage> {
             ),
             onPressed: () { Constants.redirectTo(context, AddPianoAlimentarePage());},
             child: Text('add piano alimentare'),
+          ),
+
+          TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            ),
+            onPressed: () { Constants.redirectTo(context, GetAllenamentiPage());},
+            child: Text('view allenamenti'),
+          ),
+
+          TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            ),
+            onPressed: () { Constants.redirectTo(context, AddAllenamentoPage());},
+            child: Text('add allenamento'),
           ),
         ],
       )

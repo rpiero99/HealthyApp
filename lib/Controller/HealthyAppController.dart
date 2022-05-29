@@ -3,11 +3,9 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:healthy_app/Model/CategoriaPasto.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
-import 'package:healthy_app/Utils/MapEserciziDay.dart';
 import 'package:healthy_app/Utils/NotificationService.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../Model/Allenamento.dart';
@@ -81,10 +79,17 @@ class HealthyAppController {
 
   void addAllenamento(Allenamento item) {
     if (gestoreAllenamento.allenamenti
-        .where((element) => element.id == item.id)
-        .isEmpty) {
+            .where((element) => element.id == item.id)
+            .isEmpty &&
+        item.nome! != "") {
       gestoreAllenamento.addAllenamento(item);
     }
+  }
+
+  removeAllenamento(Allenamento item) {
+    gestoreAllenamento.removeAllenamento(item);
+    DocumentReference a = gestoreDatabase.allenamentoRef.doc(item.id);
+    a.delete();
   }
 
   Future<Allenamento> startAllenamento(
@@ -175,7 +180,7 @@ class HealthyAppController {
   addSchedaPalestra(SchedaPalestra scheda) {
     if (gestoreSchedaPalestra.schedePalestra
         .where((element) => element.id == scheda.id)
-        .isEmpty) {
+        .isEmpty && scheda.nome != "") {
       gestoreSchedaPalestra.addSchedaPalestra(scheda);
     }
   }
@@ -221,7 +226,7 @@ class HealthyAppController {
       CronometroProgrammabile cronometroProgrammabile) {
     if (gestoreSchedaPalestra.cronometriProg
         .where((element) => element.id == cronometroProgrammabile.id)
-        .isEmpty) {
+        .isEmpty && cronometroProgrammabile.id != "") {
       gestoreSchedaPalestra.addCronProg(cronometroProgrammabile);
     }
   }
@@ -265,7 +270,7 @@ class HealthyAppController {
   void addUtente(Utente item) {
     if (gestoreUtente.utenti
         .where((element) => element.id == item.id)
-        .isEmpty) {
+        .isEmpty && item.email != "") {
       gestoreUtente.addUtente(item);
     }
   }
@@ -339,9 +344,9 @@ class HealthyAppController {
     QuerySnapshot querySnapshot = await gestoreDatabase.esercizioRef.get();
     final schedaPalestra = await getSchedaPalestraById(scheda.id!);
     final allEserciziInDB = querySnapshot.docs.map((doc) => doc.id);
-    for(var idEs in allEserciziInDB){
+    for (var idEs in allEserciziInDB) {
       var es = await getEsercizioById(idEs);
-      if(es.idSchedaPalestra == schedaPalestra.id){
+      if (es.idSchedaPalestra == schedaPalestra.id && es.nome != "") {
         schedaPalestra.getAllEsercizi().add(es);
       }
     }
@@ -384,7 +389,7 @@ class HealthyAppController {
   addPianoAlimentare(PianoAlimentare pianoAlimentare) {
     if (gestoreUtente.piani
         .where((element) => element.id == pianoAlimentare.id)
-        .isEmpty) {
+        .isEmpty && pianoAlimentare.descrizione != "") {
       gestoreUtente.addPianoAlimentare(pianoAlimentare);
     }
   }

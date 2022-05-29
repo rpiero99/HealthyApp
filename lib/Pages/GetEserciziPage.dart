@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healthy_app/Model/Esercizio.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
-import 'package:healthy_app/Pages/EditPageSchedaPalestra.dart';
+import 'package:healthy_app/Pages/EditSchedaPalestraPage.dart';
 import 'package:intl/intl.dart';
 
 import '../Utils/Constants.dart';
@@ -120,7 +120,9 @@ class _GetEserciziPage extends State<GetEserciziPage> {
         child: SizedBox(
             width: 200,
             child: GestureDetector(
-              onTap: () => {},
+              onTap: () => {
+                //todo - aprire dialog dove far vedere le statistiche
+              },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[

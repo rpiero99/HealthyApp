@@ -9,7 +9,8 @@ import 'package:healthy_app/Utils/Constants.dart';
 import 'Background.dart';
 
 class Body extends StatelessWidget {
-  Random random = Random();
+  const Body({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

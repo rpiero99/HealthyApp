@@ -42,6 +42,8 @@ class GestoreUtente {
 
   //aggiunta di un pasto fatto in un certo giorno e che potrebbe essere incluso nel piano come no.
   addPastoOfDay(Pasto pasto) {
-    pastiOfDay.add(pasto);
+    if(pasto.nome != "") {
+      pastiOfDay.add(pasto);
+    }
   }
 }

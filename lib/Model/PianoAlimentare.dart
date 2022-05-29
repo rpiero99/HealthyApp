@@ -63,7 +63,11 @@ class PianoAlimentare {
     return Pasto.pianoAlimentare(categoria, calorie, descrizione, nome, oraPasto, giornoPasto, quantita, type, id);
   }
 
-  void addPasto(Pasto? pasto) => _pasti.add(pasto);
+  void addPasto(Pasto? pasto) {
+    if(pasto?.nome != "") {
+      _pasti.add(pasto);
+    }
+  }
 
   void removePasto(Pasto? pasto) => _pasti.remove(pasto);
 

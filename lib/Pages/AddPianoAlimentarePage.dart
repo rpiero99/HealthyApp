@@ -31,59 +31,25 @@ class AddPianoAlimentarePage extends StatelessWidget{
   TextEditingController quantitaController = TextEditingController();
   TextEditingController typeController = TextEditingController();
 
-  final FirebaseAuth auth = FirebaseAuth.instance;
   Utente? utente;
   PianoAlimentare? pianoAlimentare;
   List<Pasto> pasti = [];
   String? giornoComboItem = 'Giorno..';
   String? categoriaComboItem = 'Categoria pasto..';
 
-
-  Future<void> getCurrentUser() async {
-    final User? user = auth.currentUser;
-    String? uid = user?.uid;
-    utente = await Constants.controller.getUtenteById(uid!);
-    // here you write the codes to input the data into firestore
-  }
   @override
   Widget build(BuildContext context) {
-    getCurrentUser();
     return Scaffold(
         backgroundColor: Constants.backgroundColor,
         appBar: makeTopAppBar(context, "Piano alimentare", Constants.controller),
-        bottomNavigationBar: CurvedNavigationBar(
-          backgroundColor: Constants.backgroundColor,
-          items: const <Widget>[
-            Icon(
-              Icons.home_outlined,
-              size: 30,
-              color: Constants.backgroundColor,
-            ),
-            Icon(Icons.run_circle_outlined,
-                size: 30, color: Constants.backgroundColor),
-            Icon(Icons.add_circle_outline_outlined,
-                size: 30, color: Constants.backgroundColor),
-            Icon(Icons.list_alt_outlined,
-                size: 30, color: Constants.backgroundColor),
-            Icon(Icons.account_circle_outlined,
-                size: 30, color: Constants.backgroundColor),
-          ],
-          onTap: (index) {
-            //Handle button tap
-          },
-        ),
-        body: SafeArea(
+        body: SingleChildScrollView(
           child: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  children: [
-                    Column(
-                      children: const [
-                        Text(
+                        const Text(
                           "Nuovo Piano Alimentare",
                           style: TextStyle(
                             fontSize: 30,
@@ -91,11 +57,9 @@ class AddPianoAlimentarePage extends StatelessWidget{
                             color: Constants.text,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
-                      ],
-                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: Column(
@@ -135,11 +99,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
                         padding: const EdgeInsets.only(top: 3, left: 3),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
-                            border: const Border(
-                                bottom: BorderSide(color: Colors.black),
-                                top: BorderSide(color: Colors.black),
-                                right: BorderSide(color: Colors.black),
-                                left: BorderSide(color: Colors.black))),
+                           ),
                         child: MaterialButton(
                           minWidth: double.infinity,
                           height: 60,
@@ -157,6 +117,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
                                     dataInizioController.clear();
                                     dataFineController.clear();
                                   }else{
+                                    utente = await Constants.controller.getUtenteById(Constants.getCurrentIdUser()!);
                                     pianoAlimentare = Constants.controller.createPianoAlimentare(dataFine, dataInizio, descrizioneController.text, utente!);
                                     for(var element in pasti){
                                       element.pianoAlimentare = pianoAlimentare?.id;
@@ -198,13 +159,10 @@ class AddPianoAlimentarePage extends StatelessWidget{
                           ),
                         ),
                       ),
-                    ),
-                  ],
                 ),
-              ],
-            ),
+            ]
           ),
-        ));
+        )));
   }
   void clearFieldsPasto() {
     calorieController.clear();

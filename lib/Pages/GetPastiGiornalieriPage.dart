@@ -2,7 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Model/Pasto.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
-import 'package:healthy_app/Pages/EditPageSchedaPalestra.dart';
+import 'package:healthy_app/Pages/EditSchedaPalestraPage.dart';
 import 'package:intl/intl.dart';
 
 import '../Utils/Constants.dart';
@@ -60,8 +60,6 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
         ]),
       ),
     );
-    // TODO: implement build
-    throw UnimplementedError();
   }
 
   Widget showCards() {
@@ -108,7 +106,7 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
                 children: <Widget>[
                   ListTile(
                     leading:
-                    const Icon(Icons.sports_gymnastics_outlined, size: 100),
+                    const Icon(Icons.fastfood_outlined, size: 100),
                     title: Text(obj.nome!,
                         style: const TextStyle(color: Colors.white)),
                     subtitle: Text(obj.descrizione!,

@@ -88,6 +88,7 @@ class AddPastoGiornaliero extends StatelessWidget {
                           obscureText: false,
                           controller: quantitaController,
                           context: context,
+                          isNumber: true
                         ),
                         StatefulBuilder(
                           builder: (BuildContext context, StateSetter dropDownState){
@@ -133,12 +134,7 @@ class AddPastoGiornaliero extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.only(top: 3, left: 3),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          border: const Border(
-                              bottom: BorderSide(color: Colors.black),
-                              top: BorderSide(color: Colors.black),
-                              right: BorderSide(color: Colors.black),
-                              left: BorderSide(color: Colors.black))),
+                          borderRadius: BorderRadius.circular(40)),
                       child: MaterialButton(
                         minWidth: double.infinity,
                         height: 60,

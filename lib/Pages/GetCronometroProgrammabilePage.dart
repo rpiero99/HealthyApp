@@ -5,14 +5,14 @@ import '../Controller/HealthyAppController.dart';
 import '../Model/CronometroProgrammabile.dart';
 import 'Widgets/RoundButton.dart';
 
-class CountdownPage extends StatefulWidget {
-  const CountdownPage({Key? key}) : super(key: key);
+class GetCronometroProgrammabilePage extends StatefulWidget {
+  const GetCronometroProgrammabilePage({Key? key}) : super(key: key);
 
   @override
-  _CountdownPageState createState() => _CountdownPageState();
+  _GetCronometroProgrammabilePageState createState() => _GetCronometroProgrammabilePageState();
 }
 
-class _CountdownPageState extends State<CountdownPage>
+class _GetCronometroProgrammabilePageState extends State<GetCronometroProgrammabilePage>
     with TickerProviderStateMixin {
   static HealthyAppController c = HealthyAppController.instance;
   CronometroProgrammabile cron = c.createCronometroProgrammabile(20, 60, 180, 600);

@@ -19,7 +19,7 @@ import 'Model/AnagraficaUtente.dart';
 import 'Model/Esercizio.dart';
 import 'Model/Pasto.dart';
 import 'Model/Utente.dart';
-import 'Pages/CountdownPage.dart';
+import 'Pages/GetCronometroProgrammabilePage.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
