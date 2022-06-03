@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:healthy_app/Pages/Widgets/TopAppBar.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 import '../Controller/HealthyAppController.dart';
 import '../Model/AnagraficaUtente.dart';
@@ -9,7 +11,7 @@ import '../Utils/Constants.dart';
 import 'HomePage.dart';
 import 'Widgets/InputWidget.dart';
 
-class AddPastoGiornaliero extends StatelessWidget {
+class AddPastoGiornaliero extends StatefulWidget {
   AddPastoGiornaliero({Key? key}) : super(key: key);
 
   AnagraficaUtente? anagraficaNew;
@@ -23,165 +25,149 @@ class AddPastoGiornaliero extends StatelessWidget {
   TextEditingController typeController = TextEditingController();
   String? categoriaComboItem = 'Categoria pasto..';
 
-  String? getCurrentIdUser() {
-    return Constants.controller.gestoreAuth.firebaseAuth.currentUser?.uid;
-  }
+  @override
+  _AddPastoGiornalieroPage createState() => _AddPastoGiornalieroPage();
+}
 
+class _AddPastoGiornalieroPage extends State<AddPastoGiornaliero> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.backgroundColor,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Constants.backgroundColor,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-              color: Constants.text,
-            )),
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-      ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child:Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
+      appBar: makeTopAppBar(context, "Pasto giornaliero", Constants.controller),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text(
+              "Crea Pasto",
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Constants.text,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
                 children: [
-                  Column(
-                    children: const [
-                      Text(
-                        "Crea Pasto",
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Constants.text,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: Column(
-                      children: [
-                        makeInput(
-                            label: "Nome..",
-                            obscureText: false,
-                            controller: nomePastoController),
+                  makeInput(
+                      label: "Nome..",
+                      obscureText: false,
+                      controller: widget.nomePastoController),
+                  makeInput(
+                      label: "Descrizione..",
+                      obscureText: false,
+                      controller: widget.descrizionePastoController),
+                  makeInput(
+                      label: "Quantità..",
+                      obscureText: false,
+                      controller: widget.quantitaController,
+                      context: context,
+                      isNumber: true),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 54,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Constants.text,
+                        borderRadius: BorderRadius.circular(25.7)),
 
-                        makeInput(
-                            label: "Descrizione..",
-                            obscureText: false,
-                            controller: descrizionePastoController),
-                        makeInput(
-                          label: "Quantità..",
-                          obscureText: false,
-                          controller: quantitaController,
-                          context: context,
-                          isNumber: true
-                        ),
-                        StatefulBuilder(
-                          builder: (BuildContext context, StateSetter dropDownState){
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              child:
-                              Container(
-                                height: 40,
-                                width: 270,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  border: Border.all(style: BorderStyle.solid, width: 0.80),
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                    items: Constants.categoriePastoString()
-                                        .map((String item) => DropdownMenuItem<String>(
-                                        child: Text(item), value: item))
-                                        .toList(),
-                                    onChanged: (value) {
-                                      dropDownState(() {
-                                        categoriaComboItem = value as String?;
-                                      });
-                                    },
-                                    value: categoriaComboItem,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        makeInput(
-                          label: "Tipo..",
-                          obscureText: false,
-                          controller: typeController,
-                          context: context,
-                        ),
-                      ],
+                    child: DropdownButton<String>(
+                      value: widget.categoriaComboItem,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          widget.categoriaComboItem = newValue!;
+                        });
+                      },
+                      items: Constants.categoriePastoString()
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 42,
+                      underline: const SizedBox(),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 3, left: 3),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40)),
-                      child: MaterialButton(
-                        minWidth: double.infinity,
-                        height: 60,
-                        onPressed: () async {
-                          if (nomePastoController.text.isNotEmpty &&
-                              descrizionePastoController.text.isNotEmpty &&
-                              quantitaController.text.isNotEmpty &&
-                              typeController.text.isNotEmpty &&
-                              calorieController.text.isNotEmpty &&
-                              categoriaComboItem != 'Categoria pasto..') {
-                            Constants.controller.createPastoOfDay(Constants.getCategoriaFromString(categoriaComboItem!),
-                                int.parse(calorieController.text),
-                                descrizionePastoController.text,
-                                nomePastoController.text,
-                                int.parse(quantitaController.text),
-                                typeController.text);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                Constants.createSnackBar(
-                                    'Pasto aggiunto correttamente.',
-                                    Constants.successSnackBar));
-                            Constants.redirectTo(context, HomePage());
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                Constants.createSnackBar('Inserire tutti i dati.',
-                                    Constants.errorSnackBar));
-                          }
-                          categoriaComboItem = CategoriaPasto.values[0].toString().split('.').last;
-                          Navigator.pop(context);
-                        },
-                        color: Constants.backgroundColorLoginButton,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40)),
-                        child: const Text(
-                          "Aggiungi Pasto",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Constants.textButtonColor),
-                        ),
-                      ),
-                    ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  makeInput(
+                    label: "Tipo..",
+                    obscureText: false,
+                    controller: widget.typeController,
+                    context: context,
+                  ),
+                  makeInput(
+                    label: "Calorie stimate..",
+                    obscureText: false,
+                    controller: widget.calorieController,
+                    context: context,
+                    isNumber: true,
                   ),
                 ],
               ),
-            ],
-          ),
-        )
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Container(
+                padding: const EdgeInsets.only(top: 3, left: 3),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(40)),
+                child: MaterialButton(
+                  minWidth: double.infinity,
+                  height: 60,
+                  onPressed: () async {
+                    if (widget.nomePastoController.text.isNotEmpty &&
+                        widget.descrizionePastoController.text.isNotEmpty &&
+                        widget.quantitaController.text.isNotEmpty &&
+                        widget.typeController.text.isNotEmpty &&
+                        widget.calorieController.text.isNotEmpty &&
+                        widget.categoriaComboItem != 'Categoria pasto..') {
+                      Constants.controller.createPastoOfDay(
+                          Constants.getCategoriaFromString(
+                              widget.categoriaComboItem!),
+                          int.parse(widget.calorieController.text),
+                          widget.descrizionePastoController.text,
+                          widget.nomePastoController.text,
+                          int.parse(widget.quantitaController.text),
+                          widget.typeController.text);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          Constants.createSnackBar(
+                              'Pasto aggiunto correttamente.',
+                              Constants.successSnackBar));
+                      Constants.redirectTo(context, HomePage());
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          Constants.createSnackBar('Inserire tutti i dati.',
+                              Constants.errorSnackBar));
+                    }
+                    widget.categoriaComboItem =
+                        CategoriaPasto.values[0].toString().split('.').last;
+
+                  },
+                  color: Constants.backgroundColorLoginButton,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40)),
+                  child: const Text(
+                    "Aggiungi Pasto",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: Constants.textButtonColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

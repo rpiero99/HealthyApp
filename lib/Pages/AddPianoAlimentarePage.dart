@@ -43,9 +43,6 @@ class AddPianoAlimentarePage extends StatelessWidget{
         backgroundColor: Constants.backgroundColor,
         appBar: makeTopAppBar(context, "Piano alimentare", Constants.controller),
         body: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -162,7 +159,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
                 ),
             ]
           ),
-        )));
+        ));
   }
   void clearFieldsPasto() {
     calorieController.clear();

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Pages/AddAllenamentoPage.dart';
 import 'package:healthy_app/Pages/AddAnagraficaPage.dart';
+import 'package:healthy_app/Pages/AddPastoGiornaliero.dart';
 import 'package:healthy_app/Pages/AddSchedaPalestraPage.dart';
 import 'package:healthy_app/Pages/DashBoard.dart';
 import 'package:healthy_app/Pages/GetAllenamentiPage.dart';
@@ -107,6 +108,13 @@ class _HomePageState extends State<HomePage> {
             ),
             onPressed: () { Constants.redirectTo(context, AddAllenamentoPage());},
             child: Text('add allenamento'),
+          ),
+          TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            ),
+            onPressed: () { Constants.redirectTo(context, AddPastoGiornaliero());},
+            child: Text('add pasto giornaliero'),
           ),
         ],
       )

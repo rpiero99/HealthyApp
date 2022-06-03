@@ -45,6 +45,7 @@ class Constants {
 
   static List<String> categoriePastoString(){
     List<String> categorie = [];
+    categorie.add("Categoria pasto..");
     for (var element in CategoriaPasto.values) {categorie.add(element.toString().split('.').last);}
     return categorie;
   }
