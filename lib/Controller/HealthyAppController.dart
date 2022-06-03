@@ -544,4 +544,17 @@ class HealthyAppController {
     DocumentSnapshot doc = await gestoreDatabase.utenteRef.doc(id).get();
     return Utente.fromJson(doc.data() as Map<String, dynamic>);
   }
+
+  Future<Utente?> getUtenteByEmail(String email) async {
+    QuerySnapshot querySnapshot = await gestoreDatabase.utenteRef.get();
+    final allUsersInDB = querySnapshot.docs.map((doc) => doc.id);
+    for (var item in allUsersInDB) {
+      await gestoreDatabase.utenteRef.doc(item).get().then((element) async {
+        var user = Utente.fromJson(element.data()!);
+        if(user.email == email){
+          return user;
+        }
+      });
+    }
+  }
 }

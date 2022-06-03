@@ -10,7 +10,15 @@ import 'HomePage.dart';
 import 'Widgets/TopAppBar.dart';
 
 class GetSchedePalestraPage extends StatefulWidget {
-  const GetSchedePalestraPage({Key? key}) : super(key: key);
+  GetSchedePalestraPage({Key? key}) : super(key: key);
+
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+  TextEditingController descrizioneController = TextEditingController();
+  TextEditingController dataInizioController = TextEditingController();
+  TextEditingController dataFineController = TextEditingController();
+
+  SchedaPalestra? schedaToView;
 
   @override
   _GetSchedePalestraPage createState() => _GetSchedePalestraPage();
@@ -105,7 +113,8 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
             width: 200,
             child: GestureDetector(
               onTap: () => {
-                //todo - aprire dialog dove far vedere le statistiche
+                widget.schedaToView = obj,
+                openViewSchedaPalestra(context),
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -125,15 +134,18 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
                           child: const Text('Modifica',
                               style: TextStyle(color: Colors.white)),
                           onPressed: () {
-                              Constants.redirectTo(
-                                  context,
-                                  EditSchedaPalestraPage(
-                                      id: obj.id!,
-                                      nome: obj.nome!,
-                                      descrizione: obj.descrizione!,
-                                      dataInizio: obj.dataInizio!,
-                                      dataFine: obj.dataFine!));
-                          },
+
+
+                          }
+                          //     Constants.redirectTo(
+                          //         context,
+                          //         EditSchedaPalestraPage(
+                          //             id: obj.id!,
+                          //             nome: obj.nome!,
+                          //             descrizione: obj.descrizione!,
+                          //             dataInizio: obj.dataInizio!,
+                          //             dataFine: obj.dataFine!));
+                          // },
                         ),
                         TextButton(
                           child: const Text('Rimuovi',
@@ -153,5 +165,53 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
       );
     }
     return const Divider();
+  }
+
+  void setFieldsSchedaPalestra(){
+    widget.nomeController.text = widget.schedaToView!.nome!;
+    widget.descrizioneController.text = widget.schedaToView!.descrizione!;
+    widget.dataInizioController.text = widget.schedaToView!.dataInizio!.toString();
+    widget.dataFineController.text = widget.schedaToView!.dataFine!.toString();
+  }
+
+  Future openViewSchedaPalestra(context) {
+    setFieldsSchedaPalestra();
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        scrollable: true,
+        title: Text(widget.schedaToView!.nome!),
+        content: Column(children: [
+          TextField(
+            readOnly: true,
+            controller: widget.nomeController,
+            decoration: const InputDecoration(hintText: "Nome.."),
+          ),
+          TextField(
+            readOnly: true,
+            controller: widget.descrizioneController,
+            decoration: const InputDecoration(hintText: "Descrizione.."),
+          ),
+          TextField(
+            readOnly: true,
+            controller: widget.dataInizioController,
+            decoration: const InputDecoration(hintText: "Data inizio.."),
+          ),
+          TextField(
+            readOnly: true,
+            controller: widget.dataFineController,
+            decoration: const InputDecoration(hintText: "Data fine.."),
+          ),
+        ]),
+        actions: [
+          TextButton(
+            child: const Text("Chiudi"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
   }
 }
