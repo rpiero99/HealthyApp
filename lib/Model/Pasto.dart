@@ -85,7 +85,7 @@ class Pasto {
 
   num? get calorie => _calorie;
 
-  DateTime? get oraDelGiorno => _oraDelGiorno = null;
+  DateTime? get oraDelGiorno => _oraDelGiorno;
 
   String? get type => _type;
 

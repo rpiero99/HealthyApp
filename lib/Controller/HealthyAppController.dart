@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:healthy_app/Model/CategoriaPasto.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
@@ -23,7 +24,7 @@ import '../Model/PianoAlimentare.dart';
 import '../Model/SchedaPalestra.dart';
 import '../Model/Utente.dart';
 
-class HealthyAppController {
+class HealthyAppController{
   GestoreAllenamento gestoreAllenamento = GestoreAllenamento.instance;
   GestoreDatabase gestoreDatabase = GestoreDatabase.instance;
   GestoreAuth gestoreAuth = GestoreAuth.instance;
@@ -431,6 +432,7 @@ class HealthyAppController {
   }
 
   Future<List<Pasto>> getPastiOfDay(DateTime day) async {
+    gestoreUtente.pastiOfDay.clear();
     QuerySnapshot querySnapshot = await gestoreDatabase.pastoRef.get();
     final allPastiInDb = querySnapshot.docs.map((doc) => doc.id);
     for (var item in allPastiInDb) {

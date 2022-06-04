@@ -75,17 +75,23 @@ class Allenamento {
   set oraFine(DateTime? oraFine) => _oraFine = oraFine;
 
   num? get tempoTotale {
-    _tempoTotale = oraFine?.difference(oraInizio!).inMinutes;
+    if(oraFine != null && oraInizio != null){
+      _tempoTotale = oraFine?.difference(oraInizio!).inMinutes;
+    }
     return _tempoTotale;
   }
 
   num? get tempoPerKm {
-    _tempoPerKm = (tempoTotale! * 60 / distanza!);
+    if(tempoTotale != null && distanza != null){
+      _tempoPerKm = (tempoTotale! * 60 / distanza!);
+    }
     return _tempoPerKm;
   }
 
   num? get velocitaMedia {
-    _velocitaMedia = (distanza! / (tempoTotale! / 60));
+    if(distanza != null && tempoTotale != null) {
+      _velocitaMedia = (distanza! / (tempoTotale! / 60));
+    }
     return _velocitaMedia;
   }
 

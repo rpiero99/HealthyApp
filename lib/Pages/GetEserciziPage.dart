@@ -13,6 +13,7 @@ import 'Widgets/TopAppBar.dart';
 
 class GetEserciziPage extends StatefulWidget {
   SchedaPalestra? schedaToEdit;
+  Esercizio? esercizioToView;
 
   GetEserciziPage({Key? key, required SchedaPalestra scheda})
       : super(key: key) {
@@ -27,8 +28,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
   String? item = 'Giorno..';
   String searchString = "";
   TextEditingController dayEsercizioController = TextEditingController();
-  TextEditingController descrizioneEsercizioController =
-      TextEditingController();
+  TextEditingController descrizioneEsercizioController = TextEditingController();
   TextEditingController nomeEsercizioController = TextEditingController();
   TextEditingController numRepEsercizioController = TextEditingController();
   TextEditingController numSerieEsercizioController = TextEditingController();
@@ -46,14 +46,21 @@ class _GetEserciziPage extends State<GetEserciziPage> {
             child: Column(
                 children: <Widget>[
                     TextField(
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.search),
                           hintText: "cerca..",
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
+                          hintStyle:  const TextStyle(color: Colors.white),
+                          focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(25.7),
                           ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(25.7),
+                          ),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[400]!)),
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -121,7 +128,8 @@ class _GetEserciziPage extends State<GetEserciziPage> {
             width: 200,
             child: GestureDetector(
               onTap: () => {
-                //todo - aprire dialog dove far vedere le statistiche
+                widget.esercizioToView = obj,
+                openViewEsercizio(context),
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -290,5 +298,85 @@ class _GetEserciziPage extends State<GetEserciziPage> {
     numSerieEsercizioController.clear();
     tempoRestEsercizioController.clear();
     item = Constants.daysWeek[0];
+  }
+
+  void setFieldsEsercizio(){
+    nomeEsercizioController.text = widget.esercizioToView!.nome!;
+    descrizioneEsercizioController.text = widget.esercizioToView!.descrizione!;
+    dayEsercizioController.text = widget.esercizioToView!.day!.toString();
+    numRepEsercizioController.text = widget.esercizioToView!.nRep!.toString();
+    numSerieEsercizioController.text = widget.esercizioToView!.nSerie!.toString();
+    tempoRestEsercizioController.text = widget.esercizioToView!.tempoRiposo!.toString();
+  }
+
+  Future openViewEsercizio(context) {
+    setFieldsEsercizio();
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        scrollable: true,
+        title: Text(widget.esercizioToView!.nome!),
+        content: Column(children: [
+          TextFormField(
+            readOnly: true,
+            controller: nomeEsercizioController,
+            decoration: const InputDecoration(
+            border: UnderlineInputBorder(),
+            labelText: 'Nome',
+            ),
+          ),
+          TextFormField(
+            readOnly: true,
+            controller: descrizioneEsercizioController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Descrizione',
+            ),
+          ),
+          TextFormField(
+            readOnly: true,
+            controller: dayEsercizioController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Giorno',
+            ),
+          ),
+          TextFormField(
+            readOnly: true,
+            controller: numRepEsercizioController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Numero rep',
+            ),
+          ),
+          TextFormField(
+            readOnly: true,
+            controller: numSerieEsercizioController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Numero serie',
+            ),
+          ),
+          TextFormField(
+            readOnly: true,
+            controller: tempoRestEsercizioController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Tempo di riposo',
+            ),
+          ),
+
+        ]),
+        actions: [
+          TextButton(
+            child: const Text("Chiudi"),
+            onPressed: () {
+              clearFieldsEsercizio();
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
   }
 }

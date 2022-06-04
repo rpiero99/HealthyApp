@@ -12,6 +12,8 @@ import 'HomePage.dart';
 import 'Widgets/InputWidget.dart';
 
 class EditSchedaPalestraPage extends StatefulWidget {
+  SchedaPalestra? schedaToEdit;
+  BuildContext? contextEd;
   TextEditingController nomeController = TextEditingController();
   TextEditingController idController = TextEditingController();
   TextEditingController descrizioneController = TextEditingController();
@@ -20,17 +22,20 @@ class EditSchedaPalestraPage extends StatefulWidget {
 
   EditSchedaPalestraPage(
       {Key? key,
-      required String id,
-      required String nome,
-      required String descrizione,
-      required DateTime dataInizio,
-      required DateTime dataFine})
+        required SchedaPalestra schedaPalestra,
+      // required String id,
+      // required String nome,
+      // required String descrizione,
+      // required DateTime dataInizio,
+      // required DateTime dataFine
+      })
       : super(key: key) {
-    idController.text = id;
-    nomeController.text = nome;
-    descrizioneController.text = descrizione;
-    dataInizioController.text = dataInizio.toString();
-    dataFineController.text = dataFine.toString();
+    schedaToEdit = schedaPalestra;
+    idController.text = schedaToEdit!.id!;
+    nomeController.text = schedaToEdit!.nome!;
+    descrizioneController.text = schedaToEdit!.descrizione!;
+    dataInizioController.text = schedaToEdit!.dataInizio.toString();
+    dataFineController.text = schedaToEdit!.dataFine.toString();
   }
 
   @override
@@ -38,6 +43,7 @@ class EditSchedaPalestraPage extends StatefulWidget {
 }
 
 class _EditSchedaPalestraPage extends State<EditSchedaPalestraPage> {
+
   //
   // String? item = 'Giorno..';
   // SchedaPalestra? schedaNew;
@@ -131,7 +137,7 @@ class _EditSchedaPalestraPage extends State<EditSchedaPalestraPage> {
                             Constants.createSnackBar(
                                 'Scheda modificata correttamente.',
                                 Constants.successSnackBar));
-                        Constants.redirectTo(context, HomePage());
+                        Navigator.pop(context);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             Constants.createSnackBar(

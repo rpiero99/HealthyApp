@@ -21,7 +21,14 @@ class GetPastiGiornalieriPage extends StatefulWidget {
 class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
   List<Pasto> allPastiOfDay = [];
   String searchString = "";
+  Pasto? pastoToView;
   TextEditingController dataPasti = TextEditingController();
+  TextEditingController calorieController = TextEditingController();
+  TextEditingController categoriaController = TextEditingController();
+  TextEditingController descrizionePastoController = TextEditingController();
+  TextEditingController nomePastoController = TextEditingController();
+  TextEditingController quantitaController = TextEditingController();
+  TextEditingController typeController = TextEditingController();
 
   @override
   void initState() {
@@ -40,23 +47,66 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
       appBar: makeTopAppBar(context, "Pasti Giornalieri", Constants.controller),
       body: SingleChildScrollView(
         child: Column(children: <Widget>[
-          makeInput(
-            label:
-                "Selezionare una data per vedere cos'hai mangiato quel giorno",
-            obscureText: false,
+          TextFormField(
+            readOnly: true,
             controller: dataPasti,
-            isDate: true,
-            context: context,
+            decoration: InputDecoration(
+              hintText: "",
+              filled: true,
+              icon: const Icon(Icons.calendar_today_outlined),
+              fillColor: Constants.backgroundButtonColor,
+              contentPadding:
+                  const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.circular(25.7),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.circular(25.7),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey[400]!)),
+            ),
+            onTap: () async {
+              DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  //DateTime.now() - not to allow to choose before today.
+                  lastDate: DateTime(2101));
+              if (pickedDate != null) {
+                String formattedDate =
+                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                setState(() {
+                  dataPasti.text =
+                      formattedDate; //set output date to TextField value.
+                });
+              }
+            },
+            onChanged: (value) {
+              setState(() {
+                dataPasti.text = value;
+              });
+            },
           ),
+          const SizedBox(height: 20,),
           TextField(
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
                 hintText: "cerca..",
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+                hintStyle:  const TextStyle(color: Colors.white),
+                focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(25.7),
                 ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(25.7),
+                ),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[400]!)),
               ),
               onChanged: (value) {
                 setState(() {
@@ -74,12 +124,11 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
 
   Widget showCards() {
     return FutureBuilder(
-      future:
-          Constants.controller.getPastiOfDay(DateTime.parse(dataPasti.text)),
+      future: Constants.controller.getPastiOfDay(DateTime.parse(dataPasti.text)),
       builder: (context, snapshot) {
         if ((snapshot.connectionState == ConnectionState.done)) {
-          var d = (snapshot.data as List<Pasto>);
-          if (d != null) {
+          var d = (snapshot.data as List<Pasto>).toList();
+          if (d != null && d.isNotEmpty) {
             return ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
@@ -87,7 +136,7 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
               itemBuilder: (context, index) {
                 if (searchString != "") {
                   return _buildItem(d[index].nome!.contains(searchString) ||
-                      d[index].descrizione!.contains(searchString)
+                          d[index].descrizione!.contains(searchString)
                       ? d[index]
                       : null);
                 }
@@ -95,11 +144,10 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
               },
             );
           }
-        }
-        else {
+        } else {
           return const Center(child: CircularProgressIndicator());
         }
-        return Divider();
+        return const Divider();
       },
     );
   }
@@ -115,7 +163,10 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
         child: SizedBox(
             width: 200,
             child: GestureDetector(
-              onTap: () => {},
+              onTap: () => {
+                pastoToView = obj,
+                openViewPasto(context),
+              },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -155,5 +206,83 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
       );
     }
     return const Divider();
+  }
+
+  void setFieldsPasto(){
+    calorieController.text = pastoToView!.calorie!.toString();
+    categoriaController.text = pastoToView!.categoria!.toString().split('.').last.toLowerCase();
+    descrizionePastoController.text = pastoToView!.descrizione!;
+    nomePastoController.text = pastoToView!.nome!;
+    quantitaController.text = pastoToView!.quantita.toString();
+    typeController.text = pastoToView!.type.toString();
+  }
+
+  Future openViewPasto(context) {
+    setFieldsPasto();
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        scrollable: true,
+        title: Text(pastoToView!.nome!),
+        content: Column(children: [
+          TextFormField(
+            readOnly: true,
+            controller: nomePastoController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Nome',
+            ),
+          ),
+          TextFormField(
+            readOnly: true,
+            controller: descrizionePastoController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Descrizione',
+            ),
+          ),
+          TextFormField(
+            readOnly: true,
+            controller: calorieController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Calorie',
+            ),
+          ),
+          TextFormField(
+            readOnly: true,
+            controller: categoriaController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Categoria',
+            ),
+          ),
+          TextFormField(
+            readOnly: true,
+            controller: quantitaController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Quantità (in gr)',
+            ),
+          ),
+          TextFormField(
+            readOnly: true,
+            controller: typeController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Tipo pasto',
+            ),
+          ),
+        ]),
+        actions: [
+          TextButton(
+            child: const Text("Chiudi"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
   }
 }

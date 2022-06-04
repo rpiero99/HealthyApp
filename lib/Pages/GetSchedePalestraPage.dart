@@ -45,14 +45,21 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
               child: Column(
                   children: <Widget>[
                       TextField(
+                          style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.search),
                             hintText: "cerca..",
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
+                            hintStyle:  const TextStyle(color: Colors.white),
+                            focusedBorder: OutlineInputBorder(
                               borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(25.7),
                             ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(25.7),
+                            ),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey[400]!)),
                           ),
                           onChanged: (value) {
                             setState(() {
@@ -134,18 +141,11 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
                           child: const Text('Modifica',
                               style: TextStyle(color: Colors.white)),
                           onPressed: () {
-
-
-                          }
-                          //     Constants.redirectTo(
-                          //         context,
-                          //         EditSchedaPalestraPage(
-                          //             id: obj.id!,
-                          //             nome: obj.nome!,
-                          //             descrizione: obj.descrizione!,
-                          //             dataInizio: obj.dataInizio!,
-                          //             dataFine: obj.dataFine!));
-                          // },
+                                Constants.redirectTo(
+                                    context,
+                                    EditSchedaPalestraPage(
+                                        schedaPalestra: obj));
+                            },
                         ),
                         TextButton(
                           child: const Text('Rimuovi',
@@ -182,25 +182,37 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
         scrollable: true,
         title: Text(widget.schedaToView!.nome!),
         content: Column(children: [
-          TextField(
+          TextFormField(
             readOnly: true,
             controller: widget.nomeController,
-            decoration: const InputDecoration(hintText: "Nome.."),
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Nome',
+            ),
           ),
-          TextField(
+          TextFormField(
             readOnly: true,
             controller: widget.descrizioneController,
-            decoration: const InputDecoration(hintText: "Descrizione.."),
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Descrizione',
+            ),
           ),
-          TextField(
+          TextFormField(
             readOnly: true,
             controller: widget.dataInizioController,
-            decoration: const InputDecoration(hintText: "Data inizio.."),
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Data inizio',
+            ),
           ),
-          TextField(
+          TextFormField(
             readOnly: true,
             controller: widget.dataFineController,
-            decoration: const InputDecoration(hintText: "Data fine.."),
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Data fine',
+            ),
           ),
         ]),
         actions: [
