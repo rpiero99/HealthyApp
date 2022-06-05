@@ -262,19 +262,18 @@ class _GetEserciziPage extends State<GetEserciziPage> {
                   numSerieEsercizioController.text.isNotEmpty &&
                   tempoRestEsercizioController.text.isNotEmpty &&
                   item != Constants.daysWeek[0]) {
-                Constants.controller.addEsercizio(
-                    widget.schedaToEdit!,
-                    Esercizio(
-                        descrizioneEsercizioController.text,
-                        nomeEsercizioController.text,
-                        int.parse(numSerieEsercizioController.text),
-                        int.parse(numRepEsercizioController.text),
-                        int.parse(tempoRestEsercizioController.text),
-                        Constants.convertDayWeekInInt(item!),
-                        ""));
-                ScaffoldMessenger.of(context).showSnackBar(
-                    Constants.createSnackBar('Esercizio creato correttamente.',
-                        Constants.successSnackBar));
+                setState(() {
+                  Constants.controller.createEsercizio(
+                    widget.schedaToEdit!, descrizioneEsercizioController.text,
+                      nomeEsercizioController.text,
+                      int.parse(numSerieEsercizioController.text),
+                      int.parse(numRepEsercizioController.text),
+                      int.parse(tempoRestEsercizioController.text),
+                      Constants.convertDayWeekInInt(item!));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      Constants.createSnackBar('Esercizio creato correttamente.',
+                          Constants.successSnackBar));
+                });
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                     Constants.createSnackBar(
@@ -303,7 +302,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
   void setFieldsEsercizio(){
     nomeEsercizioController.text = widget.esercizioToView!.nome!;
     descrizioneEsercizioController.text = widget.esercizioToView!.descrizione!;
-    dayEsercizioController.text = widget.esercizioToView!.day!.toString();
+    dayEsercizioController.text = Constants.convertDayWeekInString(widget.esercizioToView!.day!.toInt());
     numRepEsercizioController.text = widget.esercizioToView!.nRep!.toString();
     numSerieEsercizioController.text = widget.esercizioToView!.nSerie!.toString();
     tempoRestEsercizioController.text = widget.esercizioToView!.tempoRiposo!.toString();

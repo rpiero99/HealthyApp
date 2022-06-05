@@ -47,50 +47,46 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
       appBar: makeTopAppBar(context, "Pasti Giornalieri", Constants.controller),
       body: SingleChildScrollView(
         child: Column(children: <Widget>[
-          TextFormField(
-            readOnly: true,
-            controller: dataPasti,
-            decoration: InputDecoration(
-              hintText: "",
-              filled: true,
-              icon: const Icon(Icons.calendar_today_outlined),
-              fillColor: Constants.backgroundButtonColor,
-              contentPadding:
-                  const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(25.7),
+          Row(
+            children: [
+              Padding(
+                child: TextButton(
+                  onPressed: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        //DateTime.now() - not to allow to choose before today.
+                        lastDate: DateTime(2101));
+                    if (pickedDate != null) {
+                      String formattedDate =
+                      DateFormat('yyyy-MM-dd').format(pickedDate);
+                      setState(() {
+                        dataPasti.text =
+                            formattedDate; //set output date to TextField value.
+                      });
+                    }
+                  },
+                  child: const Icon(
+                    Icons.calendar_today_outlined,
+                    color: Colors.white70,
+                    size: 20,
+                  ),
+                ),
+                padding: EdgeInsets.only(right: 8, left: MediaQuery.of(context).size.width/4),
               ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(25.7),
+              Text(
+                  dataPasti.text,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 18,
+                    letterSpacing: -0.2,
+                    color: Constants.text,
+                  ),
               ),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[400]!)),
-            ),
-            onTap: () async {
-              DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  //DateTime.now() - not to allow to choose before today.
-                  lastDate: DateTime(2101));
-              if (pickedDate != null) {
-                String formattedDate =
-                    DateFormat('yyyy-MM-dd').format(pickedDate);
-                setState(() {
-                  dataPasti.text =
-                      formattedDate; //set output date to TextField value.
-                });
-              }
-            },
-            onChanged: (value) {
-              setState(() {
-                dataPasti.text = value;
-              });
-            },
+            ],
           ),
-          const SizedBox(height: 20,),
           TextField(
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(

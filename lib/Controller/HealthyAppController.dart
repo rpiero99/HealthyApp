@@ -313,9 +313,7 @@ class HealthyAppController{
       int day) {
     Esercizio esercizio = schedaPalestra.createEsercizio(
         descrizione, nome, numeroSerie, numeroRipetizioni, tempoRiposo, day);
-    schedaPalestra.addEsercizio(esercizio);
-    gestoreDatabase.esercizioRef.doc(esercizio.id).set(esercizio.toJson());
-    updateSchedaPalestra(schedaPalestra);
+    _addEsercizio(schedaPalestra, esercizio);
     return esercizio;
   }
 
@@ -325,12 +323,13 @@ class HealthyAppController{
     updateSchedaPalestra(schedaPalestra);
   }
 
-  addEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio) {
+  _addEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio) {
     if (schedaPalestra
         .getAllEsercizi()
         .where((element) => element.id == esercizio.id)
         .isEmpty) {
       schedaPalestra.addEsercizio(esercizio);
+      gestoreDatabase.esercizioRef.doc(esercizio.id).set(esercizio.toJson());
       updateSchedaPalestra(schedaPalestra);
     }
   }

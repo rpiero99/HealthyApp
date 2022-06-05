@@ -43,6 +43,25 @@ class Constants {
     return -1;
   }
 
+  static String convertDayWeekInString(int day){
+    if (day == 1) {
+      return "Lunedi";
+    } else if (day == 2) {
+      return "Martedi";
+    } else if (day == 3) {
+      return "Mercoledi";
+    } else if (day == 4) {
+      return "Giovedi";
+    } else if (day == 5) {
+      return "Venerdi";
+    } else if (day == 6) {
+      return "Sabato";
+    } else if (day == 7) {
+      return "Domenica";
+    }
+    return "Error..";
+  }
+
   static List<String> categoriePastoString(){
     List<String> categorie = [];
     categorie.add("Categoria pasto..");

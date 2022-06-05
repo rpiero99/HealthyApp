@@ -23,11 +23,6 @@ class EditSchedaPalestraPage extends StatefulWidget {
   EditSchedaPalestraPage(
       {Key? key,
         required SchedaPalestra schedaPalestra,
-      // required String id,
-      // required String nome,
-      // required String descrizione,
-      // required DateTime dataInizio,
-      // required DateTime dataFine
       })
       : super(key: key) {
     schedaToEdit = schedaPalestra;
