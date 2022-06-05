@@ -28,7 +28,7 @@ class GestoreSchedaPalestra {
 
   addSchedaPalestra(SchedaPalestra scheda) => _schede.add(scheda);
 
-  removeSchedaPalestra(SchedaPalestra scheda) => _schede.remove(scheda);
+  removeSchedaPalestra(SchedaPalestra scheda) => _schede.removeWhere((element) => element.id == scheda.id);
 
   List<CronometroProgrammabile> get cronometriProg => _cronometriProg;
 

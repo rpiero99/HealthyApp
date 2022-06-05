@@ -69,7 +69,7 @@ class PianoAlimentare {
     }
   }
 
-  void removePasto(Pasto? pasto) => _pasti.remove(pasto);
+  void removePasto(Pasto? pasto) => _pasti.removeWhere((element) => element?.id == pasto?.id);
 
   String? get id => _id;
 

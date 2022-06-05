@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'package:flutter/cupertino.dart';
+
 import '../Allenamento.dart';
 
 class GestoreAllenamento {
@@ -18,6 +20,6 @@ class GestoreAllenamento {
   void addAllenamento(Allenamento allenamento) => _allenamenti.add(allenamento);
 
   void removeAllenamento(Allenamento allenamento) =>
-      allenamenti.remove(allenamento);
+      allenamenti.removeWhere((element) => element.id == allenamento.id);
 
 }

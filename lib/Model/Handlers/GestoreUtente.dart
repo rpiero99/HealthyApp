@@ -36,7 +36,7 @@ class GestoreUtente {
 
   addPianoAlimentare(PianoAlimentare piano) => _piani.add(piano);
 
-  removePianoAlimentare(PianoAlimentare piano) => _piani.remove(piano);
+  removePianoAlimentare(PianoAlimentare piano) => _piani.removeWhere((element) => element.id == piano.id);
 
   List<Pasto> get pastiOfDay => _pastiOfDay;
 

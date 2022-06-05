@@ -70,7 +70,7 @@ class SchedaPalestra {
   }
 
   removeEsercizio(Esercizio? esercizio){
-    _esercizi?.remove(esercizio);
+    _esercizi?.removeWhere((element) => element.id == esercizio?.id);
   }
 
   updateEsercizio(Esercizio? esercizio){
