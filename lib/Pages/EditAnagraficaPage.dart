@@ -21,17 +21,21 @@ class EditAnagraficaPage extends StatefulWidget {
 
   EditAnagraficaPage({Key? key, required Utente utente}) : super(key: key) {
     utenteSelected = utente;
-    altezzaController.text = utente.anagraficaUtente!.altezzaUtente.toString();
-    nomeController.text = utente.anagraficaUtente!.nomeUtente!;
+    altezzaController.text = utenteSelected.anagraficaUtente!.altezzaUtente.toString();
+    nomeController.text = utenteSelected.anagraficaUtente!.nomeUtente!;
     dataNascitaController.text =
-        utente.anagraficaUtente!.dataNascitaUtente.toString();
-    pesoController.text = utente.anagraficaUtente!.pesoUtente.toString();
-    emailController.text = utente.email!;
-    sessoController.text = utente.anagraficaUtente!.sessoUtente!;
+        utenteSelected.anagraficaUtente!.dataNascitaUtente.toString();
+    pesoController.text = utenteSelected.anagraficaUtente!.pesoUtente.toString();
+    emailController.text = utenteSelected.email!;
+    sessoController.text = utenteSelected.anagraficaUtente!.sessoUtente!;
   }
 
   @override
   _EditAnagraficaPage createState() => _EditAnagraficaPage();
+
+  Future<void> getUtenteSelected(Future<Utente?> utente) async{
+    utenteSelected = (await utente)!;
+  }
 }
 
 class _EditAnagraficaPage extends State<EditAnagraficaPage> {
