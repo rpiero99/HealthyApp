@@ -73,9 +73,11 @@ class SchedaPalestra {
     _esercizi?.removeWhere((element) => element.id == esercizio?.id);
   }
 
-  updateEsercizio(Esercizio? esercizio){
-    removeEsercizio(getEsercizioFromName(esercizio?.nome));
-    addEsercizio(esercizio);
+  updateEsercizio(Esercizio? esercizio, String oldName){
+    if(getEsercizioFromName(oldName) != null) {
+      removeEsercizio(getEsercizioFromName(oldName));
+      addEsercizio(esercizio);
+    }
   }
 
   String? get id => _id;

@@ -101,7 +101,6 @@ class HealthyAppController{
     Allenamento newAllenamento = createAllenamento(descrizione, nome);
     stopwatch = StopWatchTimer(
       mode: StopWatchMode.countUp,
-      onChange: (value) => print('onChange $value'),
       onChangeRawSecond:
           getStatisticheAllenamentoSecondo(newAllenamento, utente),
       onChangeRawMinute: getStatisticheAllenamentoMinuto(newAllenamento),
@@ -317,9 +316,9 @@ class HealthyAppController{
     return esercizio;
   }
 
-  updateEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio) {
+  updateEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio, String oldName) {
     gestoreDatabase.esercizioRef.doc(esercizio.id).update(esercizio.toJson());
-    schedaPalestra.updateEsercizio(esercizio);
+    schedaPalestra.updateEsercizio(esercizio, oldName);
     updateSchedaPalestra(schedaPalestra);
   }
 

@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
-import 'package:healthy_app/Pages/EditSchedaPalestraPage.dart';
+import 'package:healthy_app/Pages/GetEserciziPage.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
 import 'package:intl/intl.dart';
 
@@ -29,10 +29,9 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
   String searchString = "";
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -42,40 +41,39 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
       appBar: makeTopAppBar(context, "Scheda Palestra", Constants.controller),
       body: SingleChildScrollView(
           child: SizedBox(
-              child: Column(
-                  children: <Widget>[
-                      TextField(
-                          style: const TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.search),
-                            hintText: "cerca..",
-                            hintStyle:  const TextStyle(color: Colors.white),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(25.7),
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.circular(25.7),
-                            ),
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey[400]!)),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              searchString = value;
-                            });
-                          }),
-                      const Divider(),
-                      Container(
-                        child: showCards(),
-                      )
-                    ]),
-            )),
+        child: Column(children: <Widget>[
+          TextField(
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                hintText: "cerca..",
+                hintStyle: const TextStyle(color: Colors.white),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(25.7),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(25.7),
+                ),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[400]!)),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchString = value;
+                });
+              }),
+          const Divider(),
+          Container(
+            child: showCards(),
+          )
+        ]),
+      )),
     );
   }
 
-  Future<List<SchedaPalestra>> getSchede() async{
+  Future<List<SchedaPalestra>> getSchede() async {
     return await Constants.controller.getSchedePalestra();
   }
 
@@ -95,8 +93,7 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
                         d[index].descrizione!.contains(searchString)
                     ? d[index]
                     : null);
-              }
-              else{
+              } else {
                 return _buildItem(d[index]);
               }
             },
@@ -121,7 +118,7 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
             child: GestureDetector(
               onTap: () => {
                 widget.schedaToView = obj,
-                openViewSchedaPalestra(context),
+                openViewSchedaPalestra(context, false),
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -141,11 +138,9 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
                           child: const Text('Modifica',
                               style: TextStyle(color: Colors.white)),
                           onPressed: () {
-                                Constants.redirectTo(
-                                    context,
-                                    EditSchedaPalestraPage(
-                                        schedaPalestra: obj));
-                            },
+                            widget.schedaToView = obj;
+                            openViewSchedaPalestra(context, true);
+                          },
                         ),
                         TextButton(
                           child: const Text('Rimuovi',
@@ -167,15 +162,17 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
     return const Divider();
   }
 
-  void setFieldsSchedaPalestra(){
+  void setFieldsSchedaPalestra() {
     widget.nomeController.text = widget.schedaToView!.nome!;
     widget.descrizioneController.text = widget.schedaToView!.descrizione!;
-    widget.dataInizioController.text = widget.schedaToView!.dataInizio!.toString();
+    widget.dataInizioController.text =
+        widget.schedaToView!.dataInizio!.toString();
     widget.dataFineController.text = widget.schedaToView!.dataFine!.toString();
   }
 
-  Future openViewSchedaPalestra(context) {
+  Future openViewSchedaPalestra(context, isEdit) {
     setFieldsSchedaPalestra();
+    String textEsercizi = isEdit ? "Modifica Esercizi" : "Visualizza Esercizi";
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -183,7 +180,7 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
         title: Text(widget.schedaToView!.nome!),
         content: Column(children: [
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: widget.nomeController,
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
@@ -191,7 +188,7 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
             ),
           ),
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: widget.descrizioneController,
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
@@ -205,6 +202,21 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
               border: UnderlineInputBorder(),
               labelText: 'Data inizio',
             ),
+            onTap: () async {
+              if (isEdit) {
+                DateTime? date = DateTime(DateTime.now().year);
+                FocusScope.of(context).requestFocus(FocusNode());
+
+                date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2100));
+
+                widget.dataInizioController.text = date.toString();
+                //  "${date?.day}-${date?.month}-${date?.year}";
+              }
+            },
           ),
           TextFormField(
             readOnly: true,
@@ -213,15 +225,69 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
               border: UnderlineInputBorder(),
               labelText: 'Data fine',
             ),
+            onTap: () async {
+              if (isEdit) {
+                DateTime? date = DateTime(DateTime.now().year);
+                FocusScope.of(context).requestFocus(FocusNode());
+
+                date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2100));
+
+                widget.dataFineController.text = date.toString();
+                // "${date?.day}-${date?.month}-${date?.year}";
+              }
+            },
           ),
         ]),
         actions: [
+          isEdit
+              ? TextButton(
+                  child: const Text("Modifica"),
+                  onPressed: () async {
+                    if (widget.nomeController.text.isNotEmpty &&
+                        widget.descrizioneController.text.isNotEmpty &&
+                        DateTime.parse(widget.dataFineController.text).isAfter(
+                            DateTime.parse(widget.dataInizioController.text))) {
+                      setState(() {
+                        widget.schedaToView?.nome = widget.nomeController.text;
+                        widget.schedaToView?.descrizione =
+                            widget.descrizioneController.text;
+                        widget.schedaToView?.dataInizio =
+                            DateTime.parse(widget.dataInizioController.text);
+                        widget.schedaToView?.dataFine =
+                            DateTime.parse(widget.dataFineController.text);
+                        Constants.controller
+                            .updateSchedaPalestra(widget.schedaToView!);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            Constants.createSnackBar(
+                                'Scheda modificata correttamente.',
+                                Constants.successSnackBar));
+                        Navigator.pop(context);
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          Constants.createSnackBar(
+                              'Inserire tutti i dati o controllare che la data di fine sia dopo la data di inizio.',
+                              Constants.errorSnackBar));
+                    }
+                  },
+                )
+              : TextButton(
+                  child: const Text("Chiudi"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
           TextButton(
-            child: const Text("Chiudi"),
+            child: Text(textEsercizi),
             onPressed: () {
-              Navigator.pop(context);
+              Constants.redirectTo(
+                  context, GetEserciziPage(scheda: widget.schedaToView!));
             },
-          )
+          ),
         ],
       ),
     );

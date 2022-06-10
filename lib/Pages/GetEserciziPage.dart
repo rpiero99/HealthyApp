@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healthy_app/Model/Esercizio.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
-import 'package:healthy_app/Pages/EditSchedaPalestraPage.dart';
 import 'package:intl/intl.dart';
 
 import '../Utils/Constants.dart';
@@ -73,10 +72,8 @@ class _GetEserciziPage extends State<GetEserciziPage> {
                       color: Constants.backgroundButtonColor,
                       textColor: Constants.textButtonColor,
                       press: () async {
-                        //      SchedaPalestra schedaToEdit = await Constants.controller.getSchedaPalestraById(widget.schedaToEdit!.id!);
+                        clearFieldsEsercizio();
                         return openAddEsercizioDialog(context);
-                        //clearFieldsEsercizio();
-                        //openAddEsercizioDialog(context);
                       },
                       key: GlobalKey(),
                     ),
@@ -129,7 +126,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
             child: GestureDetector(
               onTap: () => {
                 widget.esercizioToView = obj,
-                openViewEsercizio(context),
+                openViewEsercizio(context, false),
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -149,17 +146,9 @@ class _GetEserciziPage extends State<GetEserciziPage> {
                             child: const Text('Modifica',
                                 style: TextStyle(color: Colors.white)),
                             onPressed: () {
-                              //todo : pagina per modificare esercizio
+                              widget.esercizioToView = obj;
+                              openViewEsercizio(context, true);
                             }
-                            //   Constants.redirectTo(
-                            //       context,
-                            //       EditSchedaPalestraPage(
-                            //           id: obj.id!,
-                            //           nome: obj.nome!,
-                            //           descrizione: obj.descrizione!,
-                            //           dataInizio: obj.dataInizio!,
-                            //           dataFine: obj.dataFine!));
-                            // },
                             ),
                         TextButton(
                           child: const Text('Rimuovi',
@@ -308,7 +297,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
     tempoRestEsercizioController.text = widget.esercizioToView!.tempoRiposo!.toString();
   }
 
-  Future openViewEsercizio(context) {
+  Future openViewEsercizio(context, isEdit) {
     setFieldsEsercizio();
     return showDialog(
       context: context,
@@ -317,7 +306,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
         title: Text(widget.esercizioToView!.nome!),
         content: Column(children: [
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: nomeEsercizioController,
             decoration: const InputDecoration(
             border: UnderlineInputBorder(),
@@ -325,7 +314,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
             ),
           ),
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: descrizioneEsercizioController,
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
@@ -333,7 +322,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
             ),
           ),
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: dayEsercizioController,
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
@@ -341,24 +330,36 @@ class _GetEserciziPage extends State<GetEserciziPage> {
             ),
           ),
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: numRepEsercizioController,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
               labelText: 'Numero rep',
             ),
           ),
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: numSerieEsercizioController,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
               labelText: 'Numero serie',
             ),
           ),
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: tempoRestEsercizioController,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
               labelText: 'Tempo di riposo',
@@ -367,13 +368,47 @@ class _GetEserciziPage extends State<GetEserciziPage> {
 
         ]),
         actions: [
-          TextButton(
-            child: const Text("Chiudi"),
-            onPressed: () {
-              clearFieldsEsercizio();
-              Navigator.pop(context);
-            },
-          )
+          isEdit ?
+            TextButton(
+              child: const Text("Modifica"),
+              onPressed: () {
+                if (nomeEsercizioController.text.isNotEmpty &&
+                    descrizioneEsercizioController.text.isNotEmpty &&
+                    numRepEsercizioController.text.isNotEmpty &&
+                    numSerieEsercizioController.text.isNotEmpty &&
+                    tempoRestEsercizioController.text.isNotEmpty &&
+                    Constants.convertDayWeekInInt(dayEsercizioController.text) != -1) {
+                  setState(() {
+                    var oldName = widget.esercizioToView!.nome;
+                    widget.esercizioToView!.nome = nomeEsercizioController.text;
+                    widget.esercizioToView!.descrizione = descrizioneEsercizioController.text;
+                    widget.esercizioToView!.nRep = int.parse(numRepEsercizioController.text);
+                    widget.esercizioToView!.nSerie = int.parse(numSerieEsercizioController.text);
+                    widget.esercizioToView!.day = Constants.convertDayWeekInInt(dayEsercizioController.text);
+                    widget.esercizioToView!.tempoRiposo = int.parse(tempoRestEsercizioController.text);
+                    Constants.controller.updateEsercizio(widget.schedaToEdit!, widget.esercizioToView!, oldName!);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        Constants.createSnackBar('Esercizio creato correttamente.',
+                            Constants.successSnackBar));
+                  });
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      Constants.createSnackBar(
+                          'Esercizio non modificato. Uno o piu campi non validi.',
+                          Constants.errorSnackBar));
+                }
+                clearFieldsEsercizio();
+                Navigator.pop(context);
+              },
+            )
+          :
+            TextButton(
+              child: const Text("Chiudi"),
+              onPressed: () {
+                clearFieldsEsercizio();
+                Navigator.pop(context);
+              },
+            )
         ],
       ),
     );

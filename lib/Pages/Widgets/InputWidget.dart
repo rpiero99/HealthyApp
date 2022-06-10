@@ -53,7 +53,8 @@ Widget makeInput(
                   lastDate: DateTime(2101));
               if(pickedDate!=null) {
                 String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                controller?.text = formattedDate; //set output date to TextField value.
+               // var formate1 = "${pickedDate.day}-${pickedDate.month}-${pickedDate.year}";
+                controller?.text = formattedDate;
               }
 
             }

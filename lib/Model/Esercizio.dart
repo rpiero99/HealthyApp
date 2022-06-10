@@ -57,7 +57,7 @@ class Esercizio {
 
   String? get nome => _nome;
 
-  set nome(String? nome) => nome = nome;
+  set nome(String? nome) => _nome = nome;
 
   String? get descrizione => _descrizione;
 

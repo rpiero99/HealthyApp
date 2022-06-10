@@ -288,7 +288,8 @@ class AddPianoAlimentarePage extends StatelessWidget{
                   typeController.text.isNotEmpty &&
                   calorieController.text.isNotEmpty &&
                   categoriaComboItem != 'Categoria pasto..' &&
-                  giornoComboItem != Constants.daysWeek[0]) {
+                  giornoComboItem != Constants.daysWeek[0] &&
+                  pasti.where((element) => element.nome != nomePastoController.text).isEmpty) {
                 pasti.add(Pasto.pianoAlimentare(Constants.getCategoriaFromString(categoriaComboItem!),
                     int.parse(calorieController.text),
                     descrizionePastoController.text,
@@ -304,7 +305,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                     Constants.createSnackBar(
-                        'Pasto non creato. Uno o piu campi non validi.',
+                        'Pasto non creato. Uno o piu campi non validi. Il nome potrebbe già esistere.',
                         Constants.errorSnackBar));
               }
               clearFieldsPasto();

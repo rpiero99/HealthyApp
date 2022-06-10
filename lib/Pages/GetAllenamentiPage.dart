@@ -2,7 +2,6 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Model/Allenamento.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
-import 'package:healthy_app/Pages/EditSchedaPalestraPage.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
 import 'package:intl/intl.dart';
 

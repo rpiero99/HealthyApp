@@ -130,7 +130,8 @@ class _AddPastoGiornalieroPage extends State<AddPastoGiornaliero> {
                         widget.quantitaController.text.isNotEmpty &&
                         widget.typeController.text.isNotEmpty &&
                         widget.calorieController.text.isNotEmpty &&
-                        widget.categoriaComboItem != 'Categoria pasto..') {
+                        widget.categoriaComboItem != 'Categoria pasto..' &&
+                        Constants.controller.gestoreUtente.pastiOfDay.where((element) => element.nome == widget.nomePastoController.text).isEmpty) {
                       Constants.controller.createPastoOfDay(
                           Constants.getCategoriaFromString(
                               widget.categoriaComboItem!),
@@ -146,7 +147,7 @@ class _AddPastoGiornalieroPage extends State<AddPastoGiornaliero> {
                       Constants.redirectTo(context, HomePage());
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                          Constants.createSnackBar('Inserire tutti i dati.',
+                          Constants.createSnackBar('Inserire tutti i dati o controllare che il nome non sia già esistente.',
                               Constants.errorSnackBar));
                     }
                     widget.categoriaComboItem =

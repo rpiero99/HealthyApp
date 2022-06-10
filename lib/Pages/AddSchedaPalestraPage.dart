@@ -21,6 +21,7 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
 
   String? item = 'Giorno..';
   SchedaPalestra? schedaNew;
+  List<SchedaPalestra>? allSchede;
   List<Esercizio> esercizi = [];
 
   TextEditingController nomeController = TextEditingController();
@@ -35,6 +36,11 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
   TextEditingController numSerieEsercizioController = TextEditingController();
   TextEditingController tempoRestEsercizioController = TextEditingController();
 
+  @override
+  void initState() async {
+    super.initState();
+    allSchede = await Constants.controller.getSchedePalestra();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +111,8 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
                       if (nomeController.text.isNotEmpty &&
                           descrizioneController.text.isNotEmpty &&
                           DateTime.parse(dataFineController.text).isAfter(
-                              DateTime.parse(dataInizioController.text))) {
+                              DateTime.parse(dataInizioController.text)) &&
+                          allSchede!.where((element) => element.nome != nomeController.text).isEmpty) {
                         schedaNew = Constants.controller.createSchedaPalestra(
                             descrizioneController.text,
                             nomeController.text,
@@ -122,7 +129,7 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
                               element.nRep!.toInt(),
                               element.tempoRiposo!.toInt(),
                               element.day!.toInt());
-                          schedaNew?.updateEsercizio(element);
+                          schedaNew?.addEsercizio(element);
                         }
                         ScaffoldMessenger.of(context).showSnackBar(
                             Constants.createSnackBar(
@@ -243,7 +250,8 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
                   numRepEsercizioController.text.isNotEmpty &&
                   numSerieEsercizioController.text.isNotEmpty &&
                   tempoRestEsercizioController.text.isNotEmpty &&
-                  item != Constants.daysWeek[0]) {
+                  item != Constants.daysWeek[0] &&
+                  esercizi.where((element) => element.nome == nomeEsercizioController.text).isEmpty) {
                 esercizi.add(Esercizio(
                     descrizioneEsercizioController.text,
                     nomeEsercizioController.text,
@@ -258,7 +266,7 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                     Constants.createSnackBar(
-                        'Esercizio non creato. Uno o piu campi non validi.',
+                        'Esercizio non creato. Uno o piu campi non validi, o nome già esistente.',
                         Constants.errorSnackBar));
               }
               clearFieldsEsercizio();
