@@ -58,7 +58,7 @@ class LoginPage extends StatelessWidget {
                 height: 20,
               ),
               const Text(
-                "Welcome back ! Login with your credentials",
+                "Bentornato/a! Effettua il login con le tue credenziali",
                 style: TextStyle(
                   fontSize: 15,
                   color: Constants.text,

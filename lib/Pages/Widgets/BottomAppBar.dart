@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/Model/Utente.dart';
+import 'package:healthy_app/Pages/EditAnagraficaPage.dart';
+import 'package:healthy_app/Pages/HomePage.dart';
 import 'package:healthy_app/Utils/Constants.dart';
 
-Widget makeBottomAppBar(){
+Widget makeBottomAppBar(BuildContext context, Utente utente){
 
   return SizedBox(
     height: 55.0,
@@ -22,19 +25,27 @@ Widget makeBottomAppBar(){
         children: <Widget>[
           IconButton(
             icon: const Icon(Icons.home, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              Constants.redirectTo(context, HomePage());
+            },
           ),
           IconButton(
             icon: const Icon(Icons.blur_on, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              Constants.redirectTo(context, HomePage());
+            },
           ),
           IconButton(
             icon: const Icon(Icons.hotel, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              Constants.redirectTo(context, HomePage());
+            },
           ),
           IconButton(
             icon: const Icon(Icons.account_box, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              Constants.redirectTo(context, EditAnagraficaPage(utente: utente));
+            },
           )
         ],
       ),

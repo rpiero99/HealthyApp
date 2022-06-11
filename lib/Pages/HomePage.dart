@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
       future: getUtenteSelected(utenteFut),
       builder: (context, snapshot){
         if ((snapshot.connectionState == ConnectionState.done)) {
-            mapWidgets["edit anagrafica"] = EditAnagraficaPage(utente: utente!);
+  //        mapWidgets["edit anagrafica"] = EditAnagraficaPage(utente: utente!);
             return ListView.builder(
                 itemCount: mapWidgets.length,
                 itemBuilder: (context, index) {
