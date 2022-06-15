@@ -5,7 +5,6 @@ import 'package:healthy_app/Model/SchedaPalestra.dart';
 import 'package:intl/intl.dart';
 
 import '../Utils/Constants.dart';
-import 'EditPastoGiornalieroPage.dart';
 import 'HomePage.dart';
 import 'Widgets/InputWidget.dart';
 import 'Widgets/TopAppBar.dart';
@@ -21,6 +20,7 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
   List<Pasto> allPastiOfDay = [];
   String searchString = "";
   Pasto? pastoToView;
+  String categoriaItem = Constants.categoriePasto[0];
   TextEditingController dataPasti = TextEditingController();
   TextEditingController calorieController = TextEditingController();
   TextEditingController categoriaController = TextEditingController();
@@ -160,7 +160,7 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
             child: GestureDetector(
               onTap: () => {
                 pastoToView = obj,
-                openViewPasto(context),
+                openViewPasto(context, false),
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -179,8 +179,11 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
                           child: const Text('Modifica',
                               style: TextStyle(color: Colors.white)),
                           onPressed: () {
-                            Constants.redirectTo(
-                                context, EditPastoGiornalieroPage(pasto: obj));
+                            pastoToView = obj;
+                            openViewPasto(context, true);
+                            //todo -
+                            // Constants.redirectTo(
+                            //     context, EditPastoGiornalieroPage(pasto: obj));
                           },
                         ),
                         TextButton(
@@ -205,14 +208,14 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
 
   void setFieldsPasto(){
     calorieController.text = pastoToView!.calorie!.toString();
-    categoriaController.text = pastoToView!.categoria!.toString().split('.').last.toLowerCase();
+    categoriaController.text = pastoToView!.categoria!.name;
     descrizionePastoController.text = pastoToView!.descrizione!;
     nomePastoController.text = pastoToView!.nome!;
     quantitaController.text = pastoToView!.quantita.toString();
     typeController.text = pastoToView!.type.toString();
   }
 
-  Future openViewPasto(context) {
+  Future openViewPasto(context, isEdit) {
     setFieldsPasto();
     return showDialog(
       context: context,
@@ -221,7 +224,7 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
         title: Text(pastoToView!.nome!),
         content: Column(children: [
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: nomePastoController,
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
@@ -229,7 +232,7 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
             ),
           ),
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: descrizionePastoController,
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
@@ -237,23 +240,47 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
             ),
           ),
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: calorieController,
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
               labelText: 'Calorie',
             ),
           ),
-          TextFormField(
-            readOnly: true,
-            controller: categoriaController,
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Categoria',
-            ),
+          StatefulBuilder(
+            builder: (BuildContext context, StateSetter dropDownState) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Container(
+                  height: 40,
+                  width: 270,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(style: BorderStyle.solid, width: 0.80),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      items: Constants.categoriePasto
+                          .map((String item) => DropdownMenuItem<String>(
+                          child: Text(item), value: item))
+                          .toList(),
+                      onChanged: (value) {
+                        if(isEdit){
+                          dropDownState(() {
+                            categoriaItem = (value as String?)!;
+                            categoriaController.text = categoriaItem;
+                          });
+                        }
+                      },
+                      value: categoriaController.text,
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: quantitaController,
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
@@ -261,7 +288,7 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
             ),
           ),
           TextFormField(
-            readOnly: true,
+            readOnly: isEdit ? false : true,
             controller: typeController,
             decoration: const InputDecoration(
               border: UnderlineInputBorder(),
@@ -270,14 +297,62 @@ class _GetPastiGiornalieriPage extends State<GetPastiGiornalieriPage> {
           ),
         ]),
         actions: [
-          TextButton(
+          isEdit
+              ? TextButton(
+            child: const Text("Modifica"),
+            onPressed: () {
+              if (nomePastoController.text.isNotEmpty &&
+                  descrizionePastoController.text.isNotEmpty &&
+                  quantitaController.text.isNotEmpty &&
+                  categoriaItem != Constants.categoriePasto[0] &&
+                  calorieController.text.isNotEmpty &&
+                  typeController.text.isNotEmpty) {
+                setState(() {
+                  pastoToView!.nome =
+                      nomePastoController.text;
+                  pastoToView!.descrizione =
+                      descrizionePastoController.text;
+                  pastoToView!.quantita =
+                      int.parse(quantitaController.text);
+                  pastoToView!.calorie =
+                      int.parse(calorieController.text);
+                  pastoToView!.type = typeController.text;
+                  pastoToView!.categoria = Constants.getCategoriaFromString(categoriaController.text);
+                  Constants.controller.updatePasto(pastoToView!);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      Constants.createSnackBar(
+                          'Pasto modificato correttamente.',
+                          Constants.successSnackBar));
+                });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    Constants.createSnackBar(
+                        'Pasto non modificato. Uno o piu campi non validi.',
+                        Constants.errorSnackBar));
+              }
+              clearFieldsPasto();
+              Navigator.pop(context);
+            },
+          )
+              : TextButton(
             child: const Text("Chiudi"),
             onPressed: () {
+              clearFieldsPasto();
               Navigator.pop(context);
             },
           )
         ],
       ),
     );
+  }
+
+  void clearFieldsPasto() {
+    calorieController.clear();
+    categoriaController.clear();
+    descrizionePastoController.clear();
+    nomePastoController.clear();
+    quantitaController.clear();
+    typeController.clear();
+    categoriaItem = Constants.categoriePasto[0];
   }
 }
