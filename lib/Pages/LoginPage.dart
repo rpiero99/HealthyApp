@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:healthy_app/Model/Handlers/GestoreAuth.dart';
 import 'package:healthy_app/Pages/DashBoard.dart';
 import 'package:healthy_app/Pages/HomePage.dart';
+import 'package:healthy_app/Pages/MainPage.dart';
 import 'package:healthy_app/Pages/RegistrationPage.dart';
 import 'package:healthy_app/Pages/Widgets/TopAppBar.dart';
 import 'package:healthy_app/Utils/Constants.dart';
@@ -98,7 +99,7 @@ class LoginPage extends StatelessWidget {
                                 'Credenziali errate',
                                 Constants.errorSnackBar));
                       } else {
-                        Constants.redirectTo(context, HomePage());
+                        Constants.redirectTo(context, const MainPage());
                       }
                     }
                     else {

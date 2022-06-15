@@ -14,8 +14,10 @@ import 'package:healthy_app/Pages/EditAnagraficaPage.dart';
 import 'package:healthy_app/Pages/EditPianoAlimentarePage.dart';
 import 'package:healthy_app/Pages/GetAllenamentiPage.dart';
 import 'package:healthy_app/Pages/GetPastiGiornalieriPage.dart';
+import 'package:healthy_app/Pages/GetPianiAlimentari.dart';
 import 'package:healthy_app/Pages/GetSchedePalestraPage.dart';
 import 'package:healthy_app/Pages/AddPianoAlimentarePage.dart';
+import 'package:healthy_app/Pages/Widgets/BottomAppBar.dart';
 
 import '../Controller/HealthyAppController.dart';
 import '../Model/Allenamento.dart';
@@ -42,114 +44,33 @@ class _HomePageState extends State<HomePage> {
     initializeMap();
     return Scaffold(
       backgroundColor: Constants.backgroundColor,
-      appBar: makeTopAppBar(context, "Home Page", c),
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Constants.backgroundColor,
-        items: const <Widget>[
-          Icon(
-            Icons.home_outlined,
-            size: 30,
-            color: Constants.backgroundColor,
-          ),
-          Icon(Icons.run_circle_outlined,
-              size: 30, color: Constants.backgroundColor),
-          Icon(Icons.add_circle_outline_outlined,
-              size: 30, color: Constants.backgroundColor),
-          Icon(Icons.list_alt_outlined,
-              size: 30, color: Constants.backgroundColor),
-          Icon(Icons.account_circle_outlined,
-              size: 30, color: Constants.backgroundColor),
-        ],
-        onTap: (index) {
-          //Handle button tap
-        },
-      ),
+     // appBar: makeTopAppBar(context, "Home Page", c),
+    //  bottomNavigationBar: makeBottomAppBar(context)
+      //CurvedNavigationBar(
+      //   backgroundColor: Constants.backgroundColor,
+      //   items: const <Widget>[
+      //     Icon(
+      //       Icons.home_outlined,
+      //       size: 30,
+      //       color: Constants.backgroundColor,
+      //     ),
+      //     Icon(Icons.run_circle_outlined,
+      //         size: 30, color: Constants.backgroundColor),
+      //     Icon(Icons.add_circle_outline_outlined,
+      //         size: 30, color: Constants.backgroundColor),
+      //     Icon(Icons.list_alt_outlined,
+      //         size: 30, color: Constants.backgroundColor),
+      //     Icon(Icons.account_circle_outlined,
+      //         size: 30, color: Constants.backgroundColor),
+      //   ],
+      //   onTap: (index) {
+      //     //Handle button tap
+      //   },
+      // ),
+
       body: Container(
         child: showChildren(),
       )
- /*     Column(
-        children: [
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: () { Constants.redirectTo(context, );},
-            child: Text(''),
-          ),
-
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: () { Constants.redirectTo(context, );},
-            child: Text(''),
-          ),
-
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: () { Constants.redirectTo(context, GetSchedePalestraPage());},
-            child: Text('view schede palestra'),
-          ),
-
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: () { Constants.redirectTo(context, const AddSchedaPalestraPage());},
-            child: Text('add schede palestra'),
-          ),
-
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: () { Constants.redirectTo(context, AddPianoAlimentarePage());},
-            child: Text('add piano alimentare'),
-          ),
-
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: () { Constants.redirectTo(context, GetAllenamentiPage());},
-            child: Text('view allenamenti'),
-          ),
-
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: () { Constants.redirectTo(context, EditPianoAlimentarePage());},
-            child: Text('edit piano'),
-          ),
-
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: () { Constants.redirectTo(context, AddAllenamentoPage());},
-            child: Text('add allenamento'),
-          ),
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: () { Constants.redirectTo(context, AddPastoGiornaliero());},
-            child: Text('add pasto giornaliero'),
-          ),
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: () {
-              Constants.redirectTo(context, EditAnagraficaPage(utente: utente!,));},
-            child: Text('edit anagrafica'),
-          ),
-        ],
-      )*/
-
     );
   }
 
@@ -190,6 +111,7 @@ class _HomePageState extends State<HomePage> {
       'edit piano alimentare':EditPianoAlimentarePage(),
       'add allenamento':AddAllenamentoPage(),
       'add pasto giornaliero': AddPastoGiornaliero(),
+      'get piani alimentari': GetPianiAlimentari(),
 //      'edit anagrafica': EditAnagraficaPage(utente: utente!)
     };
   }

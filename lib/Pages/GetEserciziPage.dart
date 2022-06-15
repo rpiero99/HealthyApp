@@ -24,6 +24,7 @@ class GetEserciziPage extends StatefulWidget {
 }
 
 class _GetEserciziPage extends State<GetEserciziPage> {
+  List<Esercizio> allEsercizi = [];
   String? item = 'Giorno..';
   String searchString = "";
   TextEditingController dayEsercizioController = TextEditingController();
@@ -33,6 +34,15 @@ class _GetEserciziPage extends State<GetEserciziPage> {
   TextEditingController numSerieEsercizioController = TextEditingController();
   TextEditingController tempoRestEsercizioController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    getEsercizi();
+  }
+
+  Future<void> getEsercizi() async {
+    allEsercizi = await Constants.controller.getAllEserciziOf(widget.schedaToEdit!);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -250,7 +260,9 @@ class _GetEserciziPage extends State<GetEserciziPage> {
                   numRepEsercizioController.text.isNotEmpty &&
                   numSerieEsercizioController.text.isNotEmpty &&
                   tempoRestEsercizioController.text.isNotEmpty &&
-                  item != Constants.daysWeek[0]) {
+                  item != Constants.daysWeek[0] &&
+                  allEsercizi.where((element) => element.nome == nomeEsercizioController.text.trim().toLowerCase() &&
+                  element.day == Constants.convertDayWeekInInt(item!)).isEmpty) {
                 setState(() {
                   Constants.controller.createEsercizio(
                     widget.schedaToEdit!, descrizioneEsercizioController.text,

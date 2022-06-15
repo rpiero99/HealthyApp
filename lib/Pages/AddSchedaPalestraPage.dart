@@ -37,8 +37,12 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
   TextEditingController tempoRestEsercizioController = TextEditingController();
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
+    getAllSchede();
+  }
+
+  Future<void> getAllSchede() async {
     allSchede = await Constants.controller.getSchedePalestra();
   }
 
@@ -112,7 +116,7 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
                           descrizioneController.text.isNotEmpty &&
                           DateTime.parse(dataFineController.text).isAfter(
                               DateTime.parse(dataInizioController.text)) &&
-                          allSchede!.where((element) => element.nome != nomeController.text).isEmpty) {
+                          allSchede!.where((element) => element.nome?.trim() == nomeController.text.trim()).isEmpty) {
                         schedaNew = Constants.controller.createSchedaPalestra(
                             descrizioneController.text,
                             nomeController.text,

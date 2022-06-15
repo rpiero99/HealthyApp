@@ -14,7 +14,7 @@ class Pasto {
   // ora del giorno rappresenta l'orario esatto in cui hai aggiunto il pasto
   DateTime? _oraDelGiorno;
   // ora pasto rappresenta l'orario in cui consumare il pasto secondo il piano alimentare
-  num? _oraPasto;
+  String? _oraPasto;
   // giorno pasto indica il giorno settimanale in cui consumare il pasto secondo il piano alimentare
   num? _giornoPasto;
   bool? _isMangiato;
@@ -39,8 +39,8 @@ class Pasto {
     _id = json['id'] ?? "";
     _calorie = json['calorie'];
     _categoria = CategoriaPasto.values.firstWhere((e) => e.toString().contains(json['categoria']));
-    _oraPasto = _oraPasto != null ? json['oraPasto'] : 0;
-    _giornoPasto = _giornoPasto != null ? json['giorno'] : 0;
+    _oraPasto = json['oraPasto'] ?? "";
+    _giornoPasto = json['giorno'] ?? 0;
     _isMangiato = json['isMangiato'];
     _idPianoAlimentare = json['idPianoAlimentare'] ?? "";
     _descrizione = json['descrizione'] ?? "";
@@ -58,7 +58,7 @@ class Pasto {
     data['id'] = _id ?? "";
     data['calorie'] = _calorie?.toInt();
     data['categoria'] = _categoria.toString().split('.').last;
-    data['oraPasto'] = _oraPasto?.toInt();
+    data['oraPasto'] = _oraPasto ?? "";
     data['giorno'] = _giornoPasto?.toInt();
     data['isMangiato'] = _isMangiato;
     data['idPianoAlimentare'] = _idPianoAlimentare ?? "";
@@ -91,7 +91,7 @@ class Pasto {
 
   num? get quantita => _quantita;
 
-  num? get oraPasto => _oraPasto;
+  String? get oraPasto => _oraPasto;
 
   num? get giornoPasto => _giornoPasto;
 
@@ -99,7 +99,7 @@ class Pasto {
 
   set isMangiato(bool? isMangiato) => _isMangiato = isMangiato;
 
-  set oraPasto(num? ora) => _oraPasto = ora;
+  set oraPasto(String? ora) => _oraPasto = ora;
 
   set giornoPasto(num? giorno) => _giornoPasto = giorno;
 

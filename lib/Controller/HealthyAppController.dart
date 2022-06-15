@@ -388,7 +388,7 @@ class HealthyAppController{
   addPianoAlimentare(PianoAlimentare pianoAlimentare) {
     if (gestoreUtente.piani
         .where((element) => element.id == pianoAlimentare.id)
-        .isEmpty && pianoAlimentare.descrizione != "") {
+        .isEmpty && pianoAlimentare.nome != "") {
       gestoreUtente.addPianoAlimentare(pianoAlimentare);
     }
   }
@@ -409,7 +409,7 @@ class HealthyAppController{
       int calorie,
       String descrizione,
       String nome,
-      int oraPasto,
+      String oraPasto,
       int giornoPasto,
       int quantita,
       String type) {
@@ -445,6 +445,20 @@ class HealthyAppController{
       });
     }
     return gestoreUtente.pastiOfDay;
+  }
+
+  Future<List<Pasto?>> getPastiOfPianoAlimentare(PianoAlimentare pianoAlimentare) async {
+    QuerySnapshot querySnapshot = await gestoreDatabase.pastoRef.get();
+    final allPastiInDb = querySnapshot.docs.map((doc) => doc.id);
+    for (var item in allPastiInDb) {
+      await gestoreDatabase.pastoRef.doc(item).get().then((element) async {
+        Pasto pasto = Pasto.fromJson(element.data()!);
+        if(pasto.pianoAlimentare == pianoAlimentare.id){
+          pianoAlimentare.addPasto(pasto);
+        }
+      });
+    }
+    return pianoAlimentare.pasti;
   }
 
   addPasto(PianoAlimentare piano, Pasto pasto) {

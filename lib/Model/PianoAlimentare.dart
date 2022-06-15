@@ -9,6 +9,7 @@ import 'Utente.dart';
 
 class PianoAlimentare {
   String? _id;
+  String? _nome;
   List<Pasto?> _pasti = List.empty(growable: true);
   DateTime? _dataInizio;
   DateTime? _dataFine;
@@ -21,17 +22,18 @@ class PianoAlimentare {
 
   PianoAlimentare.fromJson(Map<String, dynamic> json) {
     _id = json['id'] ?? "";
+    _nome = json['nome'] ?? "";
     if (json['pasti'] != null) {
       _pasti = <Pasto>[];
-      json['pasti'].forEach((p) {
-        _pasti.add(Pasto.fromJson(p));
-      });
+      // json['pasti'].forEach((p) {
+      //   _pasti.add(Pasto.fromJson(p));
+      // });
     }
     if(json['dataInizio']!=null){
       Timestamp oraFi = json['dataInizio'];
       _dataInizio = oraFi.toDate();
     }
-    _descrizione = json['descrizione'];
+    _descrizione = json['descrizione'] ?? "";
     if(json['dataFine']!=null){
       Timestamp oraFi = json['dataFine'];
       _dataFine = oraFi.toDate();
@@ -44,6 +46,7 @@ class PianoAlimentare {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = _id ?? "";
+    data['nome'] = _nome ?? "";
     data['pasti'] = _pasti.map((v) => v?.toJson()).toList();
     if(_dataInizio != null){
       Timestamp timestamp = Timestamp.fromDate(_dataInizio!);
@@ -59,12 +62,12 @@ class PianoAlimentare {
   }
 
   Pasto createPasto(CategoriaPasto categoria, int calorie, String descrizione,
-      String nome, int oraPasto, int giornoPasto,  int quantita, String type) {
+      String nome, String oraPasto, int giornoPasto,  int quantita, String type) {
     return Pasto.pianoAlimentare(categoria, calorie, descrizione, nome, oraPasto, giornoPasto, quantita, type, id);
   }
 
   void addPasto(Pasto? pasto) {
-    if(pasto?.nome != "") {
+    if(pasto?.nome != "" && _pasti.where((element) => element!.nome == pasto!.nome).isEmpty) {
       _pasti.add(pasto);
     }
   }
@@ -74,6 +77,12 @@ class PianoAlimentare {
   String? get id => _id;
 
   set id(String? id) => _id = id;
+
+  String? get nome => _nome;
+
+  set nome(String? value) {
+    _nome = value;
+  }
 
   DateTime? get dataInizio => _dataInizio;
 

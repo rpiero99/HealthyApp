@@ -22,22 +22,31 @@ class Constants {
     'Sabato',
     'Domenica',
   ];
+  static List<String> categoriePasto = [
+    'Categoria Pasto..',
+    'COLAZIONE',
+    'SPUNTINO MATTINA',
+    'PRANZO',
+    'SPUNTINO POMERIGGIO',
+    'CENA',
+    'SPUNTINO PRE NANNA'
+  ];
 
 
   static int convertDayWeekInInt(String el) {
-    if (el.toLowerCase() == "Lunedi".toLowerCase()) {
+    if (el.toLowerCase().trim() == "Lunedi".toLowerCase().trim()) {
       return 1;
-    } else if (el.toLowerCase() == "Martedi".toLowerCase()) {
+    } else if (el.toLowerCase().trim() == "Martedi".toLowerCase().trim()) {
       return 2;
-    } else if (el.toLowerCase() == "Mercoledi".toLowerCase()) {
+    } else if (el.toLowerCase().trim() == "Mercoledi".toLowerCase().trim()) {
       return 3;
-    } else if (el.toLowerCase() == "Giovedi".toLowerCase()) {
+    } else if (el.toLowerCase().trim() == "Giovedi".toLowerCase().trim()) {
       return 4;
-    } else if (el.toLowerCase() == "Venerdi".toLowerCase()) {
+    } else if (el.toLowerCase().trim() == "Venerdi".toLowerCase().trim()) {
       return 5;
-    } else if (el.toLowerCase() == "Sabato".toLowerCase()) {
+    } else if (el.toLowerCase().trim() == "Sabato".toLowerCase().trim()) {
       return 6;
-    } else if (el.toLowerCase() == "Domenica".toLowerCase()) {
+    } else if (el.toLowerCase().trim() == "Domenica".toLowerCase().trim()) {
       return 7;
     }
     return -1;
@@ -63,10 +72,11 @@ class Constants {
   }
 
   static List<String> categoriePastoString(){
-    List<String> categorie = [];
-    categorie.add("Categoria pasto..");
-    for (var element in CategoriaPasto.values) {categorie.add(element.toString().split('.').last);}
-    return categorie;
+    for (var element in CategoriaPasto.values) {
+      if(!categoriePasto.contains(element.toString().split('.').last)) {
+        categoriePasto.add(element.toString().split('.').last);
+      }}
+    return categoriePasto;
   }
 
   static CategoriaPasto getCategoriaFromString(String pasto){
