@@ -123,7 +123,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
                                           element.calorie!.toInt(),
                                           element.descrizione!,
                                           element.nome!,
-                                          element.oraPasto!.toInt(),
+                                          element.oraPasto!,
                                           element.giornoPasto!.toInt(),
                                           element.quantita!.toInt(),
                                           element.type!);
@@ -294,11 +294,11 @@ class AddPianoAlimentarePage extends StatelessWidget{
                     int.parse(calorieController.text),
                     descrizionePastoController.text,
                     nomePastoController.text,
-                    int.parse(oraPastoController.text),
+                    oraPastoController.text,
                     Constants.convertDayWeekInInt(giornoComboItem!),
                     int.parse(quantitaController.text),
                     typeController.text,
-                    ""));
+                    pianoAlimentare?.id));
                 ScaffoldMessenger.of(context).showSnackBar(
                     Constants.createSnackBar('Pasto creato correttamente.',
                         Constants.successSnackBar));
