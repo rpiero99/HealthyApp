@@ -1,11 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Model/PianoAlimentare.dart';
-import 'package:healthy_app/Model/SchedaPalestra.dart';
-import 'package:healthy_app/Pages/GetEserciziPage.dart';
-import 'package:healthy_app/Pages/GetPastiGiornalieriPage.dart';
-import 'package:healthy_app/Utils/GeoLocService.dart';
-import 'package:intl/intl.dart';
 
 import '../Utils/Constants.dart';
 import 'GetPastiOfPianoAlimentarePage.dart';

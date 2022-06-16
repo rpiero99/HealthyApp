@@ -19,17 +19,11 @@ import 'Model/AnagraficaUtente.dart';
 import 'Model/Esercizio.dart';
 import 'Model/Pasto.dart';
 import 'Model/Utente.dart';
-import 'Pages/GetCronometroProgrammabilePage.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
-
-//  c.test();
-//  c.notificator?.init();
-//  c.notificator?.initDetails();
-//  Allenamento allenamento = await c.startAllenamento("namoo", "allenamento 1 - plaza");
 
 
 }
@@ -39,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Home Page',
+      title: 'Main Page',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

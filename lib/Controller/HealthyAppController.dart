@@ -143,6 +143,17 @@ class HealthyAppController{
 
   ///Metodi scheda palestra
 
+  Future<SchedaPalestra?> getCurrentSchedaPalestra()  async {
+    var schede = await getSchedePalestra();
+    for(var scheda in schede){
+      //todo- se si vuole contare la data dell'utente allora passarla come parametro e metterla al posto di datetime.now().
+      if(scheda.dataFine!.compareTo(DateTime.now()) >= 0){
+        return scheda;
+      }
+    }
+    return null;
+  }
+
   SchedaPalestra createSchedaPalestra(String descrizione, String nome,
       DateTime dataInizio, DateTime dataFine, idUtente) {
     SchedaPalestra scheda = gestoreSchedaPalestra.createSchedaPalestra(
@@ -422,8 +433,14 @@ class HealthyAppController{
   }
 
   Pasto createPastoOfDay(CategoriaPasto categoria, int calorie, String descrizione,
-      String nome, int quantita, String type) {
-    Pasto pasto = Pasto(categoria, calorie, descrizione, nome, quantita, type);
+      String nome, int quantita, String type, [DateTime? datePasto]) {
+    Pasto pasto;
+    if(datePasto != null) {
+      pasto = Pasto(categoria, calorie, descrizione, nome, quantita, type, datePasto);
+    }
+    else{
+      pasto = Pasto(categoria, calorie, descrizione, nome, quantita, type);
+    }
     gestoreUtente.addPastoOfDay(pasto);
     gestoreDatabase.pastoRef.doc(pasto.id).set(pasto.toJson());
     return pasto;
@@ -479,21 +496,6 @@ class HealthyAppController{
 
   updatePasto(Pasto pasto) {
     gestoreDatabase.pastoRef.doc(pasto.id).update(pasto.toJson());
-  }
-
-  PianoAlimentare getCurrentPianoAlimentareOf(Utente utente)  {
-    PianoAlimentare result = PianoAlimentare(null, null, "", utente);
-  /*  final querySnapshot = await gestoreDatabase.pianoAlimentareRef
-        .limit(1)
-        .where((element) =>
-             element.utente == utente &&
-                 element.dataFine!.isAfter(DateTime.now()))
-        .get();
-    for (var doc in querySnapshot.docs) {
-        await gestoreDatabase.pianoAlimentareRef.doc().get().then((element) async {
-          result = PianoAlimentare.fromJson(element.data()!);
-        });*/
-    return result;
   }
 
   ///metodi per gestire notifiche

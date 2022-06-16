@@ -99,7 +99,7 @@ class LoginPage extends StatelessWidget {
                                 'Credenziali errate',
                                 Constants.errorSnackBar));
                       } else {
-                        Constants.redirectTo(context, const MainPage());
+                        Constants.redirectTo(context, MainPage());
                       }
                     }
                     else {

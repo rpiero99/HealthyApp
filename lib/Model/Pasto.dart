@@ -23,10 +23,10 @@ class Pasto {
   String? _idPianoAlimentare;
 
   Pasto(this._categoria, this._calorie, this._descrizione, this._nome,
-      this._quantita, this._type){
+      this._quantita, this._type, [this._oraDelGiorno]){
     id = IdGenerator.generate();
     isMangiato = true;
-    oraDelGiorno = DateTime.now();
+    oraDelGiorno ??= DateTime.now();
   }
 
   Pasto.pianoAlimentare(this._categoria, this._calorie, this._descrizione, this._nome,

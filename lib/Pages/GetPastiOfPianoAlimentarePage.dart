@@ -315,7 +315,6 @@ class _GetPastiOfPianoAlimentarePage
           TextButton(
             child: const Text("Crea"),
             onPressed: () {
-              //todo problema qui
               if (nomePastoController.text.isNotEmpty &&
                   descrizionePastoController.text.isNotEmpty &&
                   quantitaController.text.isNotEmpty &&

@@ -8,7 +8,9 @@ import '../Utils/Constants.dart';
 import 'Widgets/TopAppBar.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+
+
+  MainPage({Key? key}) : super(key: key);
 
   @override
   _MainPage createState() => _MainPage();
@@ -16,6 +18,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPage extends State<MainPage> {
   int index = 1;
+
   final items = <Widget>[
     const Icon(
       Icons.home_outlined,
@@ -63,9 +66,9 @@ class _MainPage extends State<MainPage> {
         backgroundColor: Constants.backgroundColor,
         index: index,
         items: items,
-        onTap: (index) {
+        onTap: (ind) {
           setState(() {
-            this.index = index;
+            index = ind;
           });
           //Handle button tap
         },
