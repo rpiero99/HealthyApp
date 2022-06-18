@@ -94,23 +94,21 @@ class HealthyAppController {
     a.delete();
   }
 
-  Future<Allenamento> startAllenamento(
-      String descrizione, String nome, Utente utente) async {
+  Future<Allenamento> startAllenamento(Allenamento allenamento, Utente utente) async {
     geoLocService = GeoLocService();
     DateTime timeStamp = DateTime.now();
     geoLocService?.initPlatformState();
-    Allenamento newAllenamento = createAllenamento(descrizione, nome);
     stopwatch = StopWatchTimer(
       mode: StopWatchMode.countUp,
       onChangeRawSecond:
-          getStatisticheAllenamentoSecondo(newAllenamento, utente),
-      onChangeRawMinute: getStatisticheAllenamentoMinuto(newAllenamento),
+          getStatisticheAllenamentoSecondo(allenamento, utente),
+      onChangeRawMinute: getStatisticheAllenamentoMinuto(allenamento),
     );
 
     geoLocService?.startPosition = await geoLocService?.getCurrentPosition();
-    newAllenamento.oraInizio = timeStamp;
-    addAllenamento(newAllenamento);
-    return newAllenamento;
+    allenamento.oraInizio = timeStamp;
+    addAllenamento(allenamento);
+    return allenamento;
   }
 
   void stopAllenamento(Allenamento allenamento) async {

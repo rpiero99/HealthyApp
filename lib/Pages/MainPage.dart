@@ -40,7 +40,7 @@ class _MainPage extends State<MainPage> {
 
   final screens = [
     HomePage(),
-    const AddAllenamentoPage(),
+    AddAllenamentoPage(),
     const NewEntityScreen(),
     const GetEntityScreen(),
     //GetEntityScreen()
