@@ -2,7 +2,10 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Pages/AddAllenamentoPage.dart';
+import 'package:healthy_app/Pages/GetEserciziPage.dart';
 import 'package:healthy_app/Pages/HomePage.dart';
+import 'package:healthy_app/Pages/Screens/GetEntityScreen.dart';
+import 'package:healthy_app/Pages/Screens/NewEntityScreen.dart';
 
 import '../Utils/Constants.dart';
 import 'Widgets/TopAppBar.dart';
@@ -38,6 +41,9 @@ class _MainPage extends State<MainPage> {
   final screens = [
     HomePage(),
     const AddAllenamentoPage(),
+    const NewEntityScreen(),
+    const GetEntityScreen(),
+    //GetEntityScreen()
   ];
 
   String getNamePage() {
@@ -48,10 +54,10 @@ class _MainPage extends State<MainPage> {
       return "Allenamento";
     }
     if (index == 2) {
-      return "Home Page";
+      return "Nuovo";
     }
     if (index == 3) {
-      return "Home Page";
+      return "Lista";
     }
     return "";
   }

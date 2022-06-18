@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:healthy_app/Model/Handlers/GestoreAuth.dart';
-import 'package:healthy_app/Pages/DashBoard.dart';
-import 'package:healthy_app/Pages/HomePage.dart';
 import 'package:healthy_app/Pages/MainPage.dart';
 import 'package:healthy_app/Pages/RegistrationPage.dart';
-import 'package:healthy_app/Pages/Widgets/TopAppBar.dart';
 import 'package:healthy_app/Utils/Constants.dart';
 
-import '../Controller/HealthyAppController.dart';
 import 'Widgets/InputWidget.dart';
 
 class LoginPage extends StatelessWidget {
@@ -99,6 +94,7 @@ class LoginPage extends StatelessWidget {
                                 'Credenziali errate',
                                 Constants.errorSnackBar));
                       } else {
+                        //todo- aggiungere controllo se l'utente ha una scheda anagrifica o no. se non ce l ha far vedere AnagraficaScreen altrimenti MainPage.
                         Constants.redirectTo(context, MainPage());
                       }
                     }

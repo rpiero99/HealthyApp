@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:healthy_app/Pages/MainPage.dart';
 import 'package:healthy_app/Pages/Widgets/TopAppBar.dart';
 
 import '../Model/AnagraficaUtente.dart';
@@ -116,9 +117,9 @@ class AddAnagraficaPage extends StatelessWidget {
                           emailController.text);
                       ScaffoldMessenger.of(context).showSnackBar(
                           Constants.createSnackBar(
-                              'Utente creato correttamente.',
+                              'Scheda anagrafica creata correttamente.',
                               Constants.successSnackBar));
-                      Constants.redirectTo(context, HomePage());
+                      Constants.redirectTo(context, MainPage());
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                           Constants.createSnackBar(

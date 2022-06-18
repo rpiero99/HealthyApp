@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'Body.dart';
+import '../Body.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override

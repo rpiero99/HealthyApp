@@ -1,24 +1,8 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:healthy_app/Model/CategoriaPasto.dart';
-import 'package:healthy_app/Model/CronometroProgrammabile.dart';
-import 'package:healthy_app/Model/PianoAlimentare.dart';
-import 'package:healthy_app/Model/SchedaPalestra.dart';
-import 'package:healthy_app/Pages/DashBoard.dart';
-import 'package:healthy_app/Pages/LoginPage.dart';
-import 'package:healthy_app/Pages/RegistrationPage.dart';
-import 'package:healthy_app/Pages/WelcomeScreen.dart';
-
-import 'Controller/HealthyAppController.dart';
-import 'Model/Allenamento.dart';
-import 'Model/AnagraficaUtente.dart';
-import 'Model/Esercizio.dart';
-import 'Model/Pasto.dart';
-import 'Model/Utente.dart';
+import 'package:healthy_app/Pages/Screens/WelcomeScreen.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();

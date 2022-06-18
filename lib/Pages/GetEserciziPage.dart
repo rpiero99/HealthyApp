@@ -9,7 +9,7 @@ import '../Utils/Constants.dart';
 import 'HomePage.dart';
 import 'Widgets/RoundedButton.dart';
 import 'Widgets/TopAppBar.dart';
-
+//todo- da modificare e vedere come potrebbe servire.
 class GetEserciziPage extends StatefulWidget {
   SchedaPalestra? schedaToEdit;
   Esercizio? esercizioToView;
@@ -37,12 +37,12 @@ class _GetEserciziPage extends State<GetEserciziPage> {
   @override
   void initState() {
     super.initState();
-    getEsercizi();
+    //getEsercizi();
   }
 
-  Future<void> getEsercizi() async {
-    allEsercizi = await Constants.controller.getAllEserciziOf(widget.schedaToEdit!);
-  }
+  // Future<void> getEsercizi() async {
+  //   allEsercizi = await Constants.controller.getAllEserciziOfDayOf(widget.schedaToEdit!);
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +98,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
 
   Widget showCards() {
     return FutureBuilder(
-      future: Constants.controller.getAllEserciziOf(widget.schedaToEdit!),
+      future: Constants.controller.getAllEserciziOfDayOf(widget.schedaToEdit!, 1),
       builder: (context, snapshot) {
         if ((snapshot.connectionState == ConnectionState.done)) {
           var d = (snapshot.data as List<Esercizio>).toList();

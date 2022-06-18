@@ -364,7 +364,8 @@ class HealthyAppController {
     updateSchedaPalestra(schedaPalestra);
   }
 
-  Future<List<Esercizio>> getAllEserciziOf(SchedaPalestra? scheda) async {
+  Future<List<Esercizio>?> getAllEserciziOfDayOf(SchedaPalestra? scheda, int day) async {
+    scheda?.getEserciziFromDay(day)?.clear();
     QuerySnapshot querySnapshot = await gestoreDatabase.esercizioRef.get();
     final schedaPalestra = await getSchedaPalestraById(scheda!.id!);
     final allEserciziInDB = querySnapshot.docs.map((doc) => doc.id);
@@ -374,7 +375,7 @@ class HealthyAppController {
         schedaPalestra.getAllEsercizi().add(es);
       }
     }
-    return schedaPalestra.getAllEsercizi();
+    return schedaPalestra.getEserciziFromDay(day);
   }
 
   // Future<List<Esercizio>> getAllEserciziOfSchedaPalestra(DateTime date) async {

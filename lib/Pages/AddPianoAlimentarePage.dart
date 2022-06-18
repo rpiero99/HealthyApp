@@ -47,7 +47,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                         const Text(
-                          "Nuovo Piano Alimentare",
+                          "Crea Piano Alimentare",
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:healthy_app/Controller/HealthyAppController.dart';
 import 'package:healthy_app/Pages/HomePage.dart';
 import 'package:healthy_app/Pages/MainPage.dart';
-import 'package:healthy_app/Pages/WelcomeScreen.dart';
+import 'package:healthy_app/Pages/Screens/WelcomeScreen.dart';
 
 import '../../Utils/Constants.dart';
 

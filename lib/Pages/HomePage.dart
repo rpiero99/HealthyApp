@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   Pasto? pastoToView;
   Esercizio? esercizioToView;
   String? categoriaItem = Constants.categoriePasto[0];
-  TextEditingController dataPasti = TextEditingController();
+  TextEditingController data = TextEditingController();
   TextEditingController calorieController = TextEditingController();
   TextEditingController categoriaController = TextEditingController();
   TextEditingController descrizionePastoController = TextEditingController();
@@ -44,16 +44,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    if(dataPasti.text.isEmpty){
+    if(data.text.isEmpty){
       DateTime now = DateTime.now();
       var formatter = DateFormat('yyyy-MM-dd');
       String formattedDate = formatter.format(now);
-      dataPasti.text = formattedDate;
+      data.text = formattedDate;
     }
-    Future.delayed(Duration.zero,() async {
-      await getCurrentScheda();
+    getCurrentScheda().then((val) {
+      setState(() {
+        currentScheda = val;
+      });
     });
-
     super.initState();
   }
 
@@ -65,8 +66,8 @@ class _HomePageState extends State<HomePage> {
   //   utente = await utenteFuture;
   // }
 
-  Future<void> getCurrentScheda() async {
-    currentScheda = await Constants.controller.getCurrentSchedaPalestra(DateTime.parse(dataPasti.text));
+  Future<SchedaPalestra?> getCurrentScheda() async {
+    return await Constants.controller.getCurrentSchedaPalestra(DateTime.parse(data.text));
   }
 
   // Map<String, Widget> mapWidgets = <String, Widget>{};
@@ -93,11 +94,14 @@ class _HomePageState extends State<HomePage> {
                       if (pickedDate != null) {
                         String formattedDate =
                             DateFormat('yyyy-MM-dd').format(pickedDate);
-                        setState(() {
-                          //todo - aggiungere set della data giorno dell esercizio della scheda corrente.
-                          dataPasti.text =
+                        setState(()  {
+                          data.text =
                               formattedDate;
-                          getCurrentScheda();
+                          getCurrentScheda().then((val) {
+                            setState(() {
+                              currentScheda = val;
+                            });
+                          });
                         });
                       }
                     },
@@ -111,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                       right: 8, left: MediaQuery.of(context).size.width / 4),
                 ),
                 Text(
-                  dataPasti.text,
+                  data.text,
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                     fontWeight: FontWeight.normal,
@@ -144,7 +148,6 @@ class _HomePageState extends State<HomePage> {
                     searchString = value;
                   });
                 }),
-            const Divider(),
             // // Row(
             // //   children: [
             // //     const Padding(padding: EdgeInsets.only(left: 14)),
@@ -210,7 +213,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            //todo -
             Row(
               children: [
                 SizedBox(
@@ -259,7 +261,7 @@ class _HomePageState extends State<HomePage> {
   Widget showCardsPasti() {
     return FutureBuilder(
       future:
-          Constants.controller.getPastiOfDay(DateTime.parse(dataPasti.text)),
+          Constants.controller.getPastiOfDay(DateTime.parse(data.text)),
       builder: (context, snapshot) {
         if ((snapshot.connectionState == ConnectionState.done)) {
           var d = (snapshot.data as List<Pasto>).toList();
@@ -291,8 +293,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget showCardsEsercizi() {
-    return FutureBuilder(
-      future: Constants.controller.getAllEserciziOf(currentScheda!),
+    if(currentScheda != null) {
+      return FutureBuilder(
+      future: Constants.controller.getAllEserciziOfDayOf(currentScheda!, DateTime.parse(data.text).weekday),
       builder: (context, snapshot) {
         if ((snapshot.connectionState == ConnectionState.done)) {
           var d = (snapshot.data as List<Esercizio>).toList();
@@ -321,6 +324,8 @@ class _HomePageState extends State<HomePage> {
         return const Divider();
       },
     );
+    }
+    return const SizedBox();
   }
 
   Widget _buildItem(Object? obj) {
@@ -353,9 +358,9 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               ListTile(
                 leading: const Icon(Icons.fastfood_outlined, size: 100),
-                title: Text(flagPasto ? pastoToView!.nome! : esercizioToView!.nome!, //todo - aggiungere il nome dell'esercizio
+                title: Text(flagPasto ? pastoToView!.nome! : esercizioToView!.nome!,
                     style: const TextStyle(color: Colors.white)),
-                subtitle: Text(flagPasto ? pastoToView!.descrizione! : esercizioToView!.descrizione!, //todo - aggiungere la descrizione dell'esercizio
+                subtitle: Text(flagPasto ? pastoToView!.descrizione! : esercizioToView!.descrizione!,
                     style: const TextStyle(color: Colors.white)),
               ),
               ButtonTheme(
@@ -652,7 +657,7 @@ class _HomePageState extends State<HomePage> {
                       nomePastoController.text,
                       int.parse(quantitaController.text),
                       typeController.text,
-                      DateTime.parse(dataPasti.text));
+                      DateTime.parse(data.text));
                   ScaffoldMessenger.of(context).showSnackBar(
                       Constants.createSnackBar('Pasto creato correttamente.',
                           Constants.successSnackBar));
