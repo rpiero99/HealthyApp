@@ -29,14 +29,32 @@ class _HomePageState extends State<HomePage> {
   TextEditingController typeController = TextEditingController();
   SchedaPalestra? currentScheda;
 
+  String? item = 'Giorno..';
+  TextEditingController dayEsercizioController = TextEditingController();
+  TextEditingController descrizioneEsercizioController = TextEditingController();
+  TextEditingController nomeEsercizioController = TextEditingController();
+  TextEditingController numRepEsercizioController = TextEditingController();
+  TextEditingController numSerieEsercizioController = TextEditingController();
+  TextEditingController tempoRestEsercizioController = TextEditingController();
+
+
+  //TextEditingController calorieDelGiornoController = TextEditingController();
+
+  //todo aggiungere text box con calorie del giorno.
+
   @override
   void initState() {
+    if(dataPasti.text.isEmpty){
+      DateTime now = DateTime.now();
+      var formatter = DateFormat('yyyy-MM-dd');
+      String formattedDate = formatter.format(now);
+      dataPasti.text = formattedDate;
+    }
+    Future.delayed(Duration.zero,() async {
+      await getCurrentScheda();
+    });
+
     super.initState();
-    DateTime now = DateTime.now();
-    var formatter = DateFormat('yyyy-MM-dd');
-    String formattedDate = formatter.format(now);
-    dataPasti.text = formattedDate;
-    getCurrentScheda();
   }
 
   // Future<Utente?> utenteFut = Constants.controller
@@ -48,7 +66,7 @@ class _HomePageState extends State<HomePage> {
   // }
 
   Future<void> getCurrentScheda() async {
-    currentScheda = await Constants.controller.getCurrentSchedaPalestra();
+    currentScheda = await Constants.controller.getCurrentSchedaPalestra(DateTime.parse(dataPasti.text));
   }
 
   // Map<String, Widget> mapWidgets = <String, Widget>{};
@@ -78,7 +96,8 @@ class _HomePageState extends State<HomePage> {
                         setState(() {
                           //todo - aggiungere set della data giorno dell esercizio della scheda corrente.
                           dataPasti.text =
-                              formattedDate; //set output date to TextField value.
+                              formattedDate;
+                          getCurrentScheda();
                         });
                       }
                     },
@@ -103,7 +122,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            //todo - cerca solo per pasto. aggiungere la ricerca per esercizi.
             TextField(
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
@@ -126,6 +144,22 @@ class _HomePageState extends State<HomePage> {
                     searchString = value;
                   });
                 }),
+            const Divider(),
+            // // Row(
+            // //   children: [
+            // //     const Padding(padding: EdgeInsets.only(left: 14)),
+            // //     Text(
+            // //       "Calorie del giorno: kcal " + calorieDelGiornoController.text,
+            // //       textAlign: TextAlign.left,
+            // //       style: const TextStyle(
+            // //         fontWeight: FontWeight.bold,
+            // //         fontSize: 18,
+            // //         letterSpacing: -0.2,
+            // //         color: Constants.text,
+            // //       ),
+            // //     ),
+            // //   ],
+            // ),
             const Divider(),
             Row(
               children: const [
@@ -176,6 +210,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+            //todo -
             Row(
               children: [
                 SizedBox(
@@ -310,7 +345,7 @@ class _HomePageState extends State<HomePage> {
               {
                 flagPasto = false,
                 esercizioToView = obj,
-                //todo openViewEsercizio(context, false);
+                openViewEsercizio(context, false),
               }
           },
           child: Column(
@@ -318,9 +353,9 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               ListTile(
                 leading: const Icon(Icons.fastfood_outlined, size: 100),
-                title: Text(flagPasto ? pastoToView!.nome! : "", //todo - aggiungere il nome dell'esercizio
+                title: Text(flagPasto ? pastoToView!.nome! : esercizioToView!.nome!, //todo - aggiungere il nome dell'esercizio
                     style: const TextStyle(color: Colors.white)),
-                subtitle: Text(flagPasto ? pastoToView!.descrizione! : "", //todo - aggiungere la descrizione dell'esercizio
+                subtitle: Text(flagPasto ? pastoToView!.descrizione! : esercizioToView!.descrizione!, //todo - aggiungere la descrizione dell'esercizio
                     style: const TextStyle(color: Colors.white)),
               ),
               ButtonTheme(
@@ -333,7 +368,7 @@ class _HomePageState extends State<HomePage> {
                         if (flagPasto) {
                           openViewPasto(context, true);
                         } else {
-                          //todo openViewEsercizio(context, true);
+                          openViewEsercizio(context, true);
                         }
                       },
                     ),
@@ -635,6 +670,141 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  openViewEsercizio(BuildContext context, bool isEdit) {
+    setFieldsEsercizio();
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        scrollable: true,
+        title: Text(esercizioToView!.nome!),
+        content: Column(children: [
+          TextFormField(
+            readOnly: isEdit ? false : true,
+            controller: nomeEsercizioController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Nome',
+            ),
+          ),
+          TextFormField(
+            readOnly: isEdit ? false : true,
+            controller: descrizioneEsercizioController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Descrizione',
+            ),
+          ),
+          TextFormField(
+            readOnly: isEdit ? false : true,
+            controller: dayEsercizioController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Giorno',
+            ),
+          ),
+          TextFormField(
+            readOnly: isEdit ? false : true,
+            controller: numRepEsercizioController,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Numero rep',
+            ),
+          ),
+          TextFormField(
+            readOnly: isEdit ? false : true,
+            controller: numSerieEsercizioController,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Numero serie',
+            ),
+          ),
+          TextFormField(
+            readOnly: isEdit ? false : true,
+            controller: tempoRestEsercizioController,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Tempo di riposo',
+            ),
+          ),
+
+        ]),
+        actions: [
+          isEdit ?
+          TextButton(
+            child: const Text("Modifica"),
+            onPressed: () {
+              if (nomeEsercizioController.text.isNotEmpty &&
+                  descrizioneEsercizioController.text.isNotEmpty &&
+                  numRepEsercizioController.text.isNotEmpty &&
+                  numSerieEsercizioController.text.isNotEmpty &&
+                  tempoRestEsercizioController.text.isNotEmpty &&
+                  Constants.convertDayWeekInInt(dayEsercizioController.text) != -1) {
+                setState(() {
+                  var oldName = esercizioToView!.nome;
+                  esercizioToView!.nome = nomeEsercizioController.text;
+                  esercizioToView!.descrizione = descrizioneEsercizioController.text;
+                  esercizioToView!.nRep = int.parse(numRepEsercizioController.text);
+                  esercizioToView!.nSerie = int.parse(numSerieEsercizioController.text);
+                  esercizioToView!.day = Constants.convertDayWeekInInt(dayEsercizioController.text);
+                  esercizioToView!.tempoRiposo = int.parse(tempoRestEsercizioController.text);
+                  Constants.controller.updateEsercizio(currentScheda!, esercizioToView!, oldName!);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      Constants.createSnackBar('Esercizio creato correttamente.',
+                          Constants.successSnackBar));
+                });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    Constants.createSnackBar(
+                        'Esercizio non modificato. Uno o piu campi non validi.',
+                        Constants.errorSnackBar));
+              }
+              clearFieldsEsercizio();
+              Navigator.pop(context);
+            },
+          )
+              :
+          TextButton(
+            child: const Text("Chiudi"),
+            onPressed: () {
+              clearFieldsEsercizio();
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+  }
+  void setFieldsEsercizio(){
+    nomeEsercizioController.text = esercizioToView!.nome!;
+    descrizioneEsercizioController.text = esercizioToView!.descrizione!;
+    dayEsercizioController.text = Constants.convertDayWeekInString(esercizioToView!.day!.toInt());
+    numRepEsercizioController.text = esercizioToView!.nRep!.toString();
+    numSerieEsercizioController.text = esercizioToView!.nSerie!.toString();
+    tempoRestEsercizioController.text = esercizioToView!.tempoRiposo!.toString();
+  }
+
+  void clearFieldsEsercizio() {
+    nomeEsercizioController.clear();
+    descrizioneEsercizioController.clear();
+    dayEsercizioController.clear();
+    numRepEsercizioController.clear();
+    numSerieEsercizioController.clear();
+    tempoRestEsercizioController.clear();
+    item = Constants.daysWeek[0];
   }
 
 //   Widget showChildren() {

@@ -17,7 +17,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPage extends State<MainPage> {
-  int index = 1;
+  int index = 0;
 
   final items = <Widget>[
     const Icon(

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:healthy_app/Model/CategoriaPasto.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
@@ -24,7 +25,7 @@ import '../Model/PianoAlimentare.dart';
 import '../Model/SchedaPalestra.dart';
 import '../Model/Utente.dart';
 
-class HealthyAppController{
+class HealthyAppController {
   GestoreAllenamento gestoreAllenamento = GestoreAllenamento.instance;
   GestoreDatabase gestoreDatabase = GestoreDatabase.instance;
   GestoreAuth gestoreAuth = GestoreAuth.instance;
@@ -143,11 +144,11 @@ class HealthyAppController{
 
   ///Metodi scheda palestra
 
-  Future<SchedaPalestra?> getCurrentSchedaPalestra()  async {
+  Future<SchedaPalestra?> getCurrentSchedaPalestra(DateTime date) async {
     var schede = await getSchedePalestra();
-    for(var scheda in schede){
-      //todo- se si vuole contare la data dell'utente allora passarla come parametro e metterla al posto di datetime.now().
-      if(scheda.dataFine!.compareTo(DateTime.now()) >= 0){
+    for (var scheda in schede) {
+      if (scheda.dataFine!.compareTo(date) >= 0 &&
+          scheda.dataInizio!.compareTo(date) <= 0) {
         return scheda;
       }
     }
@@ -190,8 +191,9 @@ class HealthyAppController{
 
   addSchedaPalestra(SchedaPalestra scheda) {
     if (gestoreSchedaPalestra.schedePalestra
-        .where((element) => element.id == scheda.id)
-        .isEmpty && scheda.nome != "") {
+            .where((element) => element.id == scheda.id)
+            .isEmpty &&
+        scheda.nome != "") {
       gestoreSchedaPalestra.addSchedaPalestra(scheda);
     }
   }
@@ -236,8 +238,9 @@ class HealthyAppController{
   void addCronometroProgrammabile(
       CronometroProgrammabile cronometroProgrammabile) {
     if (gestoreSchedaPalestra.cronometriProg
-        .where((element) => element.id == cronometroProgrammabile.id)
-        .isEmpty && cronometroProgrammabile.id != "") {
+            .where((element) => element.id == cronometroProgrammabile.id)
+            .isEmpty &&
+        cronometroProgrammabile.id != "") {
       gestoreSchedaPalestra.addCronProg(cronometroProgrammabile);
     }
   }
@@ -280,10 +283,20 @@ class HealthyAppController{
 
   void addUtente(Utente item) {
     if (gestoreUtente.utenti
-        .where((element) => element.id == item.id)
-        .isEmpty && item.email != "") {
+            .where((element) => element.id == item.id)
+            .isEmpty &&
+        item.email != "") {
       gestoreUtente.addUtente(item);
     }
+  }
+
+  Future<String> getCalorieOfDay(DateTime date) async {
+    num sum = 0;
+    var pastiDelGiorno = await getPastiOfDay(date);
+    for (var pasto in pastiDelGiorno) {
+      sum += pasto.calorie!;
+    }
+    return sum.toString();
   }
 
   ///Metodi anagrafica utente
@@ -327,7 +340,8 @@ class HealthyAppController{
     return esercizio;
   }
 
-  updateEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio, String oldName) {
+  updateEsercizio(
+      SchedaPalestra schedaPalestra, Esercizio esercizio, String oldName) {
     gestoreDatabase.esercizioRef.doc(esercizio.id).update(esercizio.toJson());
     schedaPalestra.updateEsercizio(esercizio, oldName);
     updateSchedaPalestra(schedaPalestra);
@@ -350,9 +364,9 @@ class HealthyAppController{
     updateSchedaPalestra(schedaPalestra);
   }
 
-  Future<List<Esercizio>> getAllEserciziOf(SchedaPalestra scheda) async {
+  Future<List<Esercizio>> getAllEserciziOf(SchedaPalestra? scheda) async {
     QuerySnapshot querySnapshot = await gestoreDatabase.esercizioRef.get();
-    final schedaPalestra = await getSchedaPalestraById(scheda.id!);
+    final schedaPalestra = await getSchedaPalestraById(scheda!.id!);
     final allEserciziInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var idEs in allEserciziInDB) {
       var es = await getEsercizioById(idEs);
@@ -363,13 +377,21 @@ class HealthyAppController{
     return schedaPalestra.getAllEsercizi();
   }
 
+  // Future<List<Esercizio>> getAllEserciziOfSchedaPalestra(DateTime date) async {
+  //   await getCurrentSchedaPalestra(date);
+  // }
+
   ///Metodi piano alimentare
 
   Future<List<PianoAlimentare>> getPianiAlimentari() async {
-    QuerySnapshot querySnapshot = await gestoreDatabase.pianoAlimentareRef.get();
+    QuerySnapshot querySnapshot =
+        await gestoreDatabase.pianoAlimentareRef.get();
     final allUsersInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var item in allUsersInDB) {
-      await gestoreDatabase.pianoAlimentareRef.doc(item).get().then((element) async {
+      await gestoreDatabase.pianoAlimentareRef
+          .doc(item)
+          .get()
+          .then((element) async {
         addPianoAlimentare(PianoAlimentare.fromJson(element.data()!));
       });
     }
@@ -398,8 +420,9 @@ class HealthyAppController{
 
   addPianoAlimentare(PianoAlimentare pianoAlimentare) {
     if (gestoreUtente.piani
-        .where((element) => element.id == pianoAlimentare.id)
-        .isEmpty && pianoAlimentare.nome != "") {
+            .where((element) => element.id == pianoAlimentare.id)
+            .isEmpty &&
+        pianoAlimentare.nome != "") {
       gestoreUtente.addPianoAlimentare(pianoAlimentare);
     }
   }
@@ -432,13 +455,14 @@ class HealthyAppController{
     return pasto;
   }
 
-  Pasto createPastoOfDay(CategoriaPasto categoria, int calorie, String descrizione,
-      String nome, int quantita, String type, [DateTime? datePasto]) {
+  Pasto createPastoOfDay(CategoriaPasto categoria, int calorie,
+      String descrizione, String nome, int quantita, String type,
+      [DateTime? datePasto]) {
     Pasto pasto;
-    if(datePasto != null) {
-      pasto = Pasto(categoria, calorie, descrizione, nome, quantita, type, datePasto);
-    }
-    else{
+    if (datePasto != null) {
+      pasto = Pasto(
+          categoria, calorie, descrizione, nome, quantita, type, datePasto);
+    } else {
       pasto = Pasto(categoria, calorie, descrizione, nome, quantita, type);
     }
     gestoreUtente.addPastoOfDay(pasto);
@@ -464,13 +488,14 @@ class HealthyAppController{
     return gestoreUtente.pastiOfDay;
   }
 
-  Future<List<Pasto?>> getPastiOfPianoAlimentare(PianoAlimentare pianoAlimentare) async {
+  Future<List<Pasto?>> getPastiOfPianoAlimentare(
+      PianoAlimentare pianoAlimentare) async {
     QuerySnapshot querySnapshot = await gestoreDatabase.pastoRef.get();
     final allPastiInDb = querySnapshot.docs.map((doc) => doc.id);
     for (var item in allPastiInDb) {
       await gestoreDatabase.pastoRef.doc(item).get().then((element) async {
         Pasto pasto = Pasto.fromJson(element.data()!);
-        if(pasto.pianoAlimentare == pianoAlimentare.id){
+        if (pasto.pianoAlimentare == pianoAlimentare.id) {
           pianoAlimentare.addPasto(pasto);
         }
       });
@@ -567,7 +592,7 @@ class HealthyAppController{
     for (var item in allUsersInDB) {
       await gestoreDatabase.utenteRef.doc(item).get().then((element) async {
         var user = Utente.fromJson(element.data()!);
-        if(user.email == email){
+        if (user.email == email) {
           return user;
         }
       });
