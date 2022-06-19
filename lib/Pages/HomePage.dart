@@ -58,14 +58,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  // Future<Utente?> utenteFut = Constants.controller
-  //     .getUtenteByEmail((FirebaseAuth.instance.currentUser?.email)!);
-  // Utente? utente;
-  //
-  // Future<void> getUtenteSelected(Future<Utente?> utenteFuture) async {
-  //   utente = await utenteFuture;
-  // }
-
   Future<SchedaPalestra?> getCurrentScheda() async {
     return await Constants.controller.getCurrentSchedaPalestra(DateTime.parse(data.text));
   }

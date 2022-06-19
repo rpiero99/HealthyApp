@@ -2,11 +2,13 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Pages/AddAllenamentoPage.dart';
+import 'package:healthy_app/Pages/EditAnagraficaPage.dart';
 import 'package:healthy_app/Pages/GetEserciziPage.dart';
 import 'package:healthy_app/Pages/HomePage.dart';
 import 'package:healthy_app/Pages/Screens/GetEntityScreen.dart';
 import 'package:healthy_app/Pages/Screens/NewEntityScreen.dart';
 
+import '../Model/Utente.dart';
 import '../Utils/Constants.dart';
 import 'Widgets/TopAppBar.dart';
 
@@ -15,11 +17,13 @@ class MainPage extends StatefulWidget {
 
   MainPage({Key? key}) : super(key: key);
 
+
   @override
   _MainPage createState() => _MainPage();
 }
 
 class _MainPage extends State<MainPage> {
+  Utente? utente;
   int index = 0;
 
   final items = <Widget>[
@@ -38,12 +42,27 @@ class _MainPage extends State<MainPage> {
         size: 30, color: Constants.backgroundColor),
   ];
 
+  @override
+  void initState() {
+    getUtenteSelected().then((val) {
+      setState(() {
+        utente = val;
+      });
+    });
+    super.initState();
+  }
+
+  Future<Utente?> getUtenteSelected() async {
+    return await Constants.controller
+        .getUtenteByEmail((Constants.controller.gestoreAuth.firebaseAuth.currentUser?.email)!);
+  }
+
   final screens = [
     HomePage(),
     AddAllenamentoPage(),
     const NewEntityScreen(),
     const GetEntityScreen(),
-    //GetEntityScreen()
+    EditAnagraficaPage()
   ];
 
   String getNamePage() {
@@ -58,6 +77,9 @@ class _MainPage extends State<MainPage> {
     }
     if (index == 3) {
       return "Lista";
+    }
+    if (index == 4){
+      return "Anagrafica";
     }
     return "";
   }
