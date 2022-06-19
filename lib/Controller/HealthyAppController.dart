@@ -62,12 +62,15 @@ class HealthyAppController {
     return allenamento;
   }
 
-  Future<List<Allenamento>> getAllenamenti() async {
+  Future<List<Allenamento>> getAllenamenti(String idUtente) async {
     QuerySnapshot querySnapshot = await gestoreDatabase.allenamentoRef.get();
     final allAllenamentiInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var value in allAllenamentiInDB) {
       await gestoreDatabase.allenamentoRef.doc(value).get().then((element) {
-        addAllenamento(Allenamento.fromJson(element.data()!));
+        var allenamento = Allenamento.fromJson(element.data()!);
+        if(allenamento.idUtente == idUtente) {
+          addAllenamento(allenamento);
+        }
       });
     }
     return gestoreAllenamento.allenamenti;
@@ -142,8 +145,8 @@ class HealthyAppController {
 
   ///Metodi scheda palestra
 
-  Future<SchedaPalestra?> getCurrentSchedaPalestra(DateTime date) async {
-    var schede = await getSchedePalestra();
+  Future<SchedaPalestra?> getCurrentSchedaPalestra(String idutente, DateTime date) async {
+    var schede = await getSchedePalestra(idutente);
     for (var scheda in schede) {
       if (scheda.dataFine!.compareTo(date) >= 0 &&
           scheda.dataInizio!.compareTo(date) <= 0) {
@@ -153,7 +156,7 @@ class HealthyAppController {
     return null;
   }
 
-  SchedaPalestra createSchedaPalestra(String descrizione, String nome,
+  SchedaPalestra? createSchedaPalestra(String descrizione, String nome,
       DateTime dataInizio, DateTime dataFine, idUtente) {
     SchedaPalestra scheda = gestoreSchedaPalestra.createSchedaPalestra(
         descrizione, nome, dataInizio, dataFine, idUtente);
@@ -161,7 +164,7 @@ class HealthyAppController {
     return scheda;
   }
 
-  Future<List<SchedaPalestra>> getSchedePalestra() async {
+  Future<List<SchedaPalestra>> getSchedePalestra(String idUtente) async {
     QuerySnapshot querySnapshot = await gestoreDatabase.schedaPalestraRef.get();
     final allSchedePalestraInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var value in allSchedePalestraInDB) {
@@ -171,7 +174,9 @@ class HealthyAppController {
           .then((element) async {
         SchedaPalestra scheda = SchedaPalestra.fromJson(element.data()!);
         scheda.id = value;
-        addSchedaPalestra(scheda);
+        if(scheda.idUtente == idUtente) {
+          addSchedaPalestra(scheda);
+        }
       });
     }
     return gestoreSchedaPalestra.schedePalestra;
@@ -259,9 +264,7 @@ class HealthyAppController {
 
   ///Metodi utente
 
-  Future<Utente?> createUtente(
-      String id, AnagraficaUtente anagrafica, String email) async {
-    //todo - aggiungere controllo se esiste gia un utente con la stessa email.
+  Utente? createUtente(String id, AnagraficaUtente anagrafica, String email) {
     Utente user = gestoreUtente.createUtente(id, anagrafica, email);
     gestoreDatabase.utenteRef.doc(user.id).set(user.toJson());
     return user;
@@ -293,14 +296,14 @@ class HealthyAppController {
     }
   }
 
-  Future<String> getCalorieOfDay(DateTime date) async {
-    num sum = 0;
-    var pastiDelGiorno = await getPastiOfDay(date);
-    for (var pasto in pastiDelGiorno) {
-      sum += pasto.calorie!;
-    }
-    return sum.toString();
-  }
+  // Future<String> getCalorieOfDay(DateTime date) async {
+  //   num sum = 0;
+  //   var pastiDelGiorno = await getPastiOfDay(date);
+  //   for (var pasto in pastiDelGiorno) {
+  //     sum += pasto.calorie!;
+  //   }
+  //   return sum.toString();
+  // }
 
   ///Metodi anagrafica utente
 
@@ -382,13 +385,9 @@ class HealthyAppController {
     return schedaPalestra.getEserciziFromDay(day);
   }
 
-  // Future<List<Esercizio>> getAllEserciziOfSchedaPalestra(DateTime date) async {
-  //   await getCurrentSchedaPalestra(date);
-  // }
-
   ///Metodi piano alimentare
 
-  Future<List<PianoAlimentare>> getPianiAlimentari() async {
+  Future<List<PianoAlimentare>> getPianiAlimentari(String idUtente) async {
     QuerySnapshot querySnapshot =
         await gestoreDatabase.pianoAlimentareRef.get();
     final allUsersInDB = querySnapshot.docs.map((doc) => doc.id);
@@ -397,16 +396,19 @@ class HealthyAppController {
           .doc(item)
           .get()
           .then((element) async {
-        addPianoAlimentare(PianoAlimentare.fromJson(element.data()!));
+            var pianoAl = PianoAlimentare.fromJson(element.data()!);
+            if(pianoAl.idUtente == idUtente) {
+              addPianoAlimentare(PianoAlimentare.fromJson(element.data()!));
+            }
       });
     }
     return gestoreUtente.piani;
   }
 
   PianoAlimentare createPianoAlimentare(DateTime dataFine, DateTime dataInizio,
-      String descrizione, Utente utente) {
+      String descrizione, String idUtente) {
     PianoAlimentare piano = gestoreUtente.createPianoAlimentare(
-        dataFine, dataInizio, descrizione, utente);
+        dataFine, dataInizio, descrizione, idUtente);
     gestoreUtente.addPianoAlimentare(piano);
     gestoreDatabase.pianoAlimentareRef.doc(piano.id).set(piano.toJson());
     return piano;
@@ -462,20 +464,21 @@ class HealthyAppController {
 
   Pasto createPastoOfDay(CategoriaPasto categoria, int calorie,
       String descrizione, String nome, int quantita, String type,
+      String idUtente,
       [DateTime? datePasto]) {
     Pasto pasto;
     if (datePasto != null) {
       pasto = Pasto(
-          categoria, calorie, descrizione, nome, quantita, type, datePasto);
+          categoria, calorie, descrizione, nome, quantita, type, idUtente, datePasto);
     } else {
-      pasto = Pasto(categoria, calorie, descrizione, nome, quantita, type);
+      pasto = Pasto(categoria, calorie, descrizione, nome, quantita, type,idUtente);
     }
     gestoreUtente.addPastoOfDay(pasto);
     gestoreDatabase.pastoRef.doc(pasto.id).set(pasto.toJson());
     return pasto;
   }
 
-  Future<List<Pasto>> getPastiOfDay(DateTime day) async {
+  Future<List<Pasto>> getPastiOfDay(String idUtente, DateTime day) async {
     gestoreUtente.pastiOfDay.clear();
     QuerySnapshot querySnapshot = await gestoreDatabase.pastoRef.get();
     final allPastiInDb = querySnapshot.docs.map((doc) => doc.id);
@@ -485,7 +488,7 @@ class HealthyAppController {
         int? year = pasto.oraDelGiorno?.year;
         int? month = pasto.oraDelGiorno?.month;
         int? giorno = pasto.oraDelGiorno?.day;
-        if (giorno == day.day && month == day.month && year == day.year) {
+        if (giorno == day.day && month == day.month && year == day.year && pasto.idUtente == idUtente) {
           gestoreUtente.addPastoOfDay(pasto);
         }
       });

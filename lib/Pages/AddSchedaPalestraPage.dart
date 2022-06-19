@@ -43,7 +43,7 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
   }
 
   Future<void> getAllSchede() async {
-    allSchede = await Constants.controller.getSchedePalestra();
+    allSchede = await Constants.controller.getSchedePalestra(Constants.getCurrentIdUser()!);
   }
 
   @override
@@ -116,7 +116,8 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
                           descrizioneController.text.isNotEmpty &&
                           DateTime.parse(dataFineController.text).isAfter(
                               DateTime.parse(dataInizioController.text)) &&
-                          allSchede!.where((element) => element.nome?.trim() == nomeController.text.trim()).isEmpty) {
+                          allSchede!.where((element) => element.nome?.trim() == nomeController.text.trim()).isEmpty &&
+                          allSchede!.where((element) => DateTime.parse(dataInizioController.text).compareTo(element.dataFine!) > 0).isEmpty){
                         schedaNew = Constants.controller.createSchedaPalestra(
                             descrizioneController.text,
                             nomeController.text,

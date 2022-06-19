@@ -13,10 +13,11 @@ class PianoAlimentare {
   List<Pasto?> _pasti = List.empty(growable: true);
   DateTime? _dataInizio;
   DateTime? _dataFine;
+  String? _idUtente;
   Utente? _utente;
   String? _descrizione;
 
-  PianoAlimentare(this._dataFine, this._dataInizio, this._descrizione, this._utente){
+  PianoAlimentare(this._dataFine, this._dataInizio, this._descrizione, this._idUtente){
     id = IdGenerator.generate();
   }
 
@@ -25,9 +26,6 @@ class PianoAlimentare {
     _nome = json['nome'] ?? "";
     if (json['pasti'] != null) {
       _pasti = <Pasto>[];
-      // json['pasti'].forEach((p) {
-      //   _pasti.add(Pasto.fromJson(p));
-      // });
     }
     if(json['dataInizio']!=null){
       Timestamp oraFi = json['dataInizio'];
@@ -38,9 +36,7 @@ class PianoAlimentare {
       Timestamp oraFi = json['dataFine'];
       _dataFine = oraFi.toDate();
     }
-    _utente = json['utente'] != null ?
-      Utente.fromJson(json['utente'])
-        : null;
+    _idUtente = json['idUtente'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -57,7 +53,7 @@ class PianoAlimentare {
       Timestamp timestamp = Timestamp.fromDate(dataFine!);
       data['dataFine'] = timestamp;
     }
-    data['utente'] = _utente != null ? _utente?.toJson() : "";
+    data['idUtente'] = _idUtente ?? "";
     return data;
   }
 
@@ -96,9 +92,9 @@ class PianoAlimentare {
 
   set descrizione(String? descrizione) => _descrizione = descrizione;
 
-  Utente? get utente => _utente;
+  String? get idUtente => _idUtente;
 
-  set utente(Utente? utente) => _utente = utente;
+  set idUtente(String? idNew) => _idUtente = idNew;
 
   List<Pasto?> get pasti => _pasti;
 

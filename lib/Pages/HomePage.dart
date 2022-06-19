@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<SchedaPalestra?> getCurrentScheda() async {
-    return await Constants.controller.getCurrentSchedaPalestra(DateTime.parse(data.text));
+    return await Constants.controller.getCurrentSchedaPalestra(Constants.getCurrentIdUser()!, DateTime.parse(data.text));
   }
 
   // Map<String, Widget> mapWidgets = <String, Widget>{};
@@ -217,43 +217,12 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-    // initializeMap();
-    // return Scaffold(
-    //   backgroundColor: Constants.backgroundColor,
-    //  // appBar: makeTopAppBar(context, "Home Page", c),
-    // //  bottomNavigationBar: makeBottomAppBar(context)
-    //   //CurvedNavigationBar(
-    //   //   backgroundColor: Constants.backgroundColor,
-    //   //   items: const <Widget>[
-    //   //     Icon(
-    //   //       Icons.home_outlined,
-    //   //       size: 30,
-    //   //       color: Constants.backgroundColor,
-    //   //     ),
-    //   //     Icon(Icons.run_circle_outlined,
-    //   //         size: 30, color: Constants.backgroundColor),
-    //   //     Icon(Icons.add_circle_outline_outlined,
-    //   //         size: 30, color: Constants.backgroundColor),
-    //   //     Icon(Icons.list_alt_outlined,
-    //   //         size: 30, color: Constants.backgroundColor),
-    //   //     Icon(Icons.account_circle_outlined,
-    //   //         size: 30, color: Constants.backgroundColor),
-    //   //   ],
-    //   //   onTap: (index) {
-    //   //     //Handle button tap
-    //   //   },
-    //   // ),
-    //
-    //   body: Container(
-    //     child: showChildren(),
-    //   )
-    // );
   }
 
   Widget showCardsPasti() {
     return FutureBuilder(
       future:
-          Constants.controller.getPastiOfDay(DateTime.parse(data.text)),
+          Constants.controller.getPastiOfDay(Constants.getCurrentIdUser()!, DateTime.parse(data.text)),
       builder: (context, snapshot) {
         if ((snapshot.connectionState == ConnectionState.done)) {
           var d = (snapshot.data as List<Pasto>).toList();
@@ -649,6 +618,7 @@ class _HomePageState extends State<HomePage> {
                       nomePastoController.text,
                       int.parse(quantitaController.text),
                       typeController.text,
+                      Constants.getCurrentIdUser()!,
                       DateTime.parse(data.text));
                   ScaffoldMessenger.of(context).showSnackBar(
                       Constants.createSnackBar('Pasto creato correttamente.',

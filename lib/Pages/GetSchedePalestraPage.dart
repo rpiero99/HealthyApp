@@ -74,7 +74,7 @@ class _GetSchedePalestraPage extends State<GetSchedePalestraPage> {
   }
 
   Future<List<SchedaPalestra>> getSchede() async {
-    return await Constants.controller.getSchedePalestra();
+    return await Constants.controller.getSchedePalestra(Constants.getCurrentIdUser()!);
   }
 
   Widget showCards() {

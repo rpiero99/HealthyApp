@@ -69,7 +69,7 @@ class _GetPianiAlimentari extends State<GetPianiAlimentari> {
 
   Widget showCards() {
     return FutureBuilder(
-      future: Constants.controller.getPianiAlimentari(),
+      future: Constants.controller.getPianiAlimentari(Constants.getCurrentIdUser()!),
       builder: (context, snapshot) {
         if ((snapshot.connectionState == ConnectionState.done)) {
           var d = (snapshot.data as List<PianoAlimentare>).toList();

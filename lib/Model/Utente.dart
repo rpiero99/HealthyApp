@@ -8,8 +8,7 @@ class Utente {
   AnagraficaUtente? _anagraficaUtente;
   String? _email;
 
-  Utente(this._id, this._anagraficaUtente, this._email){
-  }
+  Utente(this._id, this._anagraficaUtente, this._email);
 
   Utente.fromJson(Map<String, dynamic> json) {
     _id = json['id'] ?? "";

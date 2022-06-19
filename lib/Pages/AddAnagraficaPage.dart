@@ -13,15 +13,12 @@ class AddAnagraficaPage extends StatelessWidget {
   AnagraficaUtente? anagraficaNew;
   Utente? utenteNew;
 
-  TextEditingController altezaController = TextEditingController();
+  TextEditingController altezzaController = TextEditingController();
   TextEditingController nomeController = TextEditingController();
   TextEditingController dataNascitaController = TextEditingController();
   TextEditingController pesoController = TextEditingController();
   TextEditingController sessoController = TextEditingController();
 
-  String? getCurrentIdUser() {
-    return Constants.controller.gestoreAuth.firebaseAuth.currentUser?.uid;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +65,7 @@ class AddAnagraficaPage extends StatelessWidget {
                   makeInput(
                       label: "Altezza (in cm)..",
                       obscureText: false,
-                      controller: altezaController,
+                      controller: altezzaController,
                       context: context,
                       isNumber: true),
                   makeInput(
@@ -93,18 +90,18 @@ class AddAnagraficaPage extends StatelessWidget {
                     if (nomeController.text.isNotEmpty &&
                         DateTime.parse(dataNascitaController.text)
                             .isBefore(DateTime.now()) &&
-                        altezaController.text.isNotEmpty &&
+                        altezzaController.text.isNotEmpty &&
                         pesoController.text.isNotEmpty &&
                         sessoController.text.isNotEmpty) {
                       anagraficaNew = Constants.controller
                           .createAnagraficaUtente(
-                              int.parse(altezaController.text),
+                              int.parse(altezzaController.text),
                               DateTime.parse(dataNascitaController.text),
                               nomeController.text,
                               double.parse(pesoController.text),
                               sessoController.text);
-                      utenteNew = await Constants.controller.createUtente(
-                          getCurrentIdUser()!,
+                      utenteNew = Constants.controller.createUtente(
+                          Constants.getCurrentIdUser()!,
                           anagraficaNew!,
                           (Constants.controller.gestoreAuth.firebaseAuth.currentUser?.email)!);
                       ScaffoldMessenger.of(context).showSnackBar(

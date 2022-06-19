@@ -139,7 +139,8 @@ class _AddPastoGiornalieroPage extends State<AddPastoGiornaliero> {
                           widget.descrizionePastoController.text,
                           widget.nomePastoController.text,
                           int.parse(widget.quantitaController.text),
-                          widget.typeController.text);
+                          widget.typeController.text,
+                          Constants.getCurrentIdUser()!);
                       ScaffoldMessenger.of(context).showSnackBar(
                           Constants.createSnackBar(
                               'Pasto aggiunto correttamente.',

@@ -31,8 +31,8 @@ class GestoreUtente {
   removeUtente(Utente utente) => _utenti.remove(utente);
 
   PianoAlimentare createPianoAlimentare(DateTime dataFine, DateTime dataInizio,
-          String descrizione, Utente utente) =>
-      PianoAlimentare(dataFine, dataInizio, descrizione, utente);
+          String descrizione, String idUtente) =>
+      PianoAlimentare(dataFine, dataInizio, descrizione, idUtente);
 
   addPianoAlimentare(PianoAlimentare piano) => _piani.add(piano);
 

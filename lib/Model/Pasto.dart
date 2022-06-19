@@ -21,9 +21,10 @@ class Pasto {
   String? _type;
   num? _quantita;
   String? _idPianoAlimentare;
+  String? _idUtente;
 
   Pasto(this._categoria, this._calorie, this._descrizione, this._nome,
-      this._quantita, this._type, [this._oraDelGiorno]){
+      this._quantita, this._type, this._idUtente, [this._oraDelGiorno]){
     id = IdGenerator.generate();
     isMangiato = true;
     oraDelGiorno ??= DateTime.now();
@@ -51,6 +52,7 @@ class Pasto {
     }
     _quantita = json['quantita'];
     _type = json['tipo'] ?? "";
+    _idUtente = json['idUtente'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -70,7 +72,14 @@ class Pasto {
     }
     data['quantita'] = _quantita?.toInt();
     data['tipo'] = _type ?? "";
+    data['idUtente'] = _idUtente ?? "";
     return data;
+  }
+
+  String? get idUtente => _idUtente;
+
+  set idUtente(String? value) {
+    _idUtente = value;
   }
 
   String? get id => _id;

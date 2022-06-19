@@ -80,7 +80,7 @@ class _GetAllenamentiPage extends State<GetAllenamentiPage> {
 
   Widget showCards() {
     return FutureBuilder(
-      future: Constants.controller.getAllenamenti(),
+      future: Constants.controller.getAllenamenti(Constants.getCurrentIdUser()!),
       builder: (context, snapshot) {
         if ((snapshot.connectionState == ConnectionState.done)) {
           var d = (snapshot.data as List<Allenamento>).toList();

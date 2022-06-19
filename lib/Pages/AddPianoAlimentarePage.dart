@@ -115,7 +115,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
                                     dataFineController.clear();
                                   }else{
                                     utente = await Constants.controller.getUtenteById(Constants.getCurrentIdUser()!);
-                                    pianoAlimentare = Constants.controller.createPianoAlimentare(dataFine, dataInizio, descrizioneController.text, utente!);
+                                    pianoAlimentare = Constants.controller.createPianoAlimentare(dataFine, dataInizio, descrizioneController.text, Constants.getCurrentIdUser()!);
                                     for(var element in pasti){
                                       element.pianoAlimentare = pianoAlimentare?.id;
                                       Constants.controller.createPastoPianoAlimentare(pianoAlimentare!,
