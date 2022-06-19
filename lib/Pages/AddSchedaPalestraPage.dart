@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healthy_app/Model/Esercizio.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
+import 'package:healthy_app/Pages/MainPage.dart';
 import 'package:healthy_app/Pages/Widgets/RoundedButton.dart';
 import 'package:healthy_app/Pages/Widgets/TopAppBar.dart';
 
@@ -140,7 +141,7 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
                             Constants.createSnackBar(
                                 'Scheda creata correttamente.',
                                 Constants.successSnackBar));
-                        Constants.redirectTo(context, HomePage());
+                        Constants.redirectTo(context, MainPage());
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             Constants.createSnackBar(

@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healthy_app/Model/Esercizio.dart';
 import 'package:healthy_app/Model/SchedaPalestra.dart';
-import 'package:intl/intl.dart';
 
 import '../Utils/Constants.dart';
-import 'HomePage.dart';
 import 'Widgets/RoundedButton.dart';
 import 'Widgets/TopAppBar.dart';
-//todo- da modificare e vedere come potrebbe servire.
+
 class GetEserciziPage extends StatefulWidget {
   SchedaPalestra? schedaToEdit;
   Esercizio? esercizioToView;
@@ -25,7 +23,7 @@ class GetEserciziPage extends StatefulWidget {
 
 class _GetEserciziPage extends State<GetEserciziPage> {
   List<Esercizio> allEsercizi = [];
-  String? item = 'Giorno..';
+  String? item = Constants.daysWeek[0];
   String searchString = "";
   TextEditingController dayEsercizioController = TextEditingController();
   TextEditingController descrizioneEsercizioController = TextEditingController();
@@ -37,12 +35,8 @@ class _GetEserciziPage extends State<GetEserciziPage> {
   @override
   void initState() {
     super.initState();
-    //getEsercizi();
   }
 
-  // Future<void> getEsercizi() async {
-  //   allEsercizi = await Constants.controller.getAllEserciziOfDayOf(widget.schedaToEdit!);
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +92,7 @@ class _GetEserciziPage extends State<GetEserciziPage> {
 
   Widget showCards() {
     return FutureBuilder(
-      future: Constants.controller.getAllEserciziOfDayOf(widget.schedaToEdit!, 1),
+      future: Constants.controller.getAllEserciziOf(widget.schedaToEdit),
       builder: (context, snapshot) {
         if ((snapshot.connectionState == ConnectionState.done)) {
           var d = (snapshot.data as List<Esercizio>).toList();

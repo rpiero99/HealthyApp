@@ -37,11 +37,6 @@ class _HomePageState extends State<HomePage> {
   TextEditingController numSerieEsercizioController = TextEditingController();
   TextEditingController tempoRestEsercizioController = TextEditingController();
 
-
-  //TextEditingController calorieDelGiornoController = TextEditingController();
-
-  //todo aggiungere text box con calorie del giorno.
-
   @override
   void initState() {
     if(data.text.isEmpty){
@@ -61,8 +56,6 @@ class _HomePageState extends State<HomePage> {
   Future<SchedaPalestra?> getCurrentScheda() async {
     return await Constants.controller.getCurrentSchedaPalestra(Constants.getCurrentIdUser()!, DateTime.parse(data.text));
   }
-
-  // Map<String, Widget> mapWidgets = <String, Widget>{};
 
   @override
   Widget build(BuildContext context) {
@@ -140,21 +133,6 @@ class _HomePageState extends State<HomePage> {
                     searchString = value;
                   });
                 }),
-            // // Row(
-            // //   children: [
-            // //     const Padding(padding: EdgeInsets.only(left: 14)),
-            // //     Text(
-            // //       "Calorie del giorno: kcal " + calorieDelGiornoController.text,
-            // //       textAlign: TextAlign.left,
-            // //       style: const TextStyle(
-            // //         fontWeight: FontWeight.bold,
-            // //         fontSize: 18,
-            // //         letterSpacing: -0.2,
-            // //         color: Constants.text,
-            // //       ),
-            // //     ),
-            // //   ],
-            // ),
             const Divider(),
             Row(
               children: const [
@@ -225,7 +203,7 @@ class _HomePageState extends State<HomePage> {
           Constants.controller.getPastiOfDay(Constants.getCurrentIdUser()!, DateTime.parse(data.text)),
       builder: (context, snapshot) {
         if ((snapshot.connectionState == ConnectionState.done)) {
-          var d = (snapshot.data as List<Pasto>).toList();
+          var d = (snapshot.data as List<Pasto>) ;
           if (d != null && d.isNotEmpty) {
             return SizedBox(
               width: 400,
@@ -773,46 +751,4 @@ class _HomePageState extends State<HomePage> {
     tempoRestEsercizioController.clear();
     item = Constants.daysWeek[0];
   }
-
-//   Widget showChildren() {
-//     return FutureBuilder(
-//       future: getUtenteSelected(utenteFut),
-//       builder: (context, snapshot){
-//         if ((snapshot.connectionState == ConnectionState.done)) {
-//   //        mapWidgets["edit anagrafica"] = EditAnagraficaPage(utente: utente!);
-//             return ListView.builder(
-//                 itemCount: mapWidgets.length,
-//                 itemBuilder: (context, index) {
-//                   return _buildItem(context, index);
-//                 });
-//           } else {
-//             return const Center(child: CircularProgressIndicator());
-//           }
-//       },
-//     );
-//   }
-//   Widget _buildItem(BuildContext context, int index) {
-//     String key = mapWidgets.keys.elementAt(index);
-//     return TextButton(
-//       style: ButtonStyle(
-//         foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-//       ),
-//       onPressed: () { Constants.redirectTo(context, mapWidgets[key]! );},
-//       child: Text(key),
-//     );
-//   }
-//   void initializeMap() {
-//     mapWidgets = {
-//       'add anagrafica': AddAnagraficaPage(),
-//       'view pasti del giorno': GetPastiGiornalieriPage(),
-//       'get schede': GetSchedePalestraPage(),
-//       'add scheda': AddSchedaPalestraPage(),
-//       'get allenamenti':GetAllenamentiPage(),
-//       'edit piano alimentare':EditPianoAlimentarePage(),
-//       'add allenamento':AddAllenamentoPage(),
-//       'add pasto giornaliero': AddPastoGiornaliero(),
-//       'get piani alimentari': GetPianiAlimentari(),
-// //      'edit anagrafica': EditAnagraficaPage(utente: utente!)
-//     };
-// }
 }

@@ -6,6 +6,8 @@ import 'package:healthy_app/Model/AnagraficaUtente.dart';
 import 'package:healthy_app/Model/CategoriaPasto.dart';
 import 'package:healthy_app/Model/PianoAlimentare.dart';
 import 'package:healthy_app/Model/Utente.dart';
+import 'package:healthy_app/Pages/MainPage.dart';
+import 'package:intl/intl.dart';
 
 import '../Controller/HealthyAppController.dart';
 import '../Model/Pasto.dart';
@@ -22,6 +24,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
   TextEditingController dataInizioController = TextEditingController();
   TextEditingController dataFineController = TextEditingController();
   TextEditingController descrizioneController = TextEditingController();
+  TextEditingController nomeController = TextEditingController();
   TextEditingController calorieController = TextEditingController();
   TextEditingController categoriaController = TextEditingController();
   TextEditingController oraPastoController = TextEditingController();
@@ -35,7 +38,8 @@ class AddPianoAlimentarePage extends StatelessWidget{
   PianoAlimentare? pianoAlimentare;
   List<Pasto> pasti = [];
   String? giornoComboItem = 'Giorno..';
-  String? categoriaComboItem = 'Categoria pasto..';
+  String? categoriaComboItem = Constants.categoriePasto[0];
+  TimeOfDay selectedTime = TimeOfDay.now();
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +81,10 @@ class AddPianoAlimentarePage extends StatelessWidget{
                               label: "Descrizione piano",
                               obscureText: false,
                               controller: descrizioneController),
+                          makeInput(
+                              label: "Nome piano",
+                              obscureText: false,
+                              controller: nomeController),
                           RoundedButton(
                             text: 'Aggiungi Pasto',
                             color: Constants.backgroundButtonColor,
@@ -102,7 +110,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
                           height: 60,
                           onPressed: () async {
                               if(dataInizioController.text.isNotEmpty && dataFineController.text.isNotEmpty
-                                && descrizioneController.text.isNotEmpty){
+                                && descrizioneController.text.isNotEmpty && nomeController.text.isNotEmpty){
                                   DateTime dataInizio = DateTime.parse(dataInizioController.text);
                                   DateTime dataFine = DateTime.parse(dataFineController.text);
                                   if(dataInizio.isAfter(dataFine)){
@@ -115,7 +123,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
                                     dataFineController.clear();
                                   }else{
                                     utente = await Constants.controller.getUtenteById(Constants.getCurrentIdUser()!);
-                                    pianoAlimentare = Constants.controller.createPianoAlimentare(dataFine, dataInizio, descrizioneController.text, Constants.getCurrentIdUser()!);
+                                    pianoAlimentare = Constants.controller.createPianoAlimentare(nomeController.text, dataFine, dataInizio, descrizioneController.text, Constants.getCurrentIdUser()!);
                                     for(var element in pasti){
                                       element.pianoAlimentare = pianoAlimentare?.id;
                                       Constants.controller.createPastoPianoAlimentare(pianoAlimentare!,
@@ -133,7 +141,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
                                         Constants.createSnackBar(
                                             'Piano alimentare creato correttamente.',
                                             Constants.successSnackBar));
-                                    Constants.redirectTo(context, HomePage());
+                                    Constants.redirectTo(context, MainPage());
                                   }
 
                               }else{
@@ -178,7 +186,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
       context: context,
       builder: (context) => AlertDialog(
         scrollable: true,
-        title: const Text("Nuovo Pasto del piano alimentare"),
+        title: const Text("Nuovo Pasto"),
         content: Column(children: [
           TextField(
             controller: nomePastoController,
@@ -202,7 +210,7 @@ class AddPianoAlimentarePage extends StatelessWidget{
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      items: Constants.categoriePastoString()
+                      items: Constants.categoriePasto
                           .map((String item) => DropdownMenuItem<String>(
                           child: Text(item), value: item))
                           .toList(),
@@ -249,20 +257,12 @@ class AddPianoAlimentarePage extends StatelessWidget{
             },
           ),
           TextField(
-            controller: oraPastoController,
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-            ],
-            decoration: const InputDecoration(hintText: "Ora del giorno.."),
-          ),
-          TextField(
             controller: quantitaController,
             keyboardType: TextInputType.number,
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
             ],
-            decoration: const InputDecoration(hintText: "Quantità del pasto.."),
+            decoration: const InputDecoration(hintText: "Quantità.."),
           ),
           TextField(
             controller: calorieController,
@@ -270,12 +270,31 @@ class AddPianoAlimentarePage extends StatelessWidget{
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
             ],
-            decoration: const InputDecoration(hintText: "Calorie approssimative del pasto.."),
+            decoration: const InputDecoration(hintText: "Calorie.."),
           ),
           TextField(
             controller: typeController,
-            decoration: const InputDecoration(hintText: "Tipo di pasto.."),
-          )
+            decoration: const InputDecoration(hintText: "Tipo pasto.."),
+          ),
+          TextField(
+            controller: oraPastoController,
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Ora di consumazione del pasto..',
+            ),
+            onTap: () async {
+              TimeOfDay? timeOfDay = await showTimePicker(
+                context: context,
+                initialTime: selectedTime,
+                initialEntryMode: TimePickerEntryMode.dial,
+              );
+              if (timeOfDay != null) {
+
+                  oraPastoController.text = _getStringFromTimeOfDay(timeOfDay);
+
+              }
+            },
+          ),
         ]),
         actions: [
           TextButton(
@@ -315,5 +334,11 @@ class AddPianoAlimentarePage extends StatelessWidget{
         ],
       ),
     );
+  }
+  String _getStringFromTimeOfDay(TimeOfDay tod) {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+    final format = DateFormat.Hm();
+    return format.format(dt);
   }
 }

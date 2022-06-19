@@ -14,7 +14,7 @@ class NotificationService {
   Future<void> init() async {
     //inizializzo android settings
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('app_icon');
+    AndroidInitializationSettings('');
 
     //inizializzo app settings
     const InitializationSettings initializationSettings =
@@ -52,9 +52,9 @@ void initDetails(){
   }
 
   //mostra una notifica quando questo metodo viene chiamato
-  Future<void> showNotifications(num id, String titolo, String body, String payload) async {
+  Future<void> showNotifications(int id, String titolo, String body, String payload) async {
     await flutterLocalNotificationsPlugin.show(
-      id.toInt(),
+      id,
       titolo,
       body,
       platformChannelSpecifics,

@@ -39,7 +39,7 @@ class Pasto {
   Pasto.fromJson(Map<String, dynamic> json) {
     _id = json['id'] ?? "";
     _calorie = json['calorie'];
-    _categoria = CategoriaPasto.values.firstWhere((e) => e.toString().contains(json['categoria']));
+    _categoria = CategoriaPasto.values.firstWhere((element) => element.name.contains(json['categoria'] ?? ""));
     _oraPasto = json['oraPasto'] ?? "";
     _giornoPasto = json['giorno'] ?? 0;
     _isMangiato = json['isMangiato'];

@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Controller/HealthyAppController.dart';
 import 'package:healthy_app/Model/CategoriaPasto.dart';
 
 class Constants {
-  static HealthyAppController controller = HealthyAppController.instance;
+  static HealthyAppController controller = HealthyAppController();
   static const Color backgroundColor = Color.fromRGBO(58, 66, 86, 1.0);
   static const Color backgroundButtonColor = Colors.white;
   static const Color textButtonColor = Colors.black;
@@ -26,11 +27,11 @@ class Constants {
   static List<String> categoriePasto = [
     'Categoria Pasto..',
     'COLAZIONE',
-    'SPUNTINO MATTINA',
+    'SPUNTINO_MATTINA',
     'PRANZO',
-    'SPUNTINO POMERIGGIO',
+    'SPUNTINO_POMERIGGIO',
     'CENA',
-    'SPUNTINO PRE NANNA'
+    'SPUNTINO_PRE_NANNA'
   ];
 
 
@@ -81,14 +82,7 @@ class Constants {
   }
 
   static CategoriaPasto getCategoriaFromString(String pasto){
-    CategoriaPasto cat = CategoriaPasto.COLAZIONE;
-    for(var element in CategoriaPasto.values){
-      if(element.toString().split('.').last == pasto){
-        cat = element;
-        break;
-      }
-    }
-    return cat;
+    return CategoriaPasto.values.firstWhere((element) => element.name == pasto);
   }
 
   static SnackBar createSnackBar(String label, Color color) {

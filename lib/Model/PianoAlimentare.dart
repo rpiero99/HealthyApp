@@ -17,7 +17,7 @@ class PianoAlimentare {
   Utente? _utente;
   String? _descrizione;
 
-  PianoAlimentare(this._dataFine, this._dataInizio, this._descrizione, this._idUtente){
+  PianoAlimentare(this._nome, this._dataFine, this._dataInizio, this._descrizione, this._idUtente){
     id = IdGenerator.generate();
   }
 

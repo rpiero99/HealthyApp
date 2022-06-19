@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:healthy_app/Model/CategoriaPasto.dart';
 import 'package:healthy_app/Utils/GeoLocService.dart';
+import 'package:healthy_app/Utils/IdGenerator.dart';
 import 'package:healthy_app/Utils/NotificationService.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../Model/Allenamento.dart';
@@ -36,9 +37,10 @@ class HealthyAppController {
       NotificationService.instance;
   StopWatchTimer? stopwatch;
 
-  HealthyAppController._privateConstructor();
-
-  static final instance = HealthyAppController._privateConstructor();
+  HealthyAppController(){
+    notificator?.init();
+    notificator?.initDetails();
+  }
 
   ///Metodi per login e registrazione
 
@@ -63,6 +65,7 @@ class HealthyAppController {
   }
 
   Future<List<Allenamento>> getAllenamenti(String idUtente) async {
+    gestoreAllenamento.allenamenti.clear();
     QuerySnapshot querySnapshot = await gestoreDatabase.allenamentoRef.get();
     final allAllenamentiInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var value in allAllenamentiInDB) {
@@ -126,7 +129,6 @@ class HealthyAppController {
     geoLocService?.endPosition = await geoLocService?.getCurrentPosition();
     allenamento.distanza = calculateDistance(geoLocService!.endPosition!);
     allenamento.calcoloTempoTotale();
-    //todo da testare
     geoLocService?.cancelListener();
   }
 
@@ -180,6 +182,7 @@ class HealthyAppController {
   }
 
   Future<List<SchedaPalestra>> getSchedePalestra(String idUtente) async {
+    gestoreSchedaPalestra.schedePalestra.clear();
     QuerySnapshot querySnapshot = await gestoreDatabase.schedaPalestraRef.get();
     final allSchedePalestraInDB = querySnapshot.docs.map((doc) => doc.id);
     for (var value in allSchedePalestraInDB) {
@@ -211,7 +214,7 @@ class HealthyAppController {
     if (gestoreSchedaPalestra.schedePalestra
             .where((element) => element.id == scheda.id)
             .isEmpty &&
-        scheda.nome != "") {
+        scheda.nome != "" && gestoreSchedaPalestra.schedePalestra.where((element) => element.nome == scheda.nome).isEmpty) {
       gestoreSchedaPalestra.addSchedaPalestra(scheda);
     }
   }
@@ -371,7 +374,7 @@ class HealthyAppController {
   _addEsercizio(SchedaPalestra schedaPalestra, Esercizio esercizio) {
     if (schedaPalestra
         .getAllEsercizi()
-        .where((element) => element.id == esercizio.id)
+        .where((element) => element.id == esercizio.id && element.nome == esercizio.nome)
         .isEmpty) {
       schedaPalestra.addEsercizio(esercizio);
       gestoreDatabase.esercizioRef.doc(esercizio.id).set(esercizio.toJson());
@@ -400,9 +403,24 @@ class HealthyAppController {
     return schedaPalestra.getEserciziFromDay(day);
   }
 
+  Future<List<Esercizio>?> getAllEserciziOf(
+      SchedaPalestra? scheda) async {
+    scheda?.getAllEsercizi().clear();
+    QuerySnapshot querySnapshot = await gestoreDatabase.esercizioRef.get();
+    final allEserciziInDB = querySnapshot.docs.map((doc) => doc.id);
+    for (var idEs in allEserciziInDB) {
+      var es = await getEsercizioById(idEs);
+      if (es.idSchedaPalestra == scheda!.id! && es.nome != "") {
+        _addEsercizio(scheda, es);
+      }
+    }
+    return scheda!.getAllEsercizi();
+  }
+
   ///Metodi piano alimentare
 
   Future<List<PianoAlimentare>> getPianiAlimentari(String idUtente) async {
+    gestoreUtente.piani.clear();
     QuerySnapshot querySnapshot =
         await gestoreDatabase.pianoAlimentareRef.get();
     final allUsersInDB = querySnapshot.docs.map((doc) => doc.id);
@@ -420,9 +438,9 @@ class HealthyAppController {
     return gestoreUtente.piani;
   }
 
-  PianoAlimentare createPianoAlimentare(DateTime dataFine, DateTime dataInizio,
+  PianoAlimentare createPianoAlimentare(String nome, DateTime dataFine, DateTime dataInizio,
       String descrizione, String idUtente) {
-    PianoAlimentare piano = gestoreUtente.createPianoAlimentare(
+    PianoAlimentare piano = gestoreUtente.createPianoAlimentare(nome,
         dataFine, dataInizio, descrizione, idUtente);
     gestoreUtente.addPianoAlimentare(piano);
     gestoreDatabase.pianoAlimentareRef.doc(piano.id).set(piano.toJson());
@@ -513,12 +531,14 @@ class HealthyAppController {
 
   Future<List<Pasto?>> getPastiOfPianoAlimentare(
       PianoAlimentare pianoAlimentare) async {
+    pianoAlimentare.pasti.clear();
     QuerySnapshot querySnapshot = await gestoreDatabase.pastoRef.get();
     final allPastiInDb = querySnapshot.docs.map((doc) => doc.id);
     for (var item in allPastiInDb) {
       await gestoreDatabase.pastoRef.doc(item).get().then((element) async {
         Pasto pasto = Pasto.fromJson(element.data()!);
         if (pasto.pianoAlimentare == pianoAlimentare.id) {
+          pasto.idUtente = pianoAlimentare.idUtente;
           pianoAlimentare.addPasto(pasto);
         }
       });
@@ -552,14 +572,14 @@ class HealthyAppController {
 
   void sendNotificationWhen(String titolo, String body, DateTime data) {
     Random random = Random();
-    var id = 0 + random.nextInt(1000000 - 0);
-    notificator?.scheduleNotifications(0, titolo, body, data);
+    var id = random.nextInt(1000000);
+    notificator?.scheduleNotifications(id, titolo, body, data);
   }
 
   void sendNotification(String titolo, String body, String payload) {
     Random random = Random();
-    var id = 0 + random.nextInt(1000000 - 0);
-    notificator?.showNotifications(0, titolo, body, payload);
+    var id = random.nextInt(1000000);
+    notificator?.showNotifications(id, titolo, body, payload);
   }
 
   ///metodi get by id

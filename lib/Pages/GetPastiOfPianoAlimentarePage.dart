@@ -31,9 +31,8 @@ class GetPastiOfPianoAlimentarePage extends StatefulWidget {
 
 class _GetPastiOfPianoAlimentarePage
     extends State<GetPastiOfPianoAlimentarePage> {
-  List<Pasto?> allPasti = [];
   String searchString = "";
-  String? dayItem = 'Giorno..';
+  String? dayItem = Constants.daysWeek[0];
   String categoriaItem = Constants.categoriePasto[0];
   TextEditingController calorieController = TextEditingController();
   TextEditingController categoriaController = TextEditingController();
@@ -48,11 +47,6 @@ class _GetPastiOfPianoAlimentarePage
   @override
   void initState() {
     super.initState();
-    getPasti();
-  }
-
-  Future<void> getPasti() async{
-    allPasti = await Constants.controller.getPastiOfPianoAlimentare(widget.pianoAlimentareToEdit!);
   }
 
   @override
@@ -114,8 +108,8 @@ class _GetPastiOfPianoAlimentarePage
       future: Constants.controller.getPastiOfPianoAlimentare(widget.pianoAlimentareToEdit!),
       builder: (context, snapshot) {
         if ((snapshot.connectionState == ConnectionState.done)) {
-          var d = (snapshot.data as List<Pasto>).toList();
-          if(d.isNotEmpty && d != null) {
+          var d = (snapshot.data as List<Pasto>);
+          if(d != null && d.isNotEmpty) {
             return ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
@@ -513,7 +507,7 @@ class _GetPastiOfPianoAlimentarePage
                     quantitaController.text.isNotEmpty &&
                     oraPastoController.text.isNotEmpty &&
                     Constants.convertDayWeekInInt(dayPastoController.text) != -1 &&
-                    categoriaItem != Constants.categoriePasto[0] &&
+                    categoriaController.text != Constants.categoriePasto[0] &&
                     calorieController.text.isNotEmpty &&
                     typeController.text.isNotEmpty) {
                       setState(() {
