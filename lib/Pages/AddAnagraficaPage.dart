@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:healthy_app/Pages/MainPage.dart';
 import 'package:healthy_app/Pages/Widgets/TopAppBar.dart';
 
 import '../Model/AnagraficaUtente.dart';
 import '../Model/Utente.dart';
 import '../Utils/Constants.dart';
-import 'HomePage.dart';
 import 'Widgets/InputWidget.dart';
 
 class AddAnagraficaPage extends StatelessWidget {
@@ -111,7 +109,7 @@ class AddAnagraficaPage extends StatelessWidget {
                               nomeController.text,
                               double.parse(pesoController.text),
                               sessoController.text);
-                      utenteNew = Constants.controller.createUtente(
+                      utenteNew = await Constants.controller.createUtente(
                           getCurrentIdUser()!,
                           anagraficaNew!,
                           emailController.text);

@@ -26,7 +26,8 @@ class AnagraficaScreen extends StatelessWidget {
           children: <Widget>[
             const Text(
               "Hey! Non hai ancora associata nessuna scheda anagrafica, vuoi crearne una?",
-              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20, color: Constants.text),
+              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20, color: Constants.text, inherit: false),
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: size.height * 0.05),
             RoundedButton(

@@ -94,14 +94,14 @@ class HealthyAppController {
     a.delete();
   }
 
-  Future<Allenamento> startAllenamento(Allenamento allenamento, Utente utente) async {
+  Future<Allenamento> startAllenamento(
+      Allenamento allenamento, Utente utente) async {
     geoLocService = GeoLocService();
     DateTime timeStamp = DateTime.now();
     geoLocService?.initPlatformState();
     stopwatch = StopWatchTimer(
       mode: StopWatchMode.countUp,
-      onChangeRawSecond:
-          getStatisticheAllenamentoSecondo(allenamento, utente),
+      onChangeRawSecond: getStatisticheAllenamentoSecondo(allenamento, utente),
       onChangeRawMinute: getStatisticheAllenamentoMinuto(allenamento),
     );
 
@@ -259,7 +259,9 @@ class HealthyAppController {
 
   ///Metodi utente
 
-  Utente createUtente(String id, AnagraficaUtente anagrafica, String email) {
+  Future<Utente?> createUtente(
+      String id, AnagraficaUtente anagrafica, String email) async {
+    //todo - aggiungere controllo se esiste gia un utente con la stessa email.
     Utente user = gestoreUtente.createUtente(id, anagrafica, email);
     gestoreDatabase.utenteRef.doc(user.id).set(user.toJson());
     return user;
@@ -283,7 +285,10 @@ class HealthyAppController {
     if (gestoreUtente.utenti
             .where((element) => element.id == item.id)
             .isEmpty &&
-        item.email != "") {
+        item.email != "" &&
+        gestoreUtente.utenti
+            .where((element) => element.email == item.email)
+            .isEmpty) {
       gestoreUtente.addUtente(item);
     }
   }
@@ -362,7 +367,8 @@ class HealthyAppController {
     updateSchedaPalestra(schedaPalestra);
   }
 
-  Future<List<Esercizio>?> getAllEserciziOfDayOf(SchedaPalestra? scheda, int day) async {
+  Future<List<Esercizio>?> getAllEserciziOfDayOf(
+      SchedaPalestra? scheda, int day) async {
     scheda?.getEserciziFromDay(day)?.clear();
     QuerySnapshot querySnapshot = await gestoreDatabase.esercizioRef.get();
     final schedaPalestra = await getSchedaPalestraById(scheda!.id!);

@@ -42,21 +42,6 @@ class _MainPage extends State<MainPage> {
         size: 30, color: Constants.backgroundColor),
   ];
 
-  @override
-  void initState() {
-    getUtenteSelected().then((val) {
-      setState(() {
-        utente = val;
-      });
-    });
-    super.initState();
-  }
-
-  Future<Utente?> getUtenteSelected() async {
-    return await Constants.controller
-        .getUtenteByEmail((Constants.controller.gestoreAuth.firebaseAuth.currentUser?.email)!);
-  }
-
   final screens = [
     HomePage(),
     AddAllenamentoPage(),

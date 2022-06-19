@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Controller/HealthyAppController.dart';
@@ -110,6 +111,10 @@ class Constants {
 
   static String? getCurrentIdUser() {
     return controller.gestoreAuth.firebaseAuth.currentUser?.uid;
+  }
+
+  static User? getCurrentUser() {
+    return controller.gestoreAuth.firebaseAuth.currentUser;
   }
 
 }

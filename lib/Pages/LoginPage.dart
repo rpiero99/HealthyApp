@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healthy_app/Pages/MainPage.dart';
 import 'package:healthy_app/Pages/RegistrationPage.dart';
+import 'package:healthy_app/Pages/Screens/AnagraficaScreen.dart';
 import 'package:healthy_app/Utils/Constants.dart';
 
 import 'Widgets/InputWidget.dart';
 
 class LoginPage extends StatelessWidget {
-
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -34,10 +34,7 @@ class LoginPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: SizedBox(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
+          height: MediaQuery.of(context).size.height,
           width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -86,22 +83,24 @@ class LoginPage extends StatelessWidget {
                   onPressed: () async {
                     if (emailController.text.isNotEmpty &&
                         passwordController.text.isNotEmpty) {
-                      if (await Constants.controller.login(emailController.text.trim(),
-                          passwordController.text.trim()) !=
+                      if (await Constants.controller.login(
+                              emailController.text.trim(),
+                              passwordController.text.trim()) !=
                           "signUp") {
                         ScaffoldMessenger.of(context).showSnackBar(
                             Constants.createSnackBar(
-                                'Credenziali errate',
-                                Constants.errorSnackBar));
+                                'Credenziali errate', Constants.errorSnackBar));
                       } else {
-                        //todo- aggiungere controllo se l'utente ha una scheda anagrifica o no. se non ce l ha far vedere AnagraficaScreen altrimenti MainPage.
-                        Constants.redirectTo(context, MainPage());
+                        Constants.controller.getUtenti().then((value) => value
+                                .where((element) =>
+                                    element.email == emailController.text)
+                                .isEmpty
+                            ? Constants.redirectTo(context, const AnagraficaScreen())
+                            : Constants.redirectTo(context, MainPage()));
                       }
-                    }
-                    else {
+                    } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                          Constants.createSnackBar(
-                              'Inserire le credenziali.',
+                          Constants.createSnackBar('Inserire le credenziali.',
                               Constants.errorSnackBar));
                     }
                   },
