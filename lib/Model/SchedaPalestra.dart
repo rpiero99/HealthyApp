@@ -107,7 +107,8 @@ class SchedaPalestra {
   }
 
   Esercizio? getEsercizioFromName(String? name){
-    return filterEsercizi((element) => (element).nome == name).first;
+    if(filterEsercizi((element) => (element).nome == name).isNotEmpty)
+      return filterEsercizi((element) => (element).nome == name).first;
   }
 
   List<Esercizio>? getEserciziFromDay(int day){
