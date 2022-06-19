@@ -16,7 +16,6 @@ class AddAnagraficaPage extends StatelessWidget {
   TextEditingController altezaController = TextEditingController();
   TextEditingController nomeController = TextEditingController();
   TextEditingController dataNascitaController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
   TextEditingController pesoController = TextEditingController();
   TextEditingController sessoController = TextEditingController();
 
@@ -53,10 +52,6 @@ class AddAnagraficaPage extends StatelessWidget {
                       label: "Nome..",
                       obscureText: false,
                       controller: nomeController),
-                  makeInput(
-                      label: "Email..",
-                      obscureText: false,
-                      controller: emailController),
                   makeInput(
                     label: "Data di nascita..",
                     obscureText: false,
@@ -96,7 +91,6 @@ class AddAnagraficaPage extends StatelessWidget {
                   height: 60,
                   onPressed: () async {
                     if (nomeController.text.isNotEmpty &&
-                        emailController.text.isNotEmpty &&
                         DateTime.parse(dataNascitaController.text)
                             .isBefore(DateTime.now()) &&
                         altezaController.text.isNotEmpty &&
@@ -112,7 +106,7 @@ class AddAnagraficaPage extends StatelessWidget {
                       utenteNew = await Constants.controller.createUtente(
                           getCurrentIdUser()!,
                           anagraficaNew!,
-                          emailController.text);
+                          (Constants.controller.gestoreAuth.firebaseAuth.currentUser?.email)!);
                       ScaffoldMessenger.of(context).showSnackBar(
                           Constants.createSnackBar(
                               'Scheda anagrafica creata correttamente.',

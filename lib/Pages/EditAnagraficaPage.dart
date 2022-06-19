@@ -20,7 +20,6 @@ class _EditAnagraficaPage extends State<EditAnagraficaPage> {
   TextEditingController altezzaController = TextEditingController();
   TextEditingController nomeController = TextEditingController();
   TextEditingController dataNascitaController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
   TextEditingController pesoController = TextEditingController();
   TextEditingController sessoController = TextEditingController();
   Utente? utenteSelected;
@@ -47,7 +46,6 @@ class _EditAnagraficaPage extends State<EditAnagraficaPage> {
     dataNascitaController.text =
         utenteSelected!.anagraficaUtente!.dataNascitaUtente.toString();
     pesoController.text = utenteSelected!.anagraficaUtente!.pesoUtente.toString();
-    emailController.text = utenteSelected!.email!;
     sessoController.text = utenteSelected!.anagraficaUtente!.sessoUtente!;
   }
 
@@ -98,9 +96,6 @@ class _EditAnagraficaPage extends State<EditAnagraficaPage> {
                               obscureText: false,
                               controller: nomeController),
                           makeInput(
-                              obscureText: false,
-                              controller: emailController),
-                          makeInput(
                             obscureText: false,
                             controller: dataNascitaController,
                             isDate: true,
@@ -115,11 +110,13 @@ class _EditAnagraficaPage extends State<EditAnagraficaPage> {
                             obscureText: false,
                             controller: altezzaController,
                             context: context,
+                            isNumber: true,
                           ),
                           makeInput(
                             obscureText: false,
                             controller: pesoController,
                             context: context,
+                            isNumber: true,
                           ),
                         ],
                       ),
@@ -136,7 +133,6 @@ class _EditAnagraficaPage extends State<EditAnagraficaPage> {
                             height: 60,
                             onPressed: () async {
                               if (nomeController.text.isNotEmpty &&
-                                  emailController.text.isNotEmpty &&
                                   DateTime.parse(
                                       dataNascitaController.text)
                                       .isBefore(DateTime.now()) &&
@@ -154,14 +150,12 @@ class _EditAnagraficaPage extends State<EditAnagraficaPage> {
                                     int.parse(altezzaController.text);
                                 utenteSelected!.anagraficaUtente
                                     ?.pesoUtente =
-                                    int.parse(pesoController.text);
+                                    double.parse(pesoController.text);
                                 utenteSelected!.anagraficaUtente
                                     ?.sessoUtente = sessoController.text;
 
                                 Constants.controller.updateAnagraficaUtente(
                                     utenteSelected!.anagraficaUtente!);
-                                utenteSelected!.email =
-                                    emailController.text;
                                 Constants.controller
                                     .updateUtente(utenteSelected!);
 
