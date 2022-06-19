@@ -75,11 +75,10 @@ class Allenamento {
   set oraFine(DateTime? oraFine) => _oraFine = oraFine;
 
   num? get tempoTotale {
-    if(oraFine != null && oraInizio != null){
-      _tempoTotale = oraFine?.difference(oraInizio!).inMinutes;
-    }
     return _tempoTotale;
   }
+
+  set tempoTotale(num? tot) => _tempoTotale = tot;
 
   num? get tempoPerKm {
     if(tempoTotale != null && distanza != null){
@@ -114,6 +113,13 @@ class Allenamento {
   num? calcoloCalorie(Utente utente) {
     calorieConsumate = utente.anagraficaUtente!.pesoUtente! * distanza!;
     return calorieConsumate;
+  }
+
+  num? calcoloTempoTotale(){
+    if(oraFine != null && oraInizio != null){
+      tempoTotale = oraFine?.difference(oraInizio!).inMinutes;
+    }
+    return tempoTotale;
   }
 
   String? get idUtente => _idUtente;

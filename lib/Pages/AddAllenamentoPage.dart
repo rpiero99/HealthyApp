@@ -7,6 +7,7 @@ import 'package:healthy_app/Pages/RegistrationPage.dart';
 import 'package:healthy_app/Pages/Widgets/RoundedButton.dart';
 import 'package:healthy_app/Utils/Constants.dart';
 
+import '../Model/Utente.dart';
 import 'Background.dart';
 import 'StartAllenamentoPage.dart';
 import 'Widgets/InputWidget.dart';
@@ -15,13 +16,29 @@ import 'Widgets/TopAppBar.dart';
 class AddAllenamentoPage extends StatefulWidget {
   AddAllenamentoPage({Key? key}) : super(key: key);
 
-  TextEditingController descrizioneController = TextEditingController();
-  TextEditingController nomeController = TextEditingController();
   @override
   _AddAllenamentoPage createState() => _AddAllenamentoPage();
 }
 
 class _AddAllenamentoPage extends State<AddAllenamentoPage> {
+  Utente? currentUtente;
+  TextEditingController descrizioneController = TextEditingController();
+  TextEditingController nomeController = TextEditingController();
+  @override
+  void initState() {
+    getCurrentUser().then((val) {
+      setState(() {
+        currentUtente = val;
+      });
+    });
+    super.initState();
+  }
+
+  Future<Utente?> getCurrentUser() async{
+    return await Constants.controller.getUtenti().then((value) =>
+    value.where((element) =>
+    element.email== Constants.controller.gestoreAuth.firebaseAuth.currentUser!.email!).first);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +72,11 @@ class _AddAllenamentoPage extends State<AddAllenamentoPage> {
                     makeInput(
                         label: "Nome..",
                         obscureText: false,
-                        controller: widget.nomeController),
+                        controller: nomeController),
                     makeInput(
                         label: "Descrizione..",
                         obscureText: false,
-                        controller: widget.descrizioneController),
+                        controller: descrizioneController),
                   ],
                 ),
               ),
@@ -73,14 +90,15 @@ class _AddAllenamentoPage extends State<AddAllenamentoPage> {
                     minWidth: double.infinity,
                     height: 60,
                     onPressed: () async {
-                      if (widget.nomeController.text.isNotEmpty &&
-                          widget.descrizioneController.text.isNotEmpty) {
-                        Allenamento alle = Constants.controller.createAllenamento(widget.descrizioneController.text, widget.nomeController.text);
+                      if (nomeController.text.isNotEmpty &&
+                          descrizioneController.text.isNotEmpty) {
+                        Allenamento alle = Constants.controller.createAllenamento(descrizioneController.text, nomeController.text);
                         ScaffoldMessenger.of(context).showSnackBar(
                             Constants.createSnackBar(
                                 'Allenamento aggiunto correttamente.',
                                 Constants.successSnackBar));
-                        Constants.redirectTo(context, StartAllenamentoPage(alle));
+                        resetFields();
+                        Constants.redirectTo(context, StartAllenamentoPage(alle,currentUtente!));
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             Constants.createSnackBar('Inserire tutti i dati',
@@ -105,5 +123,10 @@ class _AddAllenamentoPage extends State<AddAllenamentoPage> {
         ),
     );
 
+  }
+
+  void resetFields() {
+    nomeController.clear();
+    descrizioneController.clear();
   }
 }

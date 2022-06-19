@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/Model/Allenamento.dart';
 import 'package:healthy_app/Model/AnagraficaUtente.dart';
 import 'package:healthy_app/Pages/HomePage.dart';
+import 'package:healthy_app/Pages/MainPage.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../Model/Utente.dart';
@@ -10,10 +13,12 @@ import '../Utils/Constants.dart';
 import 'Widgets/TopAppBar.dart';
 
 class StartAllenamentoPage extends StatefulWidget {
-  Allenamento allenamentoSelected = Allenamento("", "");
+  Allenamento? allenamentoSelected;
+  Utente? utenteSelected;
 
-  StartAllenamentoPage(Allenamento alle, {Key? key}) : super(key: key){
+  StartAllenamentoPage(Allenamento alle, Utente utente, {Key? key}) : super(key: key){
     allenamentoSelected = alle;
+    utenteSelected = utente;
   }
   @override
   _StartAllenamentoPage createState() => _StartAllenamentoPage();
@@ -21,12 +26,9 @@ class StartAllenamentoPage extends StatefulWidget {
 
 class _StartAllenamentoPage extends State<StartAllenamentoPage> {
   final _isHours = true;
-
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countUp,
     onChange: (value) => print('onChange $value'),
-    onChangeRawSecond: (value) => print('onChangeRawSecond $value'),
-    onChangeRawMinute: (value) => print('onChangeRawMinute $value'),
     onStop: () {
       print('onStop');
     },
@@ -47,7 +49,6 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
     _stopWatchTimer.records.listen((value) => print('records $value'));
     _stopWatchTimer.fetchStop.listen((value) => print('stop from stream'));
     _stopWatchTimer.fetchEnded.listen((value) => print('ended from stream'));
-
     /// Can be set preset time. This case is "00:01.23".
     // _stopWatchTimer.setPresetTime(mSec: 1234);
   }
@@ -59,7 +60,8 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
   }
   @override
   Widget build(BuildContext context) {
-  Allenamento all = widget.allenamentoSelected;
+  Allenamento? all = widget.allenamentoSelected;
+  Utente? utente = widget.utenteSelected;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.backgroundColor,
@@ -91,6 +93,7 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                           child: Text(
                             displayTime,
                             style: const TextStyle(
+                                color: Constants.text,
                                 fontSize: 40,
                                 fontFamily: 'Helvetica',
                                 fontWeight: FontWeight.bold),
@@ -101,6 +104,7 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                           child: Text(
                             value.toString(),
                             style: const TextStyle(
+                                color: Constants.text,
                                 fontSize: 16,
                                 fontFamily: 'Helvetica',
                                 fontWeight: FontWeight.w400),
@@ -112,52 +116,9 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                 ),
 
                 /// Display every minute.
-                StreamBuilder<int>(
-                  stream: _stopWatchTimer.minuteTime,
-                  initialData: _stopWatchTimer.minuteTime.value,
-                  builder: (context, snap) {
-                    final value = snap.data;
-                    print('Listen every minute. $value');
-                    return Column(
-                      children: <Widget>[
-                        Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 4),
-                                  child: Text(
-                                    'minute',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontFamily: 'Helvetica',
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
-                                  child: Text(
-                                    value.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 30,
-                                        fontFamily: 'Helvetica',
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
-                            )),
-                      ],
-                    );
-                  },
-                ),
-
-                /// Display every second.
-                StreamBuilder<int>(
-                  stream: _stopWatchTimer.secondTime,
-                  initialData: _stopWatchTimer.secondTime.value,
+ /*               StreamBuilder<num>(
+                  stream: _stopWatchTimer.rawTime,
+                  initialData: all?.distanza,
                   builder: (context, snap) {
                     final value = snap.data;
                     print('Listen every second. $value');
@@ -172,8 +133,9 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                                 const Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 4),
                                   child: Text(
-                                    'second',
+                                    'Distanza (km)',
                                     style: TextStyle(
+                                      color: Constants.text,
                                       fontSize: 17,
                                       fontFamily: 'Helvetica',
                                     ),
@@ -185,6 +147,52 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                                   child: Text(
                                     value.toString(),
                                     style: const TextStyle(
+                                        color: Constants.text,
+                                        fontSize: 30,
+                                        fontFamily: 'Helvetica',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ],
+                    );
+                  },
+                ),*/
+
+                /// Display every second.
+ /*               StreamBuilder(
+                  stream: _stopWatchTimer.rawTime,
+                  initialData: all!.calorieConsumate,
+                  builder: (context, snap) {
+                    final value = snap.data;
+                    print('Listen every second. $value');
+                    return Column(
+                      children: <Widget>[
+                        Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 4),
+                                  child: Text(
+                                    'Calorie consumate (kcal) ',
+                                    style: TextStyle(
+                                      color: Constants.text,
+                                      fontSize: 17,
+                                      fontFamily: 'Helvetica',
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Text(
+                                    value.toString(),
+                                    style: const TextStyle(
+                                      color: Constants.text,
                                       fontSize: 30,
                                       fontFamily: 'Helvetica',
                                       fontWeight: FontWeight.bold,
@@ -196,10 +204,12 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                       ],
                     );
                   },
+                ),*/
+                const SizedBox(
+                  height: 60,
                 ),
-
                 /// Lap time.
-                Padding(
+ /*               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: SizedBox(
                     height: 100,
@@ -246,7 +256,7 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                       },
                     ),
                   ),
-                ),
+                ),*/
 
                 /// Button
                 Row(
@@ -260,7 +270,7 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                         shape: const StadiumBorder(),
                         onPressed: () async {
                           _stopWatchTimer.onExecute.add(StopWatchExecute.start);
-                          Constants.controller.startAllenamento(all, Utente("aa", AnagraficaUtente(9, DateTime.now(), "", 0, "_sesso"), "_email"));
+                          Constants.controller.startAllenamento(all!, utente!);
                         },
                         child: const Text(
                           'Inizia',
@@ -276,7 +286,7 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                         shape: const StadiumBorder(),
                         onPressed: () async {
                           _stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-                          Constants.controller.stopAllenamento(all);
+                          Constants.controller.endAllenamento(all!);
                         },
                         child: const Text(
                           'Stop',
@@ -292,6 +302,7 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                         shape: const StadiumBorder(),
                         onPressed: () async {
                           _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+                          Constants.controller.resetAllenamento(all!);
                         },
                         child: const Text(
                           'Reset',
@@ -301,7 +312,7 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                     ),
                   ],
                 ),
-                Padding(
+ /*               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -408,6 +419,9 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
+                ),*/
+                const SizedBox(
+                  height: 60,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -419,12 +433,13 @@ class _StartAllenamentoPage extends State<StartAllenamentoPage> {
                       minWidth: double.infinity,
                       height: 60,
                       onPressed: () async {
+                        Constants.controller.endAllenamento(all!);
                         Constants.controller.updateAllenamento(all);
                         ScaffoldMessenger.of(context).showSnackBar(
                             Constants.createSnackBar(
                                 'Allenamento aggiunto correttamente.',
                                 Constants.successSnackBar));
-                        Constants.redirectTo(context, HomePage());
+                        Constants.redirectTo(context, MainPage());
                       },
                       color: Constants.backgroundColorLoginButton,
                       shape: RoundedRectangleBorder(

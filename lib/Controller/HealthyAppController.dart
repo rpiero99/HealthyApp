@@ -102,11 +102,11 @@ class HealthyAppController {
     geoLocService = GeoLocService();
     DateTime timeStamp = DateTime.now();
     geoLocService?.initPlatformState();
-    stopwatch = StopWatchTimer(
+ /*     stopwatch = StopWatchTimer(
       mode: StopWatchMode.countUp,
       onChangeRawSecond: getStatisticheAllenamentoSecondo(allenamento, utente),
       onChangeRawMinute: getStatisticheAllenamentoMinuto(allenamento),
-    );
+    );*/
 
     geoLocService?.startPosition = await geoLocService?.getCurrentPosition();
     allenamento.oraInizio = timeStamp;
@@ -114,10 +114,18 @@ class HealthyAppController {
     return allenamento;
   }
 
-  void stopAllenamento(Allenamento allenamento) async {
+  void resetAllenamento(Allenamento allenamento) {
+    allenamento.oraInizio = null;
+    allenamento.oraFine = null;
+    allenamento.distanza = 0;
+    allenamento.calorieConsumate = 0;
+  }
+
+  void endAllenamento(Allenamento allenamento) async {
     allenamento.oraFine = DateTime.now();
     geoLocService?.endPosition = await geoLocService?.getCurrentPosition();
     allenamento.distanza = calculateDistance(geoLocService!.endPosition!);
+    allenamento.calcoloTempoTotale();
     //todo da testare
     geoLocService?.cancelListener();
   }
@@ -136,6 +144,13 @@ class HealthyAppController {
     allenamento.distanza = calculateDistance(current!);
     allenamento.calcoloCalorie(utente);
   }
+
+  Future<num?> getStatisticheAllenamentoDistanza( Allenamento allenamento, Utente utente) async {
+    Position? current = await geoLocService?.getCurrentPosition();
+    allenamento.distanza = calculateDistance(current!);
+    return allenamento.distanza;
+  }
+
 
   getStatisticheAllenamentoMinuto(Allenamento allenamento) {
     allenamento.oraFine = DateTime.now();
