@@ -118,7 +118,7 @@ class _AddSchedaPalestraPage extends State<AddSchedaPalestraPage> {
                           DateTime.parse(dataFineController.text).isAfter(
                               DateTime.parse(dataInizioController.text)) &&
                           allSchede!.where((element) => element.nome?.trim() == nomeController.text.trim()).isEmpty &&
-                          allSchede!.where((element) => DateTime.parse(dataInizioController.text).compareTo(element.dataFine!) > 0).isEmpty){
+                          allSchede!.where((element) => DateTime.parse(dataInizioController.text).compareTo(element.dataFine!) > 0).isNotEmpty){
                         schedaNew = Constants.controller.createSchedaPalestra(
                             descrizioneController.text,
                             nomeController.text,
